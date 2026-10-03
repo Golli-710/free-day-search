@@ -9,6 +9,8 @@ create table if not exists public.facilities (
   regular_fee text not null,
   free_conditions text not null default '',
   free_rules jsonb not null default '[]'::jsonb check (jsonb_typeof(free_rules) = 'array'),
+  -- Audience criteria are normalized per free rule; supports future profile matching.
+  free_eligibility jsonb not null default '[]'::jsonb check (jsonb_typeof(free_eligibility) = 'array'),
   hours text not null,
   closed text not null,
   official_url text not null,
@@ -21,12 +23,18 @@ create table if not exists public.facilities (
   updated_at timestamptz not null default now()
 );
 
+alter table public.facilities
+  add column if not exists free_eligibility jsonb not null default '[]'::jsonb
+  check (jsonb_typeof(free_eligibility) = 'array');
+
 create index if not exists facilities_area_category_idx
   on public.facilities (prefecture, category);
 create index if not exists facilities_audit_status_idx
   on public.facilities (audit_status);
 create index if not exists facilities_free_rules_gin_idx
   on public.facilities using gin (free_rules);
+create index if not exists facilities_free_eligibility_gin_idx
+  on public.facilities using gin (free_eligibility);
 
 -- Normalize field-level checks so an update job can find stale or unresolved
 -- values without parsing JSON. Keep a row even for unverified fields.
@@ -34,7 +42,7 @@ create table if not exists public.facility_field_checks (
   facility_id text not null references public.facilities(facility_id) on delete cascade,
   field_name text not null check (field_name in (
     'name','prefecture','municipality','address','category','regular_fee',
-    'free_conditions','free_rules','hours','closed','official_url',
+    'free_conditions','free_rules','free_eligibility','hours','closed','official_url',
     'source_url','last_checked'
   )),
   status text not null default 'needs_review'
@@ -44,6 +52,15 @@ create table if not exists public.facility_field_checks (
   note text not null default '',
   primary key (facility_id, field_name)
 );
+
+alter table public.facility_field_checks
+  drop constraint if exists facility_field_checks_field_name_check;
+alter table public.facility_field_checks
+  add constraint facility_field_checks_field_name_check check (field_name in (
+    'name','prefecture','municipality','address','category','regular_fee',
+    'free_conditions','free_rules','free_eligibility','hours','closed','official_url',
+    'source_url','last_checked'
+  ));
 
 create index if not exists facility_field_checks_status_idx
   on public.facility_field_checks (status, reviewed_at);
