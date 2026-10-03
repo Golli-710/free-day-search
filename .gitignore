@@ -1,0 +1,17 @@
+# Secrets and local environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local tooling and build output
+.DS_Store
+node_modules/
+_site/
+.next/
+coverage/
+
+# Synced local reference material; publish only the curated site and docs
+sources/
+AGENTS.md

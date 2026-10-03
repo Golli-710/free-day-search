@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://golli-710.github.io/free-day-search/sitemap.xml
