@@ -30,6 +30,7 @@
   const adultRuleStatus = (rule) => eligibilityForRule(rule).adult_general ? "general" : eligibilityForRule(rule).adult_eligible ? "conditional" : "excluded";
   const audienceNotice = (rule) => eligibilityForRule(rule).details || "対象者限定";
   const adultEligibilitySummary = (f) => {
+    if (!scheduleConfirmed(f)) return "大人・一般：情報未確認のため判定できません";
     const rules = rulesFor(f).filter(rule => rule.type === "eligibility");
     const conditional = rules.filter(rule => adultRuleStatus(rule) === "conditional").map(audienceNotice);
     if (conditional.length) return "大人・一般：条件付きで無料（" + [...new Set(conditional)].join("、") + "）";
