@@ -15,14 +15,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
+    permissions:
+      contents: read
+      pages: read
     runs-on: ubuntu-latest
+    outputs:
+      page_url: ${{ steps.pages.outputs.base_url }}
     steps:
       - name: Check out project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Prepare static files and SEO URLs
         shell: bash
         run: |
@@ -34,12 +36,24 @@ jobs:
             site_url="https://${owner}.github.io/${repository}/"
           fi
           python3 scripts/prepare_site.py --site-url "$site_url" --output _site
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
+      - name: Configure Pages metadata
+        id: pages
+        uses: actions/configure-pages@v6
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: _site
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url || needs.build.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
