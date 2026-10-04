@@ -28,6 +28,18 @@
     f.free_eligibility = f.free_rules.filter(rule => rule.type === "eligibility" || rule.audience).map(rule => rule.eligibility);
   });
   const adultRuleStatus = (rule) => eligibilityForRule(rule).adult_general ? "general" : eligibilityForRule(rule).adult_eligible ? "conditional" : "excluded";
+  const calendarRuleStatus = (rule) => {
+    const eligibility = eligibilityForRule(rule);
+    if (eligibility.adult_general) return "general";
+    const onlyResidence = (eligibility.resident_prefectures?.length || eligibility.resident_municipalities?.length) && !(eligibility.age_conditions?.length) && !(eligibility.other_requirements?.length) && !eligibility.student;
+    return onlyResidence ? "conditional" : "excluded";
+  };
+  const calendarEventForDate = (f, date) => {
+    if (!scheduleConfirmed(f)) return null;
+    const rules = dateRulesFor(f).filter(rule => matchesRule(rule, date) && calendarRuleStatus(rule) !== "excluded");
+    if (!rules.length) return null;
+    return {date, rules, restricted:rules.some(rule => calendarRuleStatus(rule) === "conditional"), badge:"この日に無料"};
+  };
   const audienceNotice = (rule) => eligibilityForRule(rule).details || "対象者限定";
   const adultEligibilitySummary = (f) => {
     if (!scheduleConfirmed(f)) return "大人・一般：情報未確認のため判定できません";
@@ -186,7 +198,7 @@
     const restrictedText = next.restricted ? "対象条件あり" : "";
     const qualified = (next.rules || []).filter(rule => adultRuleStatus(rule) === "conditional").map(audienceNotice);
     const hasGeneral = (next.rules || []).some(rule => adultRuleStatus(rule) === "general");
-    return `<article class="facility-card"><div class="card-top"><span class="tag">${esc(f.category)}</span><span class="muted">${esc(f.prefecture)}・${esc(f.municipality)}</span></div>${reviewNotice(f)}<h3><a href="${url({facility:f.facility_id})}">${esc(f.name)}</a></h3><p class="address">${esc(f.address)}</p><div class="free-date"><span>${esc(eventLabel)}</span><strong>${esc(next.label || (next.date ? formatDate(next.date) : "日付要確認"))}</strong><small>大人・一般：${qualified.length && !hasGeneral ? "条件付きで無料" : "無料"}</small>${qualified.map(x => `<small>⚠️ ${esc(x)}</small>`).join("")}${restrictedText ? `<small>${restrictedText}</small>` : ""}${ruleLabels.length ? `<small>条件：${ruleLabels.map(esc).join("・")}</small>` : ""}</div><p class="conditions">無料条件：${esc(f.free_conditions)}</p><div class="card-bottom"><span>通常料金：${esc(f.regular_fee)}</span><a class="text-link" href="${url({facility:f.facility_id})}">詳細を見る →</a></div><span class="visually-hidden">登録された無料日・条件：${esc(days)}</span></article>`;
+    return `<article class="facility-card"><div class="card-top"><span class="tag">${esc(f.category)}</span><span class="muted">${esc(f.prefecture)}・${esc(f.municipality)}</span></div>${reviewNotice(f)}<h3><a href="${url({facility:f.facility_id})}">${esc(f.name)}</a></h3><p class="address">${esc(f.address)}</p><div class="free-date"><span>${esc(eventLabel)}</span><strong>${esc(next.label || (next.date ? formatDate(next.date) : "日付要確認"))}</strong><small>大人・一般：${qualified.length && !hasGeneral ? "条件付きで無料" : "無料"}</small>${qualified.map(x => `<small>⚠️ ${esc(x)}</small>`).join("")}${restrictedText ? `<small>${restrictedText}</small>` : ""}${ruleLabels.length ? `<small>条件：${ruleLabels.map(esc).join("・")}</small>` : ""}</div><p class="conditions">無料条件：${esc(f.free_conditions)}</p><div class="card-bottom"><span>通常料金：${esc(f.regular_fee)}</span><a class="text-link" href="${url({facility:f.facility_id})}">詳細を見る →</a><a class="text-link" href="${esc(f.official_url)}" target="_blank" rel="noopener">公式サイト ↗</a></div><span class="visually-hidden">登録された無料日・条件：${esc(days)}</span></article>`;
   };
   const setMeta = (title, desc, schema) => {
     document.title = title;
@@ -208,6 +220,44 @@
   };
   const contextForPeriod = (event, badge) => ({...event, label:event.label === "常時無料" ? "常時無料" : formatDate(event.date), badge:event.restricted ? "対象条件で無料" : badge || event.badge || "この日に無料"});
   const contextsForEvents = (events, badge) => new Map(events.map(({f, event}) => [f.facility_id, contextForPeriod(event, badge)]));
+  const calendarMonthKey = (year, month) => year * 12 + month - 1;
+  const calendarMonthDate = (key) => fromParts(Math.floor(key / 12), key % 12 + 1, 1);
+  const calendarPage = (q, today) => {
+    const currentKey = calendarMonthKey(today.getUTCFullYear(), today.getUTCMonth() + 1);
+    const y = Number(q.get("year")), m = Number(q.get("month"));
+    const requestKey = Number.isInteger(y) && Number.isInteger(m) && m >= 1 && m <= 12 ? calendarMonthKey(y, m) : currentKey;
+    const monthKey = Math.max(currentKey - 12, Math.min(currentKey + 60, requestKey));
+    const first = calendarMonthDate(monthKey), year = first.getUTCFullYear(), month = first.getUTCMonth() + 1;
+    const category = q.get("category") || "", prefecture = q.get("prefecture") || "";
+    const filtered = rows.filter(f => (!category || f.category === category) && (!prefecture || f.prefecture === prefecture));
+    const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate(), eventsByDate = new Map();
+    for (let day = 1; day <= lastDay; day++) {
+      const date = fromParts(year, month, day);
+      const events = filtered.map(f => ({f, event:calendarEventForDate(f, date) || (hasAlwaysFreeRule(f) ? {date:new Date(date), rules:[], restricted:false, badge:"常時無料", label:"常時無料"} : null)})).filter(x => x.event);
+      if (events.length) eventsByDate.set(isoDate(date), events);
+    }
+    const selected = parseIsoDate(q.get("date") || "");
+    const selectedEvents = selected && selected.getUTCFullYear() === year && selected.getUTCMonth() + 1 === month ? eventsByDate.get(isoDate(selected)) || [] : [];
+    const monthUrl = (key) => { const d = calendarMonthDate(key); return url({view:"calendar", year:String(d.getUTCFullYear()), month:String(d.getUTCMonth()+1), ...(category?{category}:{}), ...(prefecture?{prefecture}:{})}); };
+    const dayUrl = (date) => url({view:"calendar", year:String(year), month:String(month), date:isoDate(date), ...(category?{category}:{}), ...(prefecture?{prefecture}:{})}) + "#calendar-results";
+    const weekdays = ["月", "火", "水", "木", "金", "土", "日"];
+    const offset = (first.getUTCDay() + 6) % 7, cellCount = Math.ceil((offset + lastDay) / 7) * 7;
+    const cells = Array.from({length:cellCount}, (_, i) => {
+      const day = i - offset + 1;
+      if (day < 1 || day > lastDay) return '<div class="calendar-cell calendar-empty" aria-hidden="true"></div>';
+      const date = fromParts(year, month, day), key = isoDate(date), events = eventsByDate.get(key) || [];
+      const isSelected = !!selected && key === isoDate(selected), label = `${year}年${month}月${day}日（${weekdayName(date)}）、無料施設${events.length}件`;
+      const contents = `<span class="calendar-day-number">${day}</span>${events.length ? `<span class="calendar-day-mark" aria-hidden="true">●</span><span class="calendar-day-count">${events.length}件</span>` : ""}`;
+      return events.length ? `<a class="calendar-cell calendar-date${isSelected ? " is-selected" : ""}" href="${dayUrl(date)}" aria-label="${esc(label)}"${isSelected ? ' aria-current="date"' : ""}>${contents}</a>` : `<div class="calendar-cell calendar-date" role="gridcell" aria-label="${esc(label)}">${contents}</div>`;
+    }).join("");
+    const categoryLinks = ["", ...categories].map(value => `<a class="calendar-filter${category === value ? " is-active" : ""}" href="${url({view:"calendar",year:String(year),month:String(month),...(value?{category:value}:{}),...(prefecture?{prefecture}:{})})}">${value || "すべて"}</a>`).join("");
+    const areaLinks = ["", ...prefectures].map(value => `<a class="calendar-filter${prefecture === value ? " is-active" : ""}" href="${url({view:"calendar",year:String(year),month:String(month),...(category?{category}:{}),...(value?{prefecture:value}:{})})}">${value || "すべて"}</a>`).join("");
+    const previousKey = Math.max(currentKey - 12, monthKey - 1), nextKey = Math.min(currentKey + 60, monthKey + 1);
+    const title = selected ? `${formatDate(selected)}の無料施設` : `${year}年${month}月の無料日カレンダー`;
+    setMeta(`${title}｜無料デー検索`, `${title}。大人・一般向けに確認済みの無料日と施設を表示します。`, {"@context":"https://schema.org","@type":"CollectionPage",name:title,inLanguage:"ja"});
+    const results = selected ? `<section id="calendar-results" class="calendar-results"><div class="section-title"><div><span class="eyebrow">FREE ON THIS DAY</span><h2>${esc(title)}</h2></div></div><p class="section-note">${selectedEvents.length}施設。大人・一般が対象外の条件と確認中の無料日は除外しています。</p>${selectedEvents.length ? `<div class="cards">${selectedEvents.map(({f,event}) => card(f,{...event,label:formatDate(selected),badge:"指定日に無料"})).join("")}</div>` : '<div class="notice">この日・絞り込み条件で、大人・一般向けの確認済み無料施設はありません。</div>'}</section>` : "";
+    app.innerHTML = `<a class="back-link" href="./">← トップへ</a>${heading("無料日カレンダー", `${year}年${month}月`, "大人・一般向けに確認済みの無料日がある日を表示します。対象者限定の条件は施設ごとに明記します。")}<section class="calendar-panel" aria-label="${year}年${month}月のカレンダー"><div class="calendar-toolbar"><a class="calendar-nav" href="${monthUrl(previousKey)}" aria-label="前の月">← 前の月</a><h2>${year}年${month}月</h2><a class="calendar-nav" href="${monthUrl(nextKey)}" aria-label="次の月">次の月 →</a></div><div class="calendar-grid" role="grid" aria-label="${year}年${month}月">${weekdays.map(day => `<div class="calendar-weekday" role="columnheader">${day}</div>`).join("")}${cells}</div><p class="calendar-legend"><span aria-hidden="true">●</span> 無料施設あり。日付の下に施設数を表示します。</p><div class="calendar-filter-group"><strong>カテゴリ</strong><div class="calendar-filters">${categoryLinks}</div></div><div class="calendar-filter-group"><strong>都道府県</strong><div class="calendar-filters">${areaLinks}</div></div></section>${results}`;
+  };
   const nextWeekendRange = (today) => {
     const day = today.getUTCDay();
     const mondayOffset = (day + 6) % 7;
@@ -253,11 +303,13 @@
       <section class="content-section"><div class="section-title"><div><span class="eyebrow">THIS WEEKEND</span><h2>今週末無料の施設</h2></div><a class="text-link" href="${url({view:"weekend"})}">一覧を見る →</a></div>${weekendEvents.length ? `<div class="cards">${weekendEvents.slice(0, 4).map(({f, event}) => card(f, contextForPeriod(event, "今週末無料"))).join("")}</div>` : `<div class="notice">今週末に日付が確定している無料施設はありません。</div>`}</section>
       <section class="content-section"><div class="section-title"><div><span class="eyebrow">THIS WEEK</span><h2>今週無料の施設</h2></div><a class="text-link" href="${url({view:"week"})}">一覧を見る →</a></div>${weekEvents.length ? `<div class="cards">${weekEvents.slice(0, 4).map(({f, event}) => card(f, contextForPeriod(event, "今週無料"))).join("")}</div>` : `<div class="notice">今週の日付が確定している無料施設はありません。</div>`}</section>
       <section class="content-section"><div class="section-title"><div><span class="eyebrow">THIS MONTH</span><h2>今月無料の日がある施設</h2></div><a class="text-link" href="${url({view:"month"})}">一覧を見る →</a></div>${monthEvents.length ? `<div class="cards">${monthEvents.slice(0, 4).map(({f, event}) => card(f, contextForPeriod(event, "今月無料"))).join("")}</div>` : `<div class="notice">今月のこれからの無料日が登録された施設はありません。</div>`}</section>
+      <section class="content-section calendar-home-link"><a class="calendar-home-card" href="${url({view:"calendar"})}"><span class="quick-icon">▦</span><span><strong>無料日カレンダー</strong><small>月ごとの無料日をカレンダーで探す</small></span><b>カレンダーを見る →</b></a></section>
       <section class="content-section"><div class="section-title"><div><span class="eyebrow">BROWSE BY AREA</span><h2>エリアから探す</h2></div></div><div class="pill-links">${prefectures.map(x => `<a href="${url({prefecture:x})}">${x} <span>→</span></a>`).join("")}</div></section><section class="content-section"><div class="section-title"><div><span class="eyebrow">BROWSE BY CATEGORY</span><h2>カテゴリから探す</h2></div></div><div class="category-grid">${categories.map((x, i) => `<a href="${url({category:x})}"><span class="cat-icon">${["▧", "▤", "⚛", "♧", "◉", "❀"][i]}</span>${x}<b>→</b></a>`).join("")}</div></section><p class="data-note">掲載データは試験公開用です。無料条件・日程は変更される場合があります。訪問前に施設の公式サイトをご確認ください。</p>`;
     document.querySelector("#search-form").addEventListener("submit", e => { e.preventDefault(); const values = Object.fromEntries(new FormData(e.currentTarget)); location.href = url({search:"1", ...Object.fromEntries(Object.entries(values).filter(([, value]) => value))}); });
   };
   const render = () => {
     const q = new URLSearchParams(location.search), today = todayJst();
+    if (q.get("view") === "calendar") return calendarPage(q, today);
     if (q.has("facility")) {
       const f = rows.find(x => x.facility_id === q.get("facility"));
       if (!f) return listing("施設が見つかりません", "URLをご確認ください。", []);
