@@ -35,7 +35,7 @@ GitHub FreeでGitHub Pagesを使う場合、リポジトリは公開設定が必
 python3 scripts/prepare_site.py --site-url https://OWNER.github.io/REPOSITORY/ --output /tmp/free-day-site
 ```
 
-このコマンドは `_site/` 相当の出力にHTML・CSS・JS・施設データ・アイコン・サイトマップ・robots.txtだけをコピーします。`.env` ファイルは使いません。
+このコマンドは `_site/` 相当の出力にHTML・CSS・JS・施設データ・アイコン・サイトマップ・robots.txtと、施設データをもとにした検索向けHTMLページを生成します。`.env` ファイルは使いません。
 
 ## 施設データ
 
@@ -47,13 +47,20 @@ python3 scripts/prepare_site.py --site-url https://OWNER.github.io/REPOSITORY/ -
 
 現在は自動収集を行いません。将来の更新処理では、公式ページと情報源を項目単位で記録し、前回値との差分を作って `needs_review` にします。担当者が公式情報を確認した後にのみ `confirmed` にし、確認できない場合は `unverified` のまま保留します。自動取得が安定してから、GitHub Actionsの定期実行とSupabaseの無料枠などを検討します。Supabaseへ移す場合のテーブル案は `database/schema.sql` にあります。
 
+### 検索向けページ
+
+`scripts/prepare_site.py` は `data.js` から施設データを読み、監査済みの無料ルールがある地域・カテゴリのページと、今日・明日・今週・今週末・今月のページを静的HTMLとして生成します。対象者限定の条件は表示し、`needs_review` / `unverified` の無料日情報は掲載しません。地域×カテゴリのページは対象施設が2件以上、カテゴリ横断ページは3件以上の場合だけ作り、薄いページを増やしません。`Asia/Tokyo` の日付に合わせ、Actionsが毎日00:00 JSTに日付ページとサイトマップを再生成・公開します。
+
+ページごとにtitle、description、canonical、OGP、CollectionPage/ItemList構造化データを設定します。施設詳細ページは従来の固有URLを使います。キーワード仮説とページ対応は `SEO_KEYWORDS.md` に記録しています。検索ボリュームは未計測のため、月1,000PVは目標であり保証値ではありません。公開後はGoogle Search Consoleの実績を見て見直します。
+
 ## ファイル
 
 - `index.html` — ページ枠、基本SEO、OGP
 - `app.js` — 検索、一覧、施設詳細、ページ単位のメタ情報と構造化データ
 - `data.js` — 施設レコードと監査状態
 - `styles.css` — レスポンシブ表示
-- `scripts/prepare_site.py` — 公開URLに合わせたサイトマップとrobots.txtの生成
+- `scripts/prepare_site.py` — 確認済みデータからのSEOページ、サイトマップ、robots.txt生成
+- `SEO_KEYWORDS.md` — キーワード仮説とページ対応
 - `.github/workflows/deploy.yml` — GitHub Pagesへの自動公開
 - `AUDIT.md` — 施設データ監査結果
 - `database/schema.sql` — 将来のSupabase/PostgreSQL向け定義

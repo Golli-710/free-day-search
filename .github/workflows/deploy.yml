@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # Daily regeneration keeps the today/tomorrow landing pages current (00:00 JST).
+    - cron: "0 15 * * *"
 
 permissions:
   contents: read
