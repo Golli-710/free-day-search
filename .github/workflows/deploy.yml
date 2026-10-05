@@ -35,7 +35,11 @@ jobs:
           GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION || '' }}
         shell: bash
         run: |
+          # GitHub context preserves the repository owner's display casing.
+          # Host names are case-insensitive, but keep generated sitemap,
+          # robots.txt, canonicals, and the public URL in one lowercase form.
           owner="${GITHUB_REPOSITORY%%/*}"
+          owner="${owner,,}"
           repository="${GITHUB_REPOSITORY#*/}"
           if [[ "$repository" == "$owner.github.io" ]]; then
             site_url="https://${owner}.github.io/"

@@ -35,6 +35,7 @@ class SiteMetadataTests(unittest.TestCase):
             self.assertTrue(urls)
             self.assertEqual(len(urls), len(set(urls)))
             self.assertTrue(all(url.startswith(BASE) for url in urls))
+            self.assertTrue(all(url == url.lower() for url in urls))
             self.assertIn(BASE + "facility/ueno-zoo/", urls)
             self.assertIn(BASE + "free/today/", urls)
 
