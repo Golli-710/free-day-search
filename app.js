@@ -160,15 +160,26 @@
   const scheduleConfirmed = (f) => f.audit?.status === "confirmed" && !["needs_review", "unverified"].includes(f.audit?.field_status?.free_rules) && !["needs_review", "unverified"].includes(f.audit?.field_status?.free_days) && !["needs_review", "unverified"].includes(f.audit?.field_status?.free_conditions);
   const dateRulesFor = (f) => rulesFor(f).filter(rule => dateRuleTypes.has(rule.type));
   const adultDateRulesFor = (f) => dateRulesFor(f).filter(rule => adultRuleStatus(rule) !== "excluded");
-  const matchedDateRules = (f, date) => scheduleConfirmed(f) ? dateRulesFor(f).filter(rule => matchesRule(rule, date) && adultRuleStatus(rule) !== "excluded") : [];
-  const isFreeOn = (f, date) => scheduleConfirmed(f) && (hasAlwaysFreeRule(f) || matchedDateRules(f, date).length > 0);
+  const matchedDateRules = (f, date) => scheduleConfirmed(f) && openOn(f, date) ? dateRulesFor(f).filter(rule => matchesRule(rule, date) && adultRuleStatus(rule) !== "excluded") : [];
+  const isFreeOn = (f, date) => scheduleConfirmed(f) && openOn(f, date) && (hasAlwaysFreeRule(f, date) || matchedDateRules(f, date).length > 0);
   const eventForDate = (f, date) => {
     const rules = matchedDateRules(f, date);
     if (!rules.length) return null;
     const restricted = rules.some(rule => adultRuleStatus(rule) === "conditional");
     return {date, rules, restricted, badge:restricted ? "対象条件あり" : "この日に無料"};
   };
-  const hasAlwaysFreeRule = (f) => scheduleConfirmed(f) && rulesFor(f).some(rule => rule.type === "always_free");
+  const openOn = (f, date) => {
+    if (!date) return true;
+    const weekday = date.getUTCDay(), day = date.getUTCDate();
+    if (Array.isArray(f.open_weekdays) && !f.open_weekdays.includes(weekday)) return false;
+    if ((f.closed_weekdays || []).includes(weekday) && !(holidayName(date) && (f.open_on_holidays || []).includes(weekday))) return false;
+    if (f.closed_holidays && holidayName(date)) return false;
+    if (f.closed_day_after_holiday && holidayName(new Date(date.getTime() - 86400000))) return false;
+    if ((f.closed_nth_weekdays || []).some(rule => weekday === rule.weekday && (rule.month == null || rule.month === date.getUTCMonth() + 1) && Math.floor((day - 1) / 7) + 1 === rule.ordinal)) return false;
+    if ((f.closed_month_days || []).includes(monthDay(date))) return false;
+    return !(f.closed_dates || []).includes(isoDate(date));
+  };
+  const hasAlwaysFreeRule = (f, date = null) => scheduleConfirmed(f) && rulesFor(f).some(rule => rule.type === "always_free") && openOn(f, date);
   const nextOccurrences = (f, start, count = 1, end = null) => {
     if (!scheduleConfirmed(f)) return [];
     const rules = adultDateRulesFor(f);
@@ -176,6 +187,7 @@
     const results = [];
     const limit = end || fromParts(start.getUTCFullYear() + 8, start.getUTCMonth() + 1, start.getUTCDate());
     for (let date = new Date(start); date <= limit && results.length < count; date.setUTCDate(date.getUTCDate() + 1)) {
+      if (!openOn(f, date)) continue;
       const matched = rules.filter(rule => matchesRule(rule, date));
       if (matched.length) results.push({date:new Date(date), rules:matched, restricted:matched.some(rule => adultRuleStatus(rule) === "conditional")});
     }
@@ -215,7 +227,7 @@
     app.innerHTML = `<a class="back-link" href="./">← トップへ</a>${heading(eyebrow, title, desc)}<p class="result-count">${items.length}件の施設</p><h2 class="visually-hidden">施設一覧</h2>${items.length ? `<div class="cards">${items.map(f => card(f, contexts.get(f.facility_id))).join("")}</div>` : `<div class="empty"><p>条件に合う施設が見つかりませんでした。</p><a class="button secondary" href="./">条件を変えて検索する</a></div>`}`;
   };
   const scheduledOn = (date) => {
-    const found = rows.map(f => ({f, event:eventForDate(f, date) || (hasAlwaysFreeRule(f) ? {date:new Date(date), rules:[], badge:"常時無料"} : null)})).filter(x => x.event);
+    const found = rows.map(f => ({f, event:eventForDate(f, date) || (hasAlwaysFreeRule(f, date) ? {date:new Date(date), rules:[], badge:"常時無料"} : null)})).filter(x => x.event);
     return found.sort((a, b) => a.f.name.localeCompare(b.f.name, "ja"));
   };
   const contextForPeriod = (event, badge) => ({...event, label:event.label === "常時無料" ? "常時無料" : formatDate(event.date), badge:event.restricted ? "対象条件で無料" : badge || event.badge || "この日に無料"});
@@ -233,7 +245,7 @@
     const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate(), eventsByDate = new Map();
     for (let day = 1; day <= lastDay; day++) {
       const date = fromParts(year, month, day);
-      const events = filtered.map(f => ({f, event:calendarEventForDate(f, date) || (hasAlwaysFreeRule(f) ? {date:new Date(date), rules:[], restricted:false, badge:"常時無料", label:"常時無料"} : null)})).filter(x => x.event);
+      const events = filtered.map(f => ({f, event:calendarEventForDate(f, date) || (hasAlwaysFreeRule(f, date) ? {date:new Date(date), rules:[], restricted:false, badge:"常時無料", label:"常時無料"} : null)})).filter(x => x.event);
       if (events.length) eventsByDate.set(isoDate(date), events);
     }
     const selected = parseIsoDate(q.get("date") || "");
@@ -279,7 +291,7 @@
       for (let date = new Date(start); date <= end; date.setUTCDate(date.getUTCDate() + 1)) {
         const event = eventForDate(f, date);
         if (event) { events.push({f, event:{...event, badge:badge || event.badge}}); break; }
-        if (hasAlwaysFreeRule(f)) { events.push({f, event:{date:new Date(date), rules:[], badge:"常時無料", label:"常時無料"}}); break; }
+        if (hasAlwaysFreeRule(f, date)) { events.push({f, event:{date:new Date(date), rules:[], badge:"常時無料", label:"常時無料"}}); break; }
       }
     });
     return events.sort((a, b) => a.event.date - b.event.date || a.f.name.localeCompare(b.f.name, "ja"));
@@ -340,7 +352,7 @@
       });
       const parts = [q.get("prefecture"), q.get("category"), q.get("date"), q.get("q")].filter(Boolean);
       const description = parts.length ? `${parts.join("・")}の条件で検索しました。${selectedDate ? "大人・一般向けの無料ルールがある施設を表示します。" : ""}` : "すべての施設を表示しています。";
-      const contexts = selectedDate ? new Map(result.map(f => [f.facility_id, eventForDate(f, selectedDate) || {date:selectedDate, label:hasAlwaysFreeRule(f) ? "常時無料" : formatDate(selectedDate), badge:hasAlwaysFreeRule(f) ? "常時無料" : "指定日に無料", rules:[]}])) : new Map();
+      const contexts = selectedDate ? new Map(result.map(f => [f.facility_id, eventForDate(f, selectedDate) || {date:selectedDate, label:hasAlwaysFreeRule(f, selectedDate) ? "常時無料" : formatDate(selectedDate), badge:hasAlwaysFreeRule(f, selectedDate) ? "常時無料" : "指定日に無料", rules:[]}])) : new Map();
       return listing("検索結果", description, result, "施設を探す", contexts);
     }
     const view = q.get("view");

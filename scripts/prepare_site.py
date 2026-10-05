@@ -86,8 +86,25 @@ def date_rules(f):
     return [r for r in f.get("free_rules", []) if r.get("type") in {"annual_date", "holiday", "specific_date", "nth_weekday", "weekly_weekday", "nearest_weekday", "annual_period"} and eligible(r) != "excluded"]
 
 
-def has_always(f):
-    return approved(f) and any(r.get("type") == "always_free" for r in f.get("free_rules", []))
+def open_on(f, day):
+    weekday = (day.weekday() + 1) % 7  # Match JavaScript: Sunday is 0.
+    if "open_weekdays" in f and weekday not in f["open_weekdays"]:
+        return False
+    if weekday in f.get("closed_weekdays", []) and not (day in holidays(day.year) and weekday in f.get("open_on_holidays", [])):
+        return False
+    if f.get("closed_holidays") and day in holidays(day.year):
+        return False
+    if f.get("closed_day_after_holiday") and day - timedelta(days=1) in holidays(day.year):
+        return False
+    if any(weekday == rule["weekday"] and rule.get("month") in (None, day.month) and (day.day - 1) // 7 + 1 == rule["ordinal"] for rule in f.get("closed_nth_weekdays", [])):
+        return False
+    if day.strftime("%m-%d") in f.get("closed_month_days", []) or day.isoformat() in f.get("closed_dates", []):
+        return False
+    return True
+
+
+def has_always(f, day=None):
+    return approved(f) and any(r.get("type") == "always_free" for r in f.get("free_rules", [])) and (day is None or open_on(f, day))
 
 
 def equinox(year, spring):
@@ -176,7 +193,7 @@ def matches(rule, day):
 
 
 def free_events(f, day):
-    if not approved(f):
+    if not approved(f) or not open_on(f, day):
         return []
     found = [r for r in date_rules(f) if matches(r, day)]
     if found:
@@ -202,9 +219,14 @@ def next_occurrence(f, today):
     if not approved(f):
         return None
     if has_always(f):
-        return (None, [{"label": "常時無料", "type": "always_free"}])
+        for offset in range(8 * 366):
+            day = today + timedelta(days=offset)
+            if has_always(f, day):
+                return day, [{"label": "常時無料", "type": "always_free"}]
     for offset in range(8 * 366):
         day = today + timedelta(days=offset)
+        if not open_on(f, day):
+            continue
         found = [r for r in date_rules(f) if matches(r, day)]
         if found:
             return day, found
