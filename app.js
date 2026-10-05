@@ -5,6 +5,7 @@
   const app = document.querySelector("#app");
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"}[c]));
   const url = (params) => `?${new URLSearchParams(params).toString()}`;
+  const facilityUrl = (id) => { const root = new URL(location.href); root.search = ""; root.hash = ""; return new URL(`facility/${encodeURIComponent(id)}/`, root).href; };
   const rulesFor = (f) => f.free_rules || (f.free_days || []).map(md => ({type:"annual_date", month_day:md, label:prettyDate(md)}));
   // Normalize only explicit source wording. Ambiguous audiences remain excluded.
   const eligibilityForRule = (rule) => {
@@ -210,20 +211,28 @@
     const restrictedText = next.restricted ? "対象条件あり" : "";
     const qualified = (next.rules || []).filter(rule => adultRuleStatus(rule) === "conditional").map(audienceNotice);
     const hasGeneral = (next.rules || []).some(rule => adultRuleStatus(rule) === "general");
-    return `<article class="facility-card"><div class="card-top"><span class="tag">${esc(f.category)}</span><span class="muted">${esc(f.prefecture)}・${esc(f.municipality)}</span></div>${reviewNotice(f)}<h3><a href="${url({facility:f.facility_id})}">${esc(f.name)}</a></h3><p class="address">${esc(f.address)}</p><div class="free-date"><span>${esc(eventLabel)}</span><strong>${esc(next.label || (next.date ? formatDate(next.date) : "日付要確認"))}</strong><small>大人・一般：${qualified.length && !hasGeneral ? "条件付きで無料" : "無料"}</small>${qualified.map(x => `<small>⚠️ ${esc(x)}</small>`).join("")}${restrictedText ? `<small>${restrictedText}</small>` : ""}${ruleLabels.length ? `<small>条件：${ruleLabels.map(esc).join("・")}</small>` : ""}</div><p class="conditions">無料条件：${esc(f.free_conditions)}</p><div class="card-bottom"><span>通常料金：${esc(f.regular_fee)}</span><a class="text-link" href="${url({facility:f.facility_id})}">詳細を見る →</a><a class="text-link" href="${esc(f.official_url)}" target="_blank" rel="noopener">公式サイト ↗</a></div><span class="visually-hidden">登録された無料日・条件：${esc(days)}</span></article>`;
+    return `<article class="facility-card"><div class="card-top"><span class="tag">${esc(f.category)}</span><span class="muted">${esc(f.prefecture)}・${esc(f.municipality)}</span></div>${reviewNotice(f)}<h3><a href="${facilityUrl(f.facility_id)}">${esc(f.name)}</a></h3><p class="address">${esc(f.address)}</p><div class="free-date"><span>${esc(eventLabel)}</span><strong>${esc(next.label || (next.date ? formatDate(next.date) : "日付要確認"))}</strong><small>大人・一般：${qualified.length && !hasGeneral ? "条件付きで無料" : "無料"}</small>${qualified.map(x => `<small>⚠️ ${esc(x)}</small>`).join("")}${restrictedText ? `<small>${restrictedText}</small>` : ""}${ruleLabels.length ? `<small>条件：${ruleLabels.map(esc).join("・")}</small>` : ""}</div><p class="conditions">無料条件：${esc(f.free_conditions)}</p><div class="card-bottom"><span>通常料金：${esc(f.regular_fee)}</span><a class="text-link" href="${facilityUrl(f.facility_id)}">詳細を見る →</a><a class="text-link" href="${esc(f.official_url)}" target="_blank" rel="noopener">公式サイト ↗</a></div><span class="visually-hidden">登録された無料日・条件：${esc(days)}</span></article>`;
   };
   const setMeta = (title, desc, schema) => {
     document.title = title;
     document.querySelector('meta[name="description"]').content = desc;
-    document.querySelector('link[rel="canonical"]').href = location.href.split("?")[0] + location.search;
+    const query = new URLSearchParams(location.search), baseUrl = new URL(location.href);
+    baseUrl.search = ""; baseUrl.hash = "";
+    const staticViews = {today:"free/today/", tomorrow:"free/tomorrow/", week:"free/this-week/", weekend:"free/this-weekend/", month:"free/this-month/"};
+    const canonical = query.has("facility") ? facilityUrl(query.get("facility")) : staticViews[query.get("view")] ? new URL(staticViews[query.get("view")], baseUrl).href : baseUrl.href;
+    document.querySelector('link[rel="canonical"]').href = canonical;
+    const noIndex = ["search", "prefecture", "category", "date", "q"].some(key => query.has(key)) || query.get("view") === "calendar";
+    let robots = document.querySelector('meta[name="robots"]');
+    if (noIndex && !robots) { robots = document.createElement("meta"); robots.name = "robots"; document.head.appendChild(robots); }
+    if (robots) robots.content = noIndex ? "noindex,follow" : "index,follow";
     document.querySelector('meta[property="og:title"]').content = title;
     document.querySelector('meta[property="og:description"]').content = desc;
-    document.querySelector('meta[property="og:url"]').content = location.href;
+    document.querySelector('meta[property="og:url"]').content = canonical;
     document.querySelector("#structured-data").textContent = JSON.stringify(schema);
   };
   const heading = (eyebrow, title, desc = "") => `<div class="page-heading"><span class="eyebrow">${esc(eyebrow)}</span><h1>${esc(title)}</h1>${desc ? `<p>${esc(desc)}</p>` : ""}</div>`;
   const listing = (title, desc, items, eyebrow = "施設を探す", contexts = new Map()) => {
-    setMeta(`${title}｜無料デー検索`, desc, {"@context":"https://schema.org", "@type":"CollectionPage", name:title, description:desc, inLanguage:"ja", mainEntity:{"@type":"ItemList", numberOfItems:items.length, itemListElement:items.map((f, i) => ({"@type":"ListItem", position:i+1, name:f.name, url:`${location.href.split("?")[0]}?facility=${encodeURIComponent(f.facility_id)}`}))}});
+    setMeta(`${title}｜無料デー検索`, desc, {"@context":"https://schema.org", "@type":"CollectionPage", name:title, description:desc, inLanguage:"ja", mainEntity:{"@type":"ItemList", numberOfItems:items.length, itemListElement:items.map((f, i) => ({"@type":"ListItem", position:i+1, name:f.name, url:facilityUrl(f.facility_id)}))}});
     app.innerHTML = `<a class="back-link" href="./">← トップへ</a>${heading(eyebrow, title, desc)}<p class="result-count">${items.length}件の施設</p><h2 class="visually-hidden">施設一覧</h2>${items.length ? `<div class="cards">${items.map(f => card(f, contexts.get(f.facility_id))).join("")}</div>` : `<div class="empty"><p>条件に合う施設が見つかりませんでした。</p><a class="button secondary" href="./">条件を変えて検索する</a></div>`}`;
   };
   const scheduledOn = (date) => {
@@ -316,7 +325,7 @@
       <section class="content-section"><div class="section-title"><div><span class="eyebrow">THIS WEEK</span><h2>今週無料の施設</h2></div><a class="text-link" href="${url({view:"week"})}">一覧を見る →</a></div>${weekEvents.length ? `<div class="cards">${weekEvents.slice(0, 4).map(({f, event}) => card(f, contextForPeriod(event, "今週無料"))).join("")}</div>` : `<div class="notice">今週の日付が確定している無料施設はありません。</div>`}</section>
       <section class="content-section"><div class="section-title"><div><span class="eyebrow">THIS MONTH</span><h2>今月無料の日がある施設</h2></div><a class="text-link" href="${url({view:"month"})}">一覧を見る →</a></div>${monthEvents.length ? `<div class="cards">${monthEvents.slice(0, 4).map(({f, event}) => card(f, contextForPeriod(event, "今月無料"))).join("")}</div>` : `<div class="notice">今月のこれからの無料日が登録された施設はありません。</div>`}</section>
       <section class="content-section calendar-home-link"><a class="calendar-home-card" href="${url({view:"calendar"})}"><span class="quick-icon">▦</span><span><strong>無料日カレンダー</strong><small>月ごとの無料日をカレンダーで探す</small></span><b>カレンダーを見る →</b></a></section>
-      <section class="content-section"><div class="section-title"><div><span class="eyebrow">BROWSE BY AREA</span><h2>エリアから探す</h2></div></div><div class="pill-links">${prefectures.map(x => `<a href="${url({prefecture:x})}">${x} <span>→</span></a>`).join("")}</div></section><section class="content-section"><div class="section-title"><div><span class="eyebrow">BROWSE BY CATEGORY</span><h2>カテゴリから探す</h2></div></div><div class="category-grid">${categories.map((x, i) => `<a href="${url({category:x})}"><span class="cat-icon">${["▧", "▤", "⚛", "♧", "◉", "❀", "⌂"][i]}</span>${x}<b>→</b></a>`).join("")}</div></section><section class="content-section seo-entry-links"><div class="section-title"><div><span class="eyebrow">FREE DAY GUIDES</span><h2>無料日をテーマから探す</h2></div></div><div class="pill-links"><a href="free/today/">今日無料の施設 <span>→</span></a><a href="free/tomorrow/">明日無料の施設 <span>→</span></a><a href="free/this-week/">今週無料 <span>→</span></a><a href="free/this-weekend/">今週末無料 <span>→</span></a><a href="free/this-month/">今月無料 <span>→</span></a><a href="tokyo/free/">東京の無料施設 <span>→</span></a><a href="kanagawa/free/">神奈川の無料施設 <span>→</span></a><a href="free/art-museum/">無料美術館 <span>→</span></a><a href="free/zoo/">無料動物園 <span>→</span></a><a href="free/botanical-garden/">無料植物園 <span>→</span></a><a href="free/garden/">無料庭園 <span>→</span></a></div></section><p class="data-note">掲載データは試験公開用です。無料条件・日程は変更される場合があります。訪問前に施設の公式サイトをご確認ください。</p>`;
+      <section class="content-section"><div class="section-title"><div><span class="eyebrow">BROWSE BY AREA</span><h2>エリアから探す</h2></div></div><div class="pill-links">${prefectures.map(x => `<a href="${url({prefecture:x})}">${x} <span>→</span></a>`).join("")}</div></section><section class="content-section"><div class="section-title"><div><span class="eyebrow">BROWSE BY CATEGORY</span><h2>カテゴリから探す</h2></div></div><div class="category-grid">${categories.map((x, i) => `<a href="${url({category:x})}"><span class="cat-icon">${["▧", "▤", "⚛", "♧", "◉", "❀", "⌂"][i]}</span>${x}<b>→</b></a>`).join("")}</div></section><section class="content-section seo-entry-links"><div class="section-title"><div><span class="eyebrow">FREE DAY GUIDES</span><h2>無料日をテーマから探す</h2></div></div><div class="pill-links"><a href="free/today/">今日無料の施設 <span>→</span></a><a href="free/tomorrow/">明日無料の施設 <span>→</span></a><a href="free/this-week/">今週無料 <span>→</span></a><a href="free/this-weekend/">今週末無料 <span>→</span></a><a href="free/this-month/">今月無料 <span>→</span></a><a href="tokyo/free/">東京の無料施設 <span>→</span></a><a href="kanagawa/free/">神奈川の無料施設 <span>→</span></a><a href="osaka/free/">大阪の無料施設 <span>→</span></a><a href="tokyo/art-museum/free/">東京の無料美術館 <span>→</span></a><a href="tokyo/garden/free/">東京の無料庭園 <span>→</span></a><a href="kanagawa/art-museum/free/">神奈川の無料美術館 <span>→</span></a><a href="kanagawa/museum/free/">神奈川の無料博物館 <span>→</span></a><a href="osaka/museum/free/">大阪の無料博物館 <span>→</span></a><a href="free/art-museum/">無料美術館 <span>→</span></a><a href="free/museum/">無料博物館 <span>→</span></a><a href="free/zoo/">無料動物園 <span>→</span></a><a href="free/botanical-garden/">無料植物園 <span>→</span></a><a href="free/garden/">無料庭園 <span>→</span></a></div></section><p class="data-note">掲載データは試験公開用です。無料条件・日程は変更される場合があります。訪問前に施設の公式サイトをご確認ください。</p>`;
     document.querySelector("#search-form").addEventListener("submit", e => { e.preventDefault(); const values = Object.fromEntries(new FormData(e.currentTarget)); location.href = url({search:"1", ...Object.fromEntries(Object.entries(values).filter(([, value]) => value))}); });
   };
   const render = () => {
@@ -325,9 +334,12 @@
     if (q.has("facility")) {
       const f = rows.find(x => x.facility_id === q.get("facility"));
       if (!f) return listing("施設が見つかりません", "URLをご確認ください。", []);
-      const facilitySchema = {"@context":"https://schema.org", "@type":"TouristAttraction", name:f.name, address:{"@type":"PostalAddress", streetAddress:f.address, addressLocality:f.municipality, addressRegion:f.prefecture, addressCountry:"JP"}, url:f.official_url, sameAs:f.source_url};
+      const canonicalFacilityUrl = facilityUrl(f.facility_id);
+      const facilitySchema = {"@context":"https://schema.org", "@type":"TouristAttraction", name:f.name, description:`${f.name}（${f.prefecture}${f.municipality}）の無料日・無料条件・料金・営業時間。`, address:{"@type":"PostalAddress", streetAddress:f.address, addressLocality:f.municipality, addressRegion:f.prefecture, addressCountry:"JP"}, url:canonicalFacilityUrl, sameAs:f.official_url};
       if (Number.isFinite(f.latitude) && Number.isFinite(f.longitude)) facilitySchema.geo = {"@type":"GeoCoordinates", latitude:f.latitude, longitude:f.longitude};
       setMeta(`${f.name}の無料日・料金・営業時間｜無料デー検索`, `${f.name}（${f.prefecture}${f.municipality}）の無料日、無料条件、料金、営業時間を掲載。`, facilitySchema);
+      document.querySelector('link[rel="canonical"]').href = canonicalFacilityUrl;
+      document.querySelector('meta[property="og:url"]').content = canonicalFacilityUrl;
       const dateLabels = dateRulesFor(f).map(labelText).filter(Boolean);
       const next = nextDateInfo(f, today);
       const nextRuleText = (next.rules || []).map(labelText).filter(Boolean).join("・");

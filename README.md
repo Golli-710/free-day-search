@@ -49,9 +49,16 @@ python3 scripts/prepare_site.py --site-url https://OWNER.github.io/REPOSITORY/ -
 
 ### 検索向けページ
 
-`scripts/prepare_site.py` は `data.js` から施設データを読み、監査済みの無料ルールがある地域・カテゴリのページと、今日・明日・今週・今週末・今月のページを静的HTMLとして生成します。対象者限定の条件は表示し、`needs_review` / `unverified` の無料日情報は掲載しません。地域×カテゴリのページは対象施設が2件以上、カテゴリ横断ページは3件以上の場合だけ作り、薄いページを増やしません。`Asia/Tokyo` の日付に合わせ、Actionsが毎日00:00 JSTに日付ページとサイトマップを再生成・公開します。
+`scripts/prepare_site.py` は `data.js` から施設データを読み、監査済みの無料ルールがある地域・カテゴリのページと、今日・明日・今週・今週末・今月のページを静的HTMLとして生成します。対象者限定の条件は表示し、`needs_review` / `unverified` の無料日情報は一覧に掲載しません。地域×カテゴリページは次回日付を計算できる対象施設が3件以上、カテゴリ横断ページは3件以上の場合だけ生成します。全施設に `/facility/{facility_id}/` の静的な詳細ページを生成し、一覧・canonical・サイトマップから直接到達できるようにします。従来の `?facility=` URLも互換のため残します。`Asia/Tokyo` の日付に合わせ、Actionsが毎日00:00 JSTに日付ページとサイトマップを再生成・公開します。
 
-ページごとにtitle、description、canonical、OGP、CollectionPage/ItemList構造化データを設定します。施設詳細ページは従来の固有URLを使います。キーワード仮説とページ対応は `SEO_KEYWORDS.md` に記録しています。検索ボリュームは未計測のため、月1,000PVは目標であり保証値ではありません。公開後はGoogle Search Consoleの実績を見て見直します。
+ページごとにtitle、description、canonical、OGP、CollectionPage/ItemList構造化データを設定します。施設詳細にはTouristAttraction構造化データを出力します。キーワード仮説とページ対応は `SEO_KEYWORDS.md`、生成URL・メタ情報・掲載数の監査結果は `SEO_AUDIT.md` に記録しています。再監査は以下で実行できます。
+
+```sh
+python3 scripts/prepare_site.py --site-url https://OWNER.github.io/REPOSITORY/ --output /tmp/free-day-site
+python3 scripts/audit_seo.py --site /tmp/free-day-site --base https://OWNER.github.io/REPOSITORY/
+```
+
+検索ボリュームは未計測のため、月1,000PVは目標であり保証値ではありません。公開後はGoogle Search Consoleの実績を見て見直します。
 
 ## ファイル
 
