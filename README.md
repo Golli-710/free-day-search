@@ -48,7 +48,7 @@ python3 scripts/prepare_site.py --site-url https://OWNER.github.io/REPOSITORY/ -
 - 優先順位は「明日 → 今日 → 今週末 → 今週」。日付条件より常時無料の施設を後回しにします。
 - `audit.status` と無料日関連項目が `confirmed` の施設だけを対象とし、needs_review / unverifiedは対象外です。
 - 大人・一般が無料になるルールを使います。子ども・学生など大人対象外の条件は除外し、成人でも条件がある場合は投稿文に対象条件を明記します。
-- 施設詳細の静的URLへリンクし、`utm_source=x` 等の計測用パラメーターを付けます。サイトのcanonical URLは変更しません。
+- 施設詳細の静的URLへリンクし、`utm_source=x`、`utm_medium=social`、`utm_campaign=free_spot_daily`、`utm_content={facility_id}_{target_date}`を付けます。過去の`free_day`付きURLはそのまま有効で、canonical URLにはUTMを含めません。
 - 投稿済み履歴から同一施設の14日間再選出、同一施設・対象日の再投稿、同じ本文の再投稿を防ぎます。Dry Runは投稿済み扱いにせず、実際の投稿履歴とは区別します。地域・カテゴリの直近候補も参照して偏りを抑えます。
 - 自動文面は施設データから生成します。知名度のような根拠のない人気評価は使いません。
 
@@ -68,6 +68,14 @@ python3 scripts/prepare_site.py --site-url https://OWNER.github.io/REPOSITORY/ -
 通信タイムアウトまたはサーバー応答で送信成否が不明な場合は、重複投稿防止のため履歴を `unknown` にし、自動再試行しません。X上の投稿履歴を確認してから手動で処理してください。認証、レート制限、拒否エラーは種別だけログと履歴に残し、秘密情報や応答本文は出力しません。
 
 ローカルテストは `npm run test:social` で実行します。実データを使うDry Runは `npm run social:dry-run`、無効状態の投稿コマンド確認は `npm run social:post` です。`SOCIAL_POSTING_ENABLED=true` にすると外部投稿につながるため、確認が終わるまではfalseのままにしてください。
+
+Dry Run候補には投稿品質チェック結果が含まれます。文字数、施設名、無料条件、成人対象・条件表示、施設詳細URL、UTM、過去14日間の投稿履歴との重複を確認し、NGなら候補JSONを`quality_failed`として保存して投稿可能状態にしません。GitHub Actionsの**Job Summary**には候補本文、予定日時、地域・カテゴリ、対象条件、品質チェック表、14日間の重複判定、直近7日分の候補と地域・カテゴリ別件数を表示します。JSON Artifactも14日間保存します。
+
+### Google Search Console
+
+確認コードは `scripts/prepare_site.py` に書き込まず、GitHubリポジトリの **Settings → Secrets and variables → Actions → Variables** に `GOOGLE_SITE_VERIFICATION` として登録してください。GitHub Pagesのビルド時にトップページ・SEOランディングページ・施設詳細ページの`<head>`へmetaタグを挿入します。ローカル生成では環境変数または `--google-site-verification` オプションを指定できます。値が空なら確認metaタグは出力されません。確認コードは現在未設定です。
+
+ビルドはGitHub Pagesの本番URLを基準にし、canonical、OGP URL、sitemap、robots.txtのsitemap参照を生成します。空のSEOページは`noindex,follow`となり、sitemapには含めません。`/free/today/`、`/free/tomorrow/`、`/free/this-week/`、`/free/this-weekend/`、`/free/this-month/`、地域・カテゴリ、施設詳細の既存URLは維持しています。Search Consoleではこれらの静的URL単位で表示回数、クリック数、CTR、平均掲載順位を確認できます。URL変更は行っていません。
 
 ## 施設データ
 
@@ -106,6 +114,8 @@ python3 scripts/audit_seo.py --site /tmp/free-day-site --base https://OWNER.gith
 - `src/social/` — X APIクライアントと投稿候補生成
 - `scripts/social/` — Dry Run、履歴管理、テスト
 - `.github/workflows/social-post.yml` — 17時JSTの投稿候補生成ワークフロー（本番投稿は既定で無効）
+- `scripts/social/report.mjs` — GitHub Actions Job Summary用の候補・履歴レポート
+- `scripts/test_site_metadata.py` — Search Console、canonical、sitemap、robotsの生成テスト
 
 ## 既知の制約
 

@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 
 export const SITE_URL = "https://golli-710.github.io/free-day-search/";
+export const UTM_CAMPAIGN = "free_spot_daily";
 export const RULE_TYPES = new Set(["annual_date", "holiday", "specific_date", "nth_weekday", "weekly_weekday", "nearest_weekday", "annual_period"]);
 const DAY_MS = 86_400_000;
 const pad = n => String(n).padStart(2, "0");
@@ -137,7 +138,7 @@ const regionText = f => `${(f.prefecture || "").replace(/[都府県]$/,"")}・${
 
 function withUtm(path, campaign) {
   const u = new URL(path, SITE_URL);
-  u.searchParams.set("utm_source","x"); u.searchParams.set("utm_medium","social"); u.searchParams.set("utm_campaign","free_day"); u.searchParams.set("utm_content",campaign);
+  u.searchParams.set("utm_source","x"); u.searchParams.set("utm_medium","social"); u.searchParams.set("utm_campaign",UTM_CAMPAIGN); u.searchParams.set("utm_content",campaign);
   return u.href;
 }
 
@@ -162,7 +163,7 @@ function compactText(f,d,kind,rule,url) {
   return `${title}：${f.name}\n📍 ${regionText(f)}\n📅 ${displayDate(d)}\n💰 ${adultRuleStatus(rule)==="conditional"?"大人も条件付きで無料":"大人・一般：無料"}（${conditionFor(rule)}）${eligibility}\n\n${url}`;
 }
 
-function weightedLength(text) {
+export function weightedLength(text) {
   const withoutUrl = text.replace(/https?:\/\/\S+/g,"<URL>");
   let weight = 0;
   for (const char of withoutUrl) weight += char === "<" ? 0 : char.codePointAt(0) > 0xff ? 2 : 1;
@@ -227,11 +228,54 @@ export function candidatePool(facilities, now = new Date()) {
 
 export function isDuplicateCandidate(candidate, history, { cooldownDays = 14, now = new Date() } = {}) {
   const posts = history?.posts || [];
-  if (posts.some(p => p.status !== "dry_run" && p.facility_id === candidate.facilityId && p.target_date === candidate.targetDate)) return "same-facility-target-date";
-  if (posts.some(p => p.status !== "dry_run" && p.post_text === candidate.text)) return "identical-post-text";
-  const today = asDate(jstToday(now));
-  const cooldown = posts.some(p => ["posted","posting","unknown"].includes(p.status) && p.facility_id === candidate.facilityId && p.posted_at && (today - asDate(jstToday(new Date(p.posted_at)))) / DAY_MS < cooldownDays);
+  if (posts.some(p => p.status !== "failed" && p.facility_id === candidate.facilityId && p.target_date === candidate.targetDate)) return "same-facility-target-date";
+  if (posts.some(p => p.status !== "failed" && p.post_text === candidate.text)) return "identical-post-text";
+  const cooldown = posts.some(p => ["posted","posting","unknown"].includes(p.status) && p.facility_id === candidate.facilityId && postedWithinDays(p,cooldownDays,now));
   return cooldown ? "facility-cooldown" : null;
+}
+
+function postedWithinDays(record, days, now) {
+  if (!record.posted_at && !record.scheduled_at) return false;
+  const today = new Date(`${jstToday(now)}T00:00:00+09:00`).getTime();
+  const recordDay = new Date(`${jstToday(new Date(record.posted_at || record.scheduled_at))}T00:00:00+09:00`).getTime();
+  const delta = (today - recordDay) / DAY_MS;
+  return delta >= 0 && delta < days;
+}
+
+export function checkPostQuality({ candidate, facility, history, now = new Date() }) {
+  const checks = [];
+  const add = (id, label, passed, detail) => checks.push({ id, label, passed: Boolean(passed), detail });
+  const rules = eventRules(facility,asDate(candidate.targetDate));
+  const rule = rules.find(r => conditionFor(r) === candidate.ruleLabel) || null;
+  const adultStatus = rule ? adultRuleStatus(rule) : "excluded";
+  const expectedPath = `/free-day-search/facility/${encodeURIComponent(candidate.facilityId)}/`;
+  let parsedUrl = null;
+  try { parsedUrl = new URL(candidate.url); } catch {}
+  const urlValid = parsedUrl && parsedUrl.origin === new URL(SITE_URL).origin && parsedUrl.pathname === expectedPath;
+  const utmValid = urlValid && parsedUrl.searchParams.get("utm_source") === "x" && parsedUrl.searchParams.get("utm_medium") === "social" && parsedUrl.searchParams.get("utm_campaign") === UTM_CAMPAIGN && parsedUrl.searchParams.get("utm_content") === `${candidate.facilityId}_${candidate.targetDate}`;
+  const previous = (history?.posts || []).filter(p => p.post_id !== candidate.post_id && p.status !== "failed");
+  const realPostStatuses = new Set(["posted","posting","unknown"]);
+  const recentFacilityPost = previous.some(p => realPostStatuses.has(p.status) && p.facility_id === candidate.facilityId && postedWithinDays(p,14,now));
+  const sameTarget = previous.some(p => p.facility_id === candidate.facilityId && p.target_date === candidate.targetDate);
+  const sameText = previous.some(p => p.post_text === candidate.text);
+  const recentDryRunCount = previous.filter(p => p.status === "dry_run" && p.facility_id === candidate.facilityId && postedWithinDays(p,14,now)).length;
+  const conditionText = String(candidate.ruleLabel || "").trim();
+  const vague = /要確認|未確認|未確定|日付不明|情報確認中|公式情報未確認|条件不明/.test(conditionText);
+  const bodyHasCondition = !!conditionText && candidate.text.includes(conditionText);
+  const conditionalAudience = adultStatus !== "conditional" || candidate.text.includes(audienceFor(rule)) && /対象条件|⚠️/.test(candidate.text);
+
+  add("x_length","X文字数（URL短縮後の加重文字数）",weightedLength(candidate.text) <= 280,`${weightedLength(candidate.text)} / 280`);
+  add("facility_name","施設名を含む",Boolean(facility?.name) && candidate.text.includes(facility.name),facility?.name || "施設名なし");
+  add("condition_clear","無料条件が具体的で誤解を招く表現がない",adultStatus !== "excluded" && !vague && bodyHasCondition,conditionText || "無料条件が見つかりません");
+  add("adult_eligible","大人・一般が無料対象",candidate.auditStatus === "confirmed" && Boolean(rule) && adultStatus !== "excluded",adultStatus === "conditional" ? `成人条件あり：${audienceFor(rule)}` : adultStatus === "general" ? "大人・一般対象" : "成人対象として確認できません");
+  add("conditional_disclosed","成人への条件を本文に明記",conditionalAudience,adultStatus === "conditional" ? audienceFor(rule) : "条件付き成人ルールなし");
+  add("facility_detail_url","施設詳細ページへのリンク",Boolean(urlValid),candidate.url);
+  add("utm","UTMパラメーター",Boolean(utmValid),urlValid ? parsedUrl.search : "URL形式が不正");
+  add("no_14d_post","過去14日以内の同一施設投稿なし",!recentFacilityPost,recentFacilityPost ? "過去14日以内に同一施設の投稿または送信結果不明の記録があります" : "実投稿・送信結果不明との重複なし");
+  add("no_same_target","同一施設＋対象日の重複なし",!sameTarget,sameTarget ? "同一施設・同一対象日の履歴があります" : "同一施設・対象日の重複なし");
+  add("no_same_text","同一本文の重複なし",!sameText,sameText ? "同じ投稿本文の履歴があります" : "同一本文の重複なし");
+  const passed = checks.every(c => c.passed);
+  return { passed, checks, duplicate_checks:{ no_post_within_14_days:!recentFacilityPost, no_same_facility_target_date:!sameTarget, no_identical_text:!sameText, recent_dry_run_same_facility_count:recentDryRunCount } };
 }
 
 export function selectCandidate(facilities, history, now = new Date()) {

@@ -4,10 +4,10 @@ import { spawnSync } from "node:child_process";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { adultRuleStatus, candidatePool, generatePostCandidate, isDuplicateCandidate, jstToday, selectCandidate } from "../../src/social/generator.js";
+import { adultRuleStatus, candidatePool, checkPostQuality, generatePostCandidate, isDuplicateCandidate, jstToday, selectCandidate } from "../../src/social/generator.js";
 import { classifyXApiError, createXClient, XApiError } from "../../src/social/xClient.js";
 
-const node="/Users/puuko/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node";
+const node=process.execPath;
 const facility=(overrides={})=>({facility_id:"test-museum",name:"確認済み博物館",prefecture:"東京都",municipality:"台東区",category:"博物館",regular_fee:"一般500円",audit:{status:"confirmed",field_status:{free_rules:"confirmed"}},free_rules:[{type:"specific_date",date:"2026-10-06",label:"確認済みの無料公開日",eligibility:{adult_general:true,adult_eligible:true,details:""}}],...overrides});
 
 test("confirmed facilities can be selected, while needs_review and unverified cannot",()=>{
@@ -28,7 +28,7 @@ test("tomorrow date is calculated from Asia/Tokyo and uses a UTM facility detail
   const c=selectCandidate([facility()],{posts:[]},now);
   assert.equal(c.targetDate,"2026-10-06"); assert.equal(c.postType,"tomorrow");
   const url=new URL(c.url); assert.equal(url.pathname,"/free-day-search/facility/test-museum/");
-  assert.equal(url.searchParams.get("utm_source"),"x"); assert.equal(url.searchParams.get("utm_medium"),"social"); assert.equal(url.searchParams.get("utm_campaign"),"free_day");
+  assert.equal(url.searchParams.get("utm_source"),"x"); assert.equal(url.searchParams.get("utm_medium"),"social"); assert.equal(url.searchParams.get("utm_campaign"),"free_spot_daily");
   assert.match(c.text,/📍 東京・台東区/);
 });
 
@@ -63,6 +63,20 @@ test("same facility/date, same text, and recently posted facilities are suppress
   assert.equal(isDuplicateCandidate(c,{posts:[{facility_id:c.facilityId,target_date:c.targetDate,status:"posted"}]},{now:new Date("2026-10-05T08:00:00Z")}),"same-facility-target-date");
   assert.equal(isDuplicateCandidate(c,{posts:[{post_text:c.text,status:"posted"}]},{now:new Date("2026-10-05T08:00:00Z")}),"identical-post-text");
   assert.equal(isDuplicateCandidate(c,{posts:[{facility_id:c.facilityId,target_date:"2026-10-10",status:"posted",posted_at:"2026-10-01T12:00:00Z"}]},{now:new Date("2026-10-05T08:00:00Z")}),"facility-cooldown");
+  assert.equal(isDuplicateCandidate(c,{posts:[{facility_id:c.facilityId,target_date:"2026-10-10",status:"unknown",scheduled_at:"2026-10-01T17:00:00+09:00"}]},{now:new Date("2026-10-05T08:00:00Z")}),"facility-cooldown");
+});
+
+test("post quality passes for a clean adult candidate and blocks missing conditions or 14-day repeats",()=>{
+  const f=facility();
+  const c=generatePostCandidate({facility:f,targetDate:"2026-10-06",postType:"tomorrow"});
+  const now=new Date("2026-10-05T08:00:00Z");
+  const pass=checkPostQuality({candidate:c,facility:f,history:{posts:[]},now});
+  assert.equal(pass.passed,true); assert.ok(pass.checks.every(check=>check.passed));
+  const missingCondition={...c,text:c.text.replace(c.ruleLabel,"")};
+  const failed=checkPostQuality({candidate:missingCondition,facility:f,history:{posts:[]},now});
+  assert.equal(failed.passed,false); assert.ok(failed.checks.some(check=>check.id==="condition_clear"&&!check.passed));
+  const repeat=checkPostQuality({candidate:c,facility:f,history:{posts:[{post_id:"old",facility_id:c.facilityId,scheduled_at:"2026-10-01T17:00:00+09:00",posted_at:"2026-10-01T17:00:00+09:00",target_date:"2026-10-02",post_text:"old",status:"posted"}]},now});
+  assert.equal(repeat.passed,false); assert.equal(repeat.duplicate_checks.no_post_within_14_days,false);
 });
 
 test("DRY RUN writes JSON and never loads credentials or sends an X request",async()=>{
@@ -72,7 +86,7 @@ test("DRY RUN writes JSON and never loads credentials or sends an X request",asy
     const cli=resolve("scripts/social/cli.mjs");
     const result=spawnSync(node,[cli,"dry-run","--now","2026-10-05","--history",history,"--outbox",outbox],{encoding:"utf8",env:{...process.env,X_API_KEY:"MUST_NOT_BE_READ"}});
     assert.equal(result.status,0,result.stderr); assert.match(result.stdout,/DRY RUN/); assert.doesNotMatch(result.stdout,/MUST_NOT_BE_READ/);
-    const saved=JSON.parse(await readFile(outbox,"utf8")); assert.equal(saved.status,"candidate");
+    const saved=JSON.parse(await readFile(outbox,"utf8")); assert.equal(saved.status,"candidate"); assert.equal(saved.quality.passed,true); assert.equal(saved.quality.checks.length,10); assert.ok(saved.scheduled_at);
   }finally{await rm(dir,{recursive:true,force:true});}
 });
 

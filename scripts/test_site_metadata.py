@@ -1,0 +1,78 @@
+import os
+import re
+import sys
+import tempfile
+import unittest
+import xml.etree.ElementTree as ET
+from contextlib import redirect_stdout
+from io import StringIO
+from pathlib import Path
+from unittest.mock import patch
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+import prepare_site  # noqa: E402
+
+BASE = "https://golli-710.github.io/free-day-search/"
+
+
+def build_site(output, verification=""):
+    args = ["prepare_site.py", "--site-url", BASE, "--output", str(output), "--today", "2026-10-05"]
+    if verification:
+        args += ["--google-site-verification", verification]
+    with patch.object(sys, "argv", args), patch.dict(os.environ, {"GOOGLE_SITE_VERIFICATION": verification}), redirect_stdout(StringIO()):
+        prepare_site.main()
+
+
+class SiteMetadataTests(unittest.TestCase):
+    def test_sitemap_robots_canonical_and_noindex_are_consistent(self):
+        with tempfile.TemporaryDirectory(prefix="free-day-seo-") as directory:
+            output = Path(directory) / "site"
+            build_site(output)
+            sitemap = ET.parse(output / "sitemap.xml").getroot()
+            namespace = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+            urls = [node.text for node in sitemap.findall("s:url/s:loc", namespace)]
+            self.assertTrue(urls)
+            self.assertEqual(len(urls), len(set(urls)))
+            self.assertTrue(all(url.startswith(BASE) for url in urls))
+            self.assertIn(BASE + "facility/ueno-zoo/", urls)
+            self.assertIn(BASE + "free/today/", urls)
+
+            robots = (output / "robots.txt").read_text(encoding="utf-8")
+            self.assertIn("Sitemap: " + BASE + "sitemap.xml", robots)
+
+            canonicals = []
+            sitemap_set = set(urls)
+            for page in output.rglob("*.html"):
+                markup = page.read_text(encoding="utf-8")
+                match = re.search(r'<link rel="canonical" href="([^"]+)"', markup)
+                self.assertIsNotNone(match, str(page))
+                canonical = match.group(1)
+                self.assertTrue(canonical.startswith(BASE), canonical)
+                self.assertNotIn("?", canonical)
+                canonicals.append(canonical)
+                if 'name="robots" content="noindex,follow"' in markup:
+                    self.assertNotIn(canonical, sitemap_set)
+            self.assertIn(BASE, canonicals)
+            self.assertEqual(len(canonicals), len(set(canonicals)))
+
+    def test_verification_meta_is_configured_at_build_and_absent_by_default(self):
+        with tempfile.TemporaryDirectory(prefix="free-day-verify-") as directory:
+            output = Path(directory) / "site"
+            build_site(output, "sc-test-code-123")
+            pages = list(output.rglob("*.html"))
+            self.assertGreater(len(pages), 1)
+            for page in pages:
+                markup = page.read_text(encoding="utf-8")
+                self.assertIn('<meta name="google-site-verification" content="sc-test-code-123">', markup, str(page))
+
+            clean_output = Path(directory) / "no-verification"
+            with patch.dict(os.environ, {"GOOGLE_SITE_VERIFICATION": ""}):
+                build_site(clean_output)
+            for page in clean_output.rglob("*.html"):
+                markup = page.read_text(encoding="utf-8")
+                self.assertNotIn("google-site-verification", markup, str(page))
+
+
+if __name__ == "__main__":
+    unittest.main()

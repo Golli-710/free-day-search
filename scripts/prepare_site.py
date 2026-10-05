@@ -5,6 +5,7 @@ import argparse
 import calendar
 import html
 import json
+import os
 import re
 import shutil
 from datetime import date, timedelta
@@ -18,7 +19,6 @@ SITE_FILES = ["index.html", "app.js", "data.js", "styles.css", "favicon.svg"]
 AREAS = [("tokyo", "東京都"), ("kanagawa", "神奈川県"), ("osaka", "大阪府")]
 CATEGORIES = ["美術館", "博物館", "科学館", "動物園", "水族館", "植物園", "庭園"]
 CATEGORY_SLUGS = {"美術館": "art-museum", "博物館": "museum", "科学館": "science-museum", "動物園": "zoo", "水族館": "aquarium", "植物園": "botanical-garden", "庭園": "garden"}
-GOOGLE_VERIFICATION_META = '<meta name="google-site-verification" content="1Mh9dLEDh98zsyMK-1fJe1bOT_gdS-vFDKZf-wMKRWU">'
 WEEKDAYS = ["月", "火", "水", "木", "金", "土", "日"]
 
 
@@ -234,7 +234,7 @@ def next_occurrence(f, today):
     return None
 
 
-def page_html(title, description, heading, intro, facilities, base, canonical, related, today=None):
+def page_html(title, description, heading, intro, facilities, base, canonical, related, today=None, verification_meta=""):
     today = today or date.today()
     cards = []
     for f, event_date, event_rules in facilities:
@@ -250,10 +250,10 @@ def page_html(title, description, heading, intro, facilities, base, canonical, r
     related_html = "・".join(f'<a href="{esc(url)}">{esc(label)}</a>' for label, url in related)
     robots_meta = "" if facilities else '<meta name="robots" content="noindex,follow">'
     schema = {"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "description": description, "url": canonical, "inLanguage": "ja", "mainEntity": {"@type": "ItemList", "numberOfItems": len(facilities), "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": f["name"], "url": f'{base}facility/{quote(f["facility_id"])}/'} for i, (f, _, _) in enumerate(facilities)]}}
-    return f'''<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">{GOOGLE_VERIFICATION_META}{robots_meta}<title>{esc(title)}</title><meta name="description" content="{esc(description)}"><link rel="canonical" href="{esc(canonical)}"><meta property="og:locale" content="ja_JP"><meta property="og:type" content="website"><meta property="og:site_name" content="無料デー検索"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{esc(canonical)}"><meta name="twitter:card" content="summary"><link rel="icon" href="{base}favicon.svg"><link rel="stylesheet" href="{base}styles.css"><script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script></head><body><header class="site-header"><a class="brand" href="{base}"><span class="brand-mark">￥</span> 無料デー検索</a><a class="header-link" href="{base}">無料日を検索</a></header><main class="container"><a class="back-link" href="{base}">← トップへ</a><div class="page-heading"><span class="eyebrow">大人・一般向けの無料情報</span><h1>{esc(heading)}</h1><section class="page-context"><h2>このページで分かること</h2><p>{esc(intro)}</p><p>{len(facilities)}施設を掲載。大人・一般が対象となる確認済みルールだけで無料日を計算し、対象者限定の条件は施設ごとに表示します。掲載情報の最新確認日：{esc(latest_checked)}。各施設の確認日は一覧にも記載しています。</p><p>最新の開館・無料情報は訪問前に公式サイトをご確認ください。</p></section></div><section class="cards" aria-label="無料施設一覧">{listing}</section><section class="content-section"><h2>関連ページ</h2><p>{related_html}</p><p><a href="{base}?view=calendar">無料日カレンダーを見る</a></p></section></main><footer class="site-footer"><p><strong>無料デー検索</strong> — 施設の公式情報を確認して掲載しています。</p><p>無料条件や開館日は変更される場合があります。訪問前に公式案内をご確認ください。</p></footer></body></html>'''
+    return f'''<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">{verification_meta}{robots_meta}<title>{esc(title)}</title><meta name="description" content="{esc(description)}"><link rel="canonical" href="{esc(canonical)}"><meta property="og:locale" content="ja_JP"><meta property="og:type" content="website"><meta property="og:site_name" content="無料デー検索"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{esc(canonical)}"><meta name="twitter:card" content="summary"><link rel="icon" href="{base}favicon.svg"><link rel="stylesheet" href="{base}styles.css"><script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script></head><body><header class="site-header"><a class="brand" href="{base}"><span class="brand-mark">￥</span> 無料デー検索</a><a class="header-link" href="{base}">無料日を検索</a></header><main class="container"><a class="back-link" href="{base}">← トップへ</a><div class="page-heading"><span class="eyebrow">大人・一般向けの無料情報</span><h1>{esc(heading)}</h1><section class="page-context"><h2>このページで分かること</h2><p>{esc(intro)}</p><p>{len(facilities)}施設を掲載。大人・一般が対象となる確認済みルールだけで無料日を計算し、対象者限定の条件は施設ごとに表示します。掲載情報の最新確認日：{esc(latest_checked)}。各施設の確認日は一覧にも記載しています。</p><p>最新の開館・無料情報は訪問前に公式サイトをご確認ください。</p></section></div><section class="cards" aria-label="無料施設一覧">{listing}</section><section class="content-section"><h2>関連ページ</h2><p>{related_html}</p><p><a href="{base}?view=calendar">無料日カレンダーを見る</a></p></section></main><footer class="site-footer"><p><strong>無料デー検索</strong> — 施設の公式情報を確認して掲載しています。</p><p>無料条件や開館日は変更される場合があります。訪問前に公式案内をご確認ください。</p></footer></body></html>'''
 
 
-def facility_page_html(f, base, today, region_page, category_page):
+def facility_page_html(f, base, today, region_page, category_page, verification_meta=""):
     """Server-render a crawlable, unique page for one facility."""
     canonical = f'{base}facility/{quote(f["facility_id"])}/'
     title = f'{f["name"]}の無料日・料金・営業時間｜無料デー検索'
@@ -290,7 +290,7 @@ def facility_page_html(f, base, today, region_page, category_page):
     if f.get("lat") is not None and f.get("lon") is not None:
         schema["geo"] = {"@type": "GeoCoordinates", "latitude": f["lat"], "longitude": f["lon"]}
     adult_text = "情報確認中のため判定できません" if not is_approved else "無料" if adult_general else "条件付きで無料" if adult_eligible else "対象外（大人・一般向け条件なし）"
-    return f'''<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">{GOOGLE_VERIFICATION_META}<title>{esc(title)}</title><meta name="description" content="{esc(description)}"><link rel="canonical" href="{esc(canonical)}"><meta property="og:locale" content="ja_JP"><meta property="og:type" content="website"><meta property="og:site_name" content="無料デー検索"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{esc(canonical)}"><meta name="twitter:card" content="summary"><link rel="icon" href="{base}favicon.svg"><link rel="stylesheet" href="{base}styles.css"><script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script></head><body><header class="site-header"><a class="brand" href="{base}"><span class="brand-mark">￥</span> 無料デー検索</a><a class="header-link" href="{base}">無料日を検索</a></header><main class="container"><a class="back-link" href="{base}">← トップへ</a><div class="detail-head"><span class="tag">{esc(f["category"])}</span><div class="page-heading"><span class="eyebrow">{esc(f["prefecture"])}・{esc(f["municipality"])}</span><h1>{esc(f["name"])}</h1><p>{esc(f["category"])}の無料日・無料条件・通常料金・営業時間をまとめています。</p></div></div><div class="detail-layout"><section class="detail-main">{issue_html}<div class="next-free-banner"><span>次回無料日</span><strong>{esc(next_text)}</strong>{f'<p>該当する無料条件：{esc("・".join(next_rules))}</p>' if next_rules else ""}</div><div class="detail-highlight"><span>無料情報・対象者</span><p>大人・一般：{esc(adult_text)}</p><p>対象者条件：{esc(audience_html)}</p><p>無料条件：{esc(condition)}</p><p>無料日ルール：{esc(rule_html)}</p></div><h2>施設情報</h2><dl class="info-list"><div><dt>住所</dt><dd>{esc(f.get("address"))}</dd></div><div><dt>カテゴリ</dt><dd>{esc(f.get("category"))}</dd></div><div><dt>通常料金</dt><dd>{esc(f.get("regular_fee"))}</dd></div><div><dt>営業時間</dt><dd>{esc(f.get("hours"))}</dd></div><div><dt>定休日</dt><dd>{esc(f.get("closed"))}</dd></div><div><dt>最終確認日</dt><dd>{esc(f.get("last_checked") or f.get("last_verified_date") or "未確認")}</dd></div><div><dt>情報確認状態</dt><dd>{esc(status_text)}</dd></div></dl><p class="source-line">情報ソース：<a href="{esc(source)}" target="_blank" rel="noopener">公式情報を確認する ↗</a></p><a class="button" href="{esc(f.get("official_url"))}" target="_blank" rel="noopener">施設の公式サイトへ ↗</a><section class="content-section"><h2>関連ページ</h2><p>{related}</p></section></section><aside class="detail-aside"><span>おでかけ前に</span><p>営業時間や無料公開日は変更される場合があります。訪問前に最新情報を公式サイトでご確認ください。</p><a href="{esc(f.get("official_url"))}" target="_blank" rel="noopener">公式サイト ↗</a></aside></div></main><footer class="site-footer"><p><strong>無料デー検索</strong> — 施設の公式情報を確認して掲載しています。</p></footer></body></html>'''
+    return f'''<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">{verification_meta}<title>{esc(title)}</title><meta name="description" content="{esc(description)}"><link rel="canonical" href="{esc(canonical)}"><meta property="og:locale" content="ja_JP"><meta property="og:type" content="website"><meta property="og:site_name" content="無料デー検索"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{esc(canonical)}"><meta name="twitter:card" content="summary"><link rel="icon" href="{base}favicon.svg"><link rel="stylesheet" href="{base}styles.css"><script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script></head><body><header class="site-header"><a class="brand" href="{base}"><span class="brand-mark">￥</span> 無料デー検索</a><a class="header-link" href="{base}">無料日を検索</a></header><main class="container"><a class="back-link" href="{base}">← トップへ</a><div class="detail-head"><span class="tag">{esc(f["category"])}</span><div class="page-heading"><span class="eyebrow">{esc(f["prefecture"])}・{esc(f["municipality"])}</span><h1>{esc(f["name"])}</h1><p>{esc(f["category"])}の無料日・無料条件・通常料金・営業時間をまとめています。</p></div></div><div class="detail-layout"><section class="detail-main">{issue_html}<div class="next-free-banner"><span>次回無料日</span><strong>{esc(next_text)}</strong>{f'<p>該当する無料条件：{esc("・".join(next_rules))}</p>' if next_rules else ""}</div><div class="detail-highlight"><span>無料情報・対象者</span><p>大人・一般：{esc(adult_text)}</p><p>対象者条件：{esc(audience_html)}</p><p>無料条件：{esc(condition)}</p><p>無料日ルール：{esc(rule_html)}</p></div><h2>施設情報</h2><dl class="info-list"><div><dt>住所</dt><dd>{esc(f.get("address"))}</dd></div><div><dt>カテゴリ</dt><dd>{esc(f.get("category"))}</dd></div><div><dt>通常料金</dt><dd>{esc(f.get("regular_fee"))}</dd></div><div><dt>営業時間</dt><dd>{esc(f.get("hours"))}</dd></div><div><dt>定休日</dt><dd>{esc(f.get("closed"))}</dd></div><div><dt>最終確認日</dt><dd>{esc(f.get("last_checked") or f.get("last_verified_date") or "未確認")}</dd></div><div><dt>情報確認状態</dt><dd>{esc(status_text)}</dd></div></dl><p class="source-line">情報ソース：<a href="{esc(source)}" target="_blank" rel="noopener">公式情報を確認する ↗</a></p><a class="button" href="{esc(f.get("official_url"))}" target="_blank" rel="noopener">施設の公式サイトへ ↗</a><section class="content-section"><h2>関連ページ</h2><p>{related}</p></section></section><aside class="detail-aside"><span>おでかけ前に</span><p>営業時間や無料公開日は変更される場合があります。訪問前に最新情報を公式サイトでご確認ください。</p><a href="{esc(f.get("official_url"))}" target="_blank" rel="noopener">公式サイト ↗</a></aside></div></main><footer class="site-footer"><p><strong>無料デー検索</strong> — 施設の公式情報を確認して掲載しています。</p></footer></body></html>'''
 
 
 def main():
@@ -298,8 +298,11 @@ def main():
     parser.add_argument("--site-url", required=True, help="Public base URL, ending with slash")
     parser.add_argument("--output", default="_site")
     parser.add_argument("--today", help="Override date for reproducible checks (YYYY-MM-DD)")
+    parser.add_argument("--google-site-verification", default=os.environ.get("GOOGLE_SITE_VERIFICATION", ""), help="Optional Search Console HTML tag verification code")
     args = parser.parse_args()
     base = args.site_url.rstrip("/") + "/"
+    verification_code = args.google_site_verification.strip()
+    verification_meta = f'<meta name="google-site-verification" content="{html.escape(verification_code, quote=True)}">' if verification_code else ""
     today = date.fromisoformat(args.today) if args.today else datetime.now(ZoneInfo("Asia/Tokyo")).date()
     out = Path(args.output).resolve()
     if out.exists():
@@ -307,6 +310,12 @@ def main():
     out.mkdir(parents=True)
     for name in SITE_FILES:
         shutil.copy2(ROOT / name, out / name)
+    root_html = out / "index.html"
+    root_markup = root_html.read_text(encoding="utf-8")
+    root_markup = root_markup.replace("<!-- GOOGLE_SITE_VERIFICATION -->", verification_meta)
+    root_markup = root_markup.replace('<link rel="canonical" href="./">', f'<link rel="canonical" href="{html.escape(base, quote=True)}">')
+    root_markup = root_markup.replace('<meta property="og:url" content="./">', f'<meta property="og:url" content="{html.escape(base, quote=True)}">')
+    root_html.write_text(root_markup, encoding="utf-8")
     rows = facility_data()
     eligible = eligible_facilities(rows)
     urls = [base]
@@ -386,7 +395,7 @@ def main():
                 links.append((f"地域を問わず無料{category}", base + "free/" + cat_slug + "/"))
         canonical = base + path + "/"
         (out / path).mkdir(parents=True, exist_ok=True)
-        html_page = page_html(title, f"{intro}施設の無料条件・通常料金・確認日・公式情報を掲載。", heading, intro, facilities, base, canonical, links, today)
+        html_page = page_html(title, f"{intro}施設の無料条件・通常料金・確認日・公式情報を掲載。", heading, intro, facilities, base, canonical, links, today, verification_meta)
         (out / path / "index.html").write_text(html_page, encoding="utf-8")
         if facilities:
             urls.append(canonical)
@@ -397,7 +406,7 @@ def main():
         category_path = f"{area_slug}/{CATEGORY_SLUGS[f['category']]}/free" if area_slug and f"{area_slug}/{CATEGORY_SLUGS[f['category']]}/free" in by_path else None
         page_path = f"facility/{quote(f['facility_id'])}"
         (out / page_path).mkdir(parents=True, exist_ok=True)
-        (out / page_path / "index.html").write_text(facility_page_html(f, base, today, region_path, category_path), encoding="utf-8")
+        (out / page_path / "index.html").write_text(facility_page_html(f, base, today, region_path, category_path, verification_meta), encoding="utf-8")
         urls.append(base + page_path + "/")
     sitemap = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     sitemap += [f"  <url><loc>{html.escape(url)}</loc></url>" for url in urls]

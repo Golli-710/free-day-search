@@ -28,7 +28,11 @@ jobs:
     steps:
       - name: Check out project
         uses: actions/checkout@v5
+      - name: Test Search Console and generated SEO metadata
+        run: python3 -m unittest discover -s scripts -p test_site_metadata.py
       - name: Prepare static files and SEO URLs
+        env:
+          GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION || '' }}
         shell: bash
         run: |
           owner="${GITHUB_REPOSITORY%%/*}"
@@ -38,7 +42,7 @@ jobs:
           else
             site_url="https://${owner}.github.io/${repository}/"
           fi
-          python3 scripts/prepare_site.py --site-url "$site_url" --output _site
+          python3 scripts/prepare_site.py --site-url "$site_url" --output _site --google-site-verification "$GOOGLE_SITE_VERIFICATION"
       - name: Configure Pages metadata
         id: pages
         uses: actions/configure-pages@v6

@@ -11,5 +11,5 @@ export async function writeHistory(path,history) {
   await writeFile(temp,`${JSON.stringify(history,null,2)}\n`,{mode:0o600}); await rename(temp,path);
 }
 export function historyRecord(candidate,{status,scheduledAt,postedAt=null,xPostId=null,errorKind=null}) {
-  return {post_id:candidate.post_id,facility_id:candidate.facilityId,facility_name:candidate.facilityName||null,prefecture:candidate.prefecture||null,category:candidate.category||null,scheduled_at:scheduledAt,posted_at:postedAt,post_type:candidate.postType,target_date:candidate.targetDate,post_text:candidate.text,status,url:candidate.url,x_post_id:xPostId,error_kind:errorKind};
+  return {post_id:candidate.post_id,facility_id:candidate.facilityId,facility_name:candidate.facilityName||null,prefecture:candidate.prefecture||null,municipality:candidate.municipality||null,category:candidate.category||null,scheduled_at:scheduledAt,posted_at:postedAt,post_type:candidate.postType,target_date:candidate.targetDate,free_condition:candidate.ruleLabel||null,adult_eligibility:candidate.targetConditions||null,post_text:candidate.text,status,url:candidate.url,reason:candidate.reason||null,quality_passed:candidate.qualityPassed??null,x_post_id:xPostId,error_kind:errorKind};
 }

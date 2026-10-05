@@ -34,6 +34,8 @@ jobs:
             social-history-${{ github.ref_name }}-
       - name: Run social candidate tests
         run: npm run test:social
+      - name: Run Search Console and static SEO metadata tests
+        run: npm run test:seo
       - name: Generate and save a dry-run candidate
         run: npm run social:dry-run
       - name: Create X post (disabled unless repository variable is explicitly true)
