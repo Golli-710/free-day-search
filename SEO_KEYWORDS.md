@@ -1,6 +1,6 @@
 # SEOキーワード・ページ設計
 
-月1,000PVは目標であり、検索順位や流入を保証するものではありません。34施設のうち、無料ルールを確認できた施設だけを地域・カテゴリ・日付ページに載せています。needs_review / unverified の施設は無料施設一覧から除外します。
+月1,000PVは目標であり、検索順位や流入を保証するものではありません。43施設のうち、無料ルールを確認できた施設だけを地域・カテゴリ・日付ページに載せています。needs_review / unverified の施設は無料施設一覧から除外します。
 
 ## 優先度A：近い行動につながる日付検索
 
@@ -36,6 +36,7 @@
 | 東京 無料 美術館 | [/tokyo/art-museum/free/](/tokyo/art-museum/free/) | B |
 | 東京 無料 動物園 | [/tokyo/zoo/free/](/tokyo/zoo/free/) | B |
 | 東京 無料 植物園 | [/tokyo/botanical-garden/free/](/tokyo/botanical-garden/free/) | B |
+| 東京 無料 庭園 | [/tokyo/garden/free/](/tokyo/garden/free/) | B |
 | 東京 無料 水族館 | 東京地域ページ・施設詳細 | B |
 | 東京 無料 科学館 | 東京地域ページ・施設詳細 | B |
 | 神奈川 無料施設 | [/kanagawa/free/](/kanagawa/free/) | B |
@@ -56,6 +57,7 @@
 | 無料 美術館 東京 神奈川 | [/free/art-museum/](/free/art-museum/) | B |
 | 無料 動物園 東京 神奈川 | [/free/zoo/](/free/zoo/) | B |
 | 無料 植物園 東京 神奈川 | [/free/botanical-garden/](/free/botanical-garden/) | B |
+| 無料庭園 東京 | [/free/garden/](/free/garden/) | B |
 
 ## 優先度C：施設名・条件から探す
 

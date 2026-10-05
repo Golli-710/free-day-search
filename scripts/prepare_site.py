@@ -15,8 +15,8 @@ from urllib.parse import quote
 ROOT = Path(__file__).resolve().parent.parent
 SITE_FILES = ["index.html", "app.js", "data.js", "styles.css", "favicon.svg"]
 AREAS = [("tokyo", "東京都"), ("kanagawa", "神奈川県"), ("osaka", "大阪府")]
-CATEGORIES = ["美術館", "博物館", "科学館", "動物園", "水族館", "植物園"]
-CATEGORY_SLUGS = {"美術館": "art-museum", "博物館": "museum", "科学館": "science-museum", "動物園": "zoo", "水族館": "aquarium", "植物園": "botanical-garden"}
+CATEGORIES = ["美術館", "博物館", "科学館", "動物園", "水族館", "植物園", "庭園"]
+CATEGORY_SLUGS = {"美術館": "art-museum", "博物館": "museum", "科学館": "science-museum", "動物園": "zoo", "水族館": "aquarium", "植物園": "botanical-garden", "庭園": "garden"}
 GOOGLE_VERIFICATION_META = '<meta name="google-site-verification" content="1Mh9dLEDh98zsyMK-1fJe1bOT_gdS-vFDKZf-wMKRWU">'
 WEEKDAYS = ["月", "火", "水", "木", "金", "土", "日"]
 

@@ -1,6 +1,6 @@
 # 無料デー検索
 
-東京都・神奈川県・大阪府の美術館、博物館、科学館、動物園、水族館、植物園を対象に、無料の日や対象者別の無料条件を探せる、月移動・日別結果・カテゴリ／都道府県絞り込み対応の静的WebサイトMVPです。テスト用施設ではなく公式情報を出典とした34施設を掲載し、確認状況が曖昧な項目には状態を表示します。
+東京都・神奈川県・大阪府の美術館、博物館、科学館、動物園、水族館、植物園、庭園を対象に、無料の日や対象者別の無料条件を探せる、月移動・日別結果・カテゴリ／都道府県絞り込み対応の静的WebサイトMVPです。テスト用施設ではなく公式情報を出典とした43施設を掲載し、確認状況が曖昧な項目には状態を表示します。
 
 ## 使用技術
 
@@ -41,7 +41,7 @@ python3 scripts/prepare_site.py --site-url https://OWNER.github.io/REPOSITORY/ -
 
 施設データは `data.js` の `window.FACILITIES` にあります。`facility_id` は施設詳細の固有URL（`?facility=施設ID`）に使います。無料条件の文章は `free_conditions`、日付や対象者を検索するルールは `free_rules` に保持します。対象者条件は各ルールの `eligibility` と施設単位の `free_eligibility` に構造化し、対象グループ、年齢条件、居住都道府県・市区町村、学生条件、その他条件、一般（大人）対象か、条件詳細を保存します。明示された対象だけを判定し、不明なものは一般無料にしません。ルール型は `annual_date`、`specific_date`、`holiday`、`nth_weekday`、`weekly_weekday`、`nearest_weekday`、`annual_period`、`eligibility`、`always_free` です。無料日のない施設に日付を補完しないでください。
 
-確認状態は `audit.status`（`confirmed` / `needs_review`）、`audit.field_status`（`confirmed` / `needs_review` / `unverified`）、`audit.reviewed_at`、`audit.issues` に記録します。詳細ページと一覧カードは未確定状態を利用者に表示します。`AUDIT.md` は2026年10月3日時点の監査記録です。
+確認状態は `audit.status`（`confirmed` / `needs_review`）、`audit.field_status`（`confirmed` / `needs_review` / `unverified`）、`audit.reviewed_at`、`audit.issues` に記録します。詳細ページと一覧カードは未確定状態を利用者に表示します。`AUDIT.md` は2026年10月3日時点の監査記録です。追加した都立9庭園は2026年10月5日に各施設の公式ページを確認しています。
 
 ## 自動更新の方針
 
