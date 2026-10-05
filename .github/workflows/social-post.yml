@@ -1,0 +1,60 @@
+name: Social post candidate
+
+on:
+  schedule:
+    # 08:00 UTC = 17:00 JST. GitHub may delay scheduled runs during busy periods.
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: social-post
+  cancel-in-progress: false
+
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    env:
+      SOCIAL_POSTING_ENABLED: ${{ vars.SOCIAL_POSTING_ENABLED || 'false' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Restore posting history
+        id: restore-history
+        uses: actions/cache/restore@v4
+        with:
+          path: social/history.json
+          key: social-history-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            social-history-${{ github.ref_name }}-
+      - name: Run social candidate tests
+        run: npm run test:social
+      - name: Generate and save a dry-run candidate
+        run: npm run social:dry-run
+      - name: Create X post (disabled unless repository variable is explicitly true)
+        if: env.SOCIAL_POSTING_ENABLED == 'true'
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
+        run: npm run social:post
+      - name: Save candidate JSON for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: social-candidate-${{ github.run_id }}
+          path: social/outbox/latest.json
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Save posting history for the next scheduled run
+        if: always() && steps.restore-history.outcome != 'failure'
+        uses: actions/cache/save@v4
+        with:
+          path: social/history.json
+          key: social-history-${{ github.ref_name }}-${{ github.run_id }}

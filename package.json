@@ -1,0 +1,10 @@
+{
+  "name": "free-day-search",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "social:dry-run": "node scripts/social/cli.mjs dry-run",
+    "social:post": "node scripts/social/cli.mjs post",
+    "test:social": "node --test scripts/social/*.test.mjs"
+  }
+}

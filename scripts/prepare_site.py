@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """Build the static site, high-value SEO landing pages, and sitemap."""
 import argparse
 import calendar

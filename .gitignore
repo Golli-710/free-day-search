@@ -11,6 +11,7 @@ node_modules/
 _site/
 .next/
 coverage/
+/social/outbox/
 
 # Synced local reference material; publish only the curated site and docs
 sources/
