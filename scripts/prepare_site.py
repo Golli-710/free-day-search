@@ -13,9 +13,10 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 from urllib.parse import quote
+from foundation import add_foundation
 
 ROOT = Path(__file__).resolve().parent.parent
-SITE_FILES = ["index.html", "app.js", "data.js", "styles.css", "favicon.svg"]
+SITE_FILES = ["index.html", "app.js", "data.js", "styles.css", "favicon.svg", "analytics.js"]
 AREAS = [("tokyo", "東京都"), ("kanagawa", "神奈川県"), ("osaka", "大阪府")]
 CATEGORIES = ["美術館", "博物館", "科学館", "動物園", "水族館", "植物園", "庭園"]
 CATEGORY_SLUGS = {"美術館": "art-museum", "博物館": "museum", "科学館": "science-museum", "動物園": "zoo", "水族館": "aquarium", "植物園": "botanical-garden", "庭園": "garden"}
@@ -408,6 +409,7 @@ def main():
         (out / page_path).mkdir(parents=True, exist_ok=True)
         (out / page_path / "index.html").write_text(facility_page_html(f, base, today, region_path, category_path, verification_meta), encoding="utf-8")
         urls.append(base + page_path + "/")
+    urls.extend(add_foundation(ROOT, out, base, verification_meta))
     sitemap = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     sitemap += [f"  <url><loc>{html.escape(url)}</loc></url>" for url in urls]
     sitemap.append("</urlset>")
