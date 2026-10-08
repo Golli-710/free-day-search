@@ -11,7 +11,10 @@ ROOT = Path(__file__).resolve().parents[1]
 def build():
     production = os.environ.get("CF_PAGES_BRANCH") == os.environ.get("PRODUCTION_BRANCH", "main")
     indexable = production and os.environ.get("SITE_INDEXABLE", "false") == "true"
-    base = os.environ.get("SITE_URL", "") if indexable else os.environ.get("CF_PAGES_URL", "")
+    configured_url = os.environ.get("SITE_URL", "")
+    # Main builds should link to the stable hostname even before indexing is enabled.
+    # Branch previews remain isolated at their own deployment URL.
+    base = configured_url if production and (configured_url or indexable) else os.environ.get("CF_PAGES_URL", "")
     parsed = urlsplit(base)
     if parsed.scheme != "https" or not parsed.netloc or parsed.path not in ("", "/") or parsed.query or parsed.fragment or parsed.username:
         raise ValueError("Cloudflare build needs an HTTPS root SITE_URL (production) or CF_PAGES_URL (staging)")

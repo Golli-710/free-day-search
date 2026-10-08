@@ -18,6 +18,20 @@ class CloudflareTests(unittest.TestCase):
         self.assertTrue((out / '404.html').exists())
         self.assertFalse((out / 'src').exists())
 
+    def test_main_staging_uses_stable_url_without_enabling_indexing(self):
+        stable = 'https://free-day-search.pages.dev/'
+        with patch.dict(os.environ, {'CF_PAGES_BRANCH':'main', 'SITE_INDEXABLE':'false', 'SITE_URL':stable, 'CF_PAGES_URL':'https://hash.free-day-search.pages.dev'}, clear=True):
+            build_cloudflare.build()
+        out = ROOT / '_site'
+        self.assertIn('X-Robots-Tag: noindex', (out / '_headers').read_text())
+        self.assertIn('Sitemap: ' + stable + 'sitemap.xml', (out / 'robots.txt').read_text())
+        for page in out.rglob('index.html'):
+            markup = page.read_text()
+            self.assertNotIn('hash.free-day-search.pages.dev', markup)
+            self.assertIn('name="robots" content="noindex,follow"', markup)
+            self.assertIn(stable, markup)
+        self.assertIn('href="' + stable + '"', (out / 'facility/ueno-zoo/index.html').read_text())
+
     def test_production_root_urls_and_no_stale_preview_headers(self):
         with patch.dict(os.environ, {'CF_PAGES_BRANCH':'main','SITE_INDEXABLE':'true','SITE_URL':'https://example.com/'}, clear=True):
             build_cloudflare.build()

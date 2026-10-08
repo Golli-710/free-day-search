@@ -6,7 +6,7 @@ HTML/CSS/JSと52施設データを既存と同じ生成処理で `_site` に出�
 
 - `npm run build:cloudflare`: Cloudflare専用ビルド。canonical、OGP URL、構造化データ、内部リンク、robots.txt、sitemapの全URLをルート配下に生成。
 - 検証公開は既定でnoindex。プレビューは本番変数を継承しても常にHTTPヘッダーとHTMLでnoindexになります。robotsでクロール禁止にせずnoindexの取得を許可します。
-- 本番URLは利用者が確定した `SITE_URL` のみ使用。新ドメインは未確定です。
+- mainブランチは検証中も `SITE_URL` があれば固定ホスト名を使います。`SITE_INDEXABLE=false` のままnoindexを維持し、日次ビルド後も内部リンクが過去のデプロイURLに固定されません。初回でURL未設定なら `CF_PAGES_URL` を使います。Previewは `SITE_URL` を継承しても自身の `CF_PAGES_URL` を使います。本番index許可には `SITE_URL` の明示設定が必須です。
 - 404を生成し、不明なURLがCloudflareのSPAフォールバックで200になることを防止。
 - 日付SEOページはpushなしでも毎日再ビルドする任意のDeploy Hookワークフローを追加。GitHub側は変更ありません。
 - X投稿のリンク先はGitHubの `SOCIAL_SITE_URL` 変数で切替可能。未設定なら旧URL。UTM品質検査も新base pathに対応。
@@ -17,7 +17,7 @@ HTML/CSS/JSと52施設データを既存と同じ生成処理で `_site` に出�
 1. Cloudflareへログインし **Workers & Pages → Create application → Pages → Connect to Git**。GitHub認証で `Golli-710/free-day-search` のアクセスを許可。
 2. Production branch=`main`、Framework preset=`None`、Build command=`npm run build:cloudflare`、Build output directory=`_site`、Root directoryは空。
 3. 環境変数 `NODE_VERSION=22`、`PYTHON_VERSION=3.12`、`SITE_INDEXABLE=false` を設定して初回公開。CF_PAGES_URL/CF_PAGES_BRANCHはCloudflareが提供するため手動設定不要。必要なら `GOOGLE_SITE_VERIFICATION` をCloudflareにも設定。
-4. 発行されたPages URLを共有。トップ、検索、月移動、絞り込み、施設詳細・日付・地域ページ、CSS、favicon、404、UTM URLを実環境で確認。プレビューと検証本番で `X-Robots-Tag: noindex, follow` を確認。
+4. 発行された固定Pages URL（例：`https://free-day-search.pages.dev/`）をProduction環境の `SITE_URL` に設定し、`SITE_INDEXABLE=false` を維持して再ビルド。デプロイごとに変わるハッシュ付きURLは指定しないでください。固定Pages URLを共有。トップ、検索、月移動、絞り込み、施設詳細・日付・地域ページ、CSS、favicon、404、UTM URLを実環境で確認。プレビューと検証本番で `X-Robots-Tag: noindex, follow` を確認。
 5. Pages Settings → Builds & deployments → Deploy hooksでmain向けHookを作り、URLをGitHub Actions Secret `CLOUDFLARE_DEPLOY_HOOK` に保存。Actions Variable `CLOUDFLARE_REFRESH_ENABLED=true` で毎日00:00 JSTの再生成を有効化。手動実行後、Cloudflare側のbuild成功も確認（Hook応答はbuild完了を示しません）。push時の自動デプロイはCloudflare Git連携が担当。
 6. 本番ホスト名を確定後、Productionのみに `SITE_URL=https://確定ホスト名/`、`SITE_INDEXABLE=true` を設定し再デプロイ。Previewは常時noindex。Pagesの別名URLはCloudflare側で本番ホストへのリダイレクトを設定し重複公開を避ける。
 7. 全ページとsitemapを確認した後、Xを使っている場合のみGitHub Variable `SOCIAL_SITE_URL` を本番URLへ変更。Search Consoleの新プロパティ確認とsitemap送信を行う。
