@@ -20,7 +20,10 @@ def build():
         raise ValueError("Cloudflare build needs an HTTPS root SITE_URL (production) or CF_PAGES_URL (staging)")
     base = base.rstrip("/") + "/"
     out = ROOT / "_site"
-    subprocess.run([sys.executable, str(ROOT / "scripts/prepare_site.py"), "--site-url", base, "--output", str(out)], check=True)
+    build_env = dict(os.environ)
+    if not indexable:
+        build_env['GA4_MEASUREMENT_ID'] = ''
+    subprocess.run([sys.executable, str(ROOT / "scripts/prepare_site.py"), "--site-url", base, "--output", str(out)], check=True, env=build_env)
     # A real 404 disables Cloudflare's default SPA fallback for unknown routes.
     (out / "404.html").write_text('<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="robots" content="noindex"><title>ページが見つかりません</title><h1>ページが見つかりません</h1><a href="/">無料デー検索へ</a></html>', encoding="utf-8")
     if not indexable:
