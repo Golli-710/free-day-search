@@ -120,3 +120,7 @@ python3 scripts/audit_seo.py --site /tmp/free-day-site --base https://OWNER.gith
 ## 既知の制約
 
 施設ページは単一のHTMLとクエリ付きURLで表示します。検索エンジンがクエリ付きページをどの程度クロールするかは公開後にSearch Console等で確認してください。無料条件には年齢や居住地など対象者限定のものが含まれ、利用者の属性を入力して適用判定する機能はまだありません。施設へ行く前に必ず公式案内を確認してください。
+
+## Cloudflare Pagesへの移行準備
+
+GitHub連携ビルドは `npm run build:cloudflare`、出力は `_site`。初期状態はnoindexの検証公開です。本番URLの指定、日次再生成、SEO切替、手動操作は [移行手順](docs/CLOUDFLARE_MIGRATION.md) を参照してください。既存GitHub Pagesは継続します。

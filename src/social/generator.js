@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 
-export const SITE_URL = "https://golli-710.github.io/free-day-search/";
+export const SITE_URL = (process.env.SOCIAL_SITE_URL || "https://golli-710.github.io/free-day-search/").replace(/\/?$/, "/");
 export const UTM_CAMPAIGN = "free_spot_daily";
 export const RULE_TYPES = new Set(["annual_date", "holiday", "specific_date", "nth_weekday", "weekly_weekday", "nearest_weekday", "annual_period"]);
 const DAY_MS = 86_400_000;
@@ -248,7 +248,7 @@ export function checkPostQuality({ candidate, facility, history, now = new Date(
   const rules = eventRules(facility,asDate(candidate.targetDate));
   const rule = rules.find(r => conditionFor(r) === candidate.ruleLabel) || null;
   const adultStatus = rule ? adultRuleStatus(rule) : "excluded";
-  const expectedPath = `/free-day-search/facility/${encodeURIComponent(candidate.facilityId)}/`;
+  const expectedPath = new URL(`facility/${encodeURIComponent(candidate.facilityId)}/`, SITE_URL).pathname;
   let parsedUrl = null;
   try { parsedUrl = new URL(candidate.url); } catch {}
   const urlValid = parsedUrl && parsedUrl.origin === new URL(SITE_URL).origin && parsedUrl.pathname === expectedPath;

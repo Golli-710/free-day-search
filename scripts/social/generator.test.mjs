@@ -4,7 +4,7 @@ import { spawnSync } from "node:child_process";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { adultRuleStatus, candidatePool, checkPostQuality, generatePostCandidate, isDuplicateCandidate, jstToday, selectCandidate } from "../../src/social/generator.js";
+import { SITE_URL, adultRuleStatus, candidatePool, checkPostQuality, generatePostCandidate, isDuplicateCandidate, jstToday, selectCandidate } from "../../src/social/generator.js";
 import { classifyXApiError, createXClient, XApiError } from "../../src/social/xClient.js";
 
 const node=process.execPath;
@@ -27,7 +27,7 @@ test("tomorrow date is calculated from Asia/Tokyo and uses a UTM facility detail
   assert.equal(jstToday(now),"2026-10-05");
   const c=selectCandidate([facility()],{posts:[]},now);
   assert.equal(c.targetDate,"2026-10-06"); assert.equal(c.postType,"tomorrow");
-  const url=new URL(c.url); assert.equal(url.pathname,"/free-day-search/facility/test-museum/");
+  const url=new URL(c.url); assert.equal(url.pathname,new URL("facility/test-museum/", SITE_URL).pathname);
   assert.equal(url.searchParams.get("utm_source"),"x"); assert.equal(url.searchParams.get("utm_medium"),"social"); assert.equal(url.searchParams.get("utm_campaign"),"free_spot_daily");
   assert.match(c.text,/📍 東京・台東区/);
 });

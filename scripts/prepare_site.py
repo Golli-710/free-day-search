@@ -374,11 +374,11 @@ def main():
         path, title, heading, intro, facilities = item
         if path.startswith(("free/today", "free/tomorrow", "free/this-")):
             links = list(related_base)
-            links += [(f"{pref}の無料施設", base + area + "/") for area, pref in AREAS if area in area_path]
+            links += [(f"{pref}の無料施設", base + area_path[area] + "/") for area, pref in AREAS if area in area_path]
             links += [(f"無料{category}一覧", base + "free/" + CATEGORY_SLUGS[category] + "/") for category in CATEGORIES if "free/" + CATEGORY_SLUGS[category] in by_path]
         elif path.startswith("free/"):
             links = list(related_base)
-            links += [(f"{pref}の無料施設", base + area + "/") for area, pref in AREAS if area in area_path]
+            links += [(f"{pref}の無料施設", base + area_path[area] + "/") for area, pref in AREAS if area in area_path]
             links += [(f"{pref}の無料{category}", base + area + "/" + CATEGORY_SLUGS[category] + "/free/") for area, pref in AREAS for category in CATEGORIES if area + "/" + CATEGORY_SLUGS[category] + "/free" in by_path]
         elif path.endswith("/free"):
             area = path.split("/")[0]

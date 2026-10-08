@@ -1,0 +1,35 @@
+name: Refresh Cloudflare date pages
+on:
+  schedule:
+    # Same 00:00 JST regeneration as existing GitHub Pages.
+    - cron: "0 15 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cloudflare-refresh
+  cancel-in-progress: false
+jobs:
+  refresh:
+    if: vars.CLOUDFLARE_REFRESH_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Git-connected Cloudflare build
+        env:
+          DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+        run: |
+          python3 - <<'PY'
+          import os, urllib.request
+          from urllib.parse import urlsplit
+          hook = os.environ.get('DEPLOY_HOOK', '')
+          parsed = urlsplit(hook)
+          if parsed.scheme != 'https' or parsed.hostname != 'api.cloudflare.com' or not parsed.path.startswith('/client/v4/pages/webhooks/'):
+              raise SystemExit('Configure the Cloudflare Pages deploy-hook secret')
+          try:
+              with urllib.request.urlopen(urllib.request.Request(hook, method='POST'), timeout=30) as response:
+                  if response.status != 200:
+                      raise RuntimeError()
+          except Exception:
+              raise SystemExit('Cloudflare refresh failed; inspect the Cloudflare deployment dashboard')
+          print('Cloudflare rebuild requested')
+          PY
