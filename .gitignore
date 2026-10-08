@@ -16,3 +16,6 @@ coverage/
 # Synced local reference material; publish only the curated site and docs
 sources/
 AGENTS.md
+
+_site-local/
+__pycache__/
