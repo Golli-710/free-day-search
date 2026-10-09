@@ -1,4 +1,6 @@
 import os
+import html
+import json
 import re
 import sys
 import tempfile
@@ -7,6 +9,7 @@ import xml.etree.ElementTree as ET
 from contextlib import redirect_stdout
 from io import StringIO
 from pathlib import Path
+from urllib.parse import unquote, urlsplit
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,6 +28,46 @@ def build_site(output, verification=""):
 
 
 class SiteMetadataTests(unittest.TestCase):
+    def test_visible_breadcrumbs_match_schema_and_all_internal_targets_exist(self):
+        with tempfile.TemporaryDirectory(prefix="free-day-navigation-") as directory:
+            output = Path(directory) / "site"
+            build_site(output)
+            titles = set()
+            for page in output.rglob('index.html'):
+                markup = page.read_text(encoding='utf-8')
+                title = re.search(r'<title>(.*?)</title>', markup).group(1)
+                self.assertNotIn(title, titles, str(page))
+                titles.add(title)
+                canonical = re.search(r'<link rel="canonical" href="([^"]+)"', markup).group(1)
+                og = re.search(r'<meta property="og:url" content="([^"]+)"', markup).group(1)
+                self.assertEqual(canonical, og)
+                for href in re.findall(r'(?:href|src)="([^"]+)"', markup):
+                    if not href.startswith(BASE):
+                        continue
+                    local = unquote(urlsplit(html.unescape(href[len(BASE):])).path)
+                    target = output / local
+                    if not local or local.endswith('/'):
+                        target /= 'index.html'
+                    self.assertTrue(target.exists(), f'{page}: {href}')
+                if page == output / 'index.html':
+                    continue
+                nav = re.search(r'<nav class="breadcrumbs"[^>]*>(.*?)</nav>', markup).group(1)
+                visible = re.findall(r'<li>(.*?)</li>', nav)
+                schemas = [json.loads(s) for s in re.findall(r'<script type="application/ld\+json">(.*?)</script>', markup)]
+                breadcrumbs = [s for s in schemas if s.get('@type') == 'BreadcrumbList']
+                self.assertEqual(len(breadcrumbs), 1, str(page))
+                items = breadcrumbs[0]['itemListElement']
+                self.assertGreaterEqual(len(items), 2)
+                self.assertEqual(len(items), len(visible))
+                for i, (item, entry) in enumerate(zip(items, visible)):
+                    self.assertEqual(item['position'], i + 1)
+                    self.assertEqual(item['name'], html.unescape(re.sub('<[^>]+>', '', entry)))
+                    if i < len(items) - 1:
+                        self.assertIn(f'href="{html.escape(item["item"], quote=True)}"', entry)
+                    else:
+                        self.assertEqual(item['item'], html.unescape(canonical))
+                        self.assertIn('aria-current="page"', entry)
+
     def test_sitemap_robots_canonical_and_noindex_are_consistent(self):
         with tempfile.TemporaryDirectory(prefix="free-day-seo-") as directory:
             output = Path(directory) / "site"
