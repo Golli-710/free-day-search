@@ -245,7 +245,7 @@ def page_html(title, description, heading, intro, facilities, base, canonical, r
         facility_url = f'{base}facility/{quote(f["facility_id"])}/'
         target_conditions = list(dict.fromkeys(r.get("audience", "") for r in event_rules if r.get("audience")))
         target_html = f'<p>対象条件：{esc("・".join(target_conditions))}</p>' if target_conditions else '<p>対象者：大人・一般</p>'
-        cards.append(f'''<article class="facility-card"><div class="card-top"><span class="tag">{esc(f["category"])}</span><span class="muted">{esc(f["prefecture"])}・{esc(f["municipality"])}</span></div><h2><a href="{facility_url}">{esc(f["name"])}</a></h2><p class="address">{esc(f["address"])}</p><p><strong>{esc(audience)}：無料</strong></p>{target_html}<p>無料日：{esc(human_date(event_date)) if event_date else "常時無料"}</p><p>無料条件：{esc(condition)}</p><p>通常料金：{esc(f.get("regular_fee"))}</p><p>最終確認日：{esc(f.get("last_checked"))}</p><p><a href="{esc(f.get("official_url"))}" target="_blank" rel="noopener">公式サイト ↗</a></p></article>''')
+        cards.append(f'''<article class="facility-card"><div class="card-top"><span class="tag">{esc(f["category"])}</span><span class="muted">{esc(f["prefecture"])}・{esc(f["municipality"])}</span></div><h2><a href="{facility_url}">{esc(f["name"])}</a></h2><p class="address">{esc(f["address"])}</p><p><strong>{esc(audience)}：無料</strong></p>{target_html}<p>無料になる範囲：{esc(f.get("free_conditions", "公式サイトで確認してください。"))}</p><p>無料日：{esc(human_date(event_date)) if event_date else "常時無料"}</p><p>無料条件：{esc(condition)}</p><p>通常料金：{esc(f.get("regular_fee"))}</p><p>最終確認日：{esc(f.get("last_checked"))}</p><p><a href="{esc(f.get("official_url"))}" target="_blank" rel="noopener">公式サイト ↗</a></p></article>''')
     listing = "\n".join(cards) if cards else '<p class="empty">この条件で大人・一般向けに確認済みの無料日がある施設はありません。無料日や条件が未確認の施設は、無料施設として掲載していません。<a href="' + base + '">検索条件を変える</a></p>'
     verified_dates = [f.get("last_checked") or f.get("last_verified_date") for f, _, _ in facilities if f.get("last_checked") or f.get("last_verified_date")]
     latest_checked = max(verified_dates) if verified_dates else "確認日未登録"
@@ -319,14 +319,14 @@ def main():
     root_markup = root_markup.replace('<meta property="og:url" content="./">', f'<meta property="og:url" content="{html.escape(base, quote=True)}">')
     root_html.write_text(root_markup, encoding="utf-8")
     rows = facility_data()
-    eligible = eligible_facilities(rows)
+    eligible_rows = eligible_facilities(rows)
     urls = [base]
     page_defs = []
 
     # Regional/category landing pages are emitted only where at least three confirmed,
-    # adult-eligible facilities give the page enough inventory to be useful.
+    # adult-eligible_rows facilities give the page enough inventory to be useful.
     for area_slug, prefecture in AREAS:
-        area_rows = [(f, *next_occurrence(f, today)) for f in eligible if f["prefecture"] == prefecture and next_occurrence(f, today)]
+        area_rows = [(f, *next_occurrence(f, today)) for f in eligible_rows if f["prefecture"] == prefecture and next_occurrence(f, today)]
         if len(area_rows) >= 2:
             category_counts = {category: sum(entry[0]["category"] == category for entry in area_rows) for category in CATEGORIES}
             covered = "・".join(category for category in CATEGORIES if category_counts[category])
@@ -353,7 +353,7 @@ def main():
     ]
     for slug, first, last, period, heading in ranges:
         matches_by_id = {}
-        for f in eligible:
+        for f in eligible_rows:
             for offset in range((last - first).days + 1):
                 day = first + timedelta(days=offset)
                 rules = free_events(f, day)
@@ -364,14 +364,25 @@ def main():
 
     # Topic pages only exist when there is sufficient confirmed inventory overall.
     for category in CATEGORIES:
-        chosen = [(f, *next_occurrence(f, today)) for f in eligible if f["category"] == category and next_occurrence(f, today)]
+        chosen = [(f, *next_occurrence(f, today)) for f in eligible_rows if f["category"] == category and next_occurrence(f, today)]
         if len(chosen) >= 3:
             slug = CATEGORY_SLUGS[category]
             page_defs.append((f"free/{slug}", f"無料{category}一覧｜無料の日・条件が分かる｜無料デー検索", f"無料{category}一覧", f"東京・神奈川・大阪の{category}から、確認済みの無料日がある施設を掲載しています。対象者の条件と最終確認日を施設ごとに確認できます。", chosen))
 
+    always = []
+    for f in eligible_rows:
+        rules = [r for r in f.get("free_rules", []) if r.get("type") == "always_free" and eligible(r) == "general"]
+        if rules:
+            always.append((f, None, rules))
+    if len(always) >= 3:
+        page_defs.append(("free/always", "常時無料の施設一覧｜無料日を待たずに探す｜無料デー検索", "常時無料で利用できる施設", "特定の無料日を待たず、大人・一般向けの常時無料ルールがある施設を探せます。入館無料でも展覧会・体験・一部エリアは有料の場合があります。休館日や予約条件は各施設の詳細・公式サイトで確認してください。", always))
+        root_markup = root_html.read_text(encoding="utf-8")
+        root_markup = root_markup.replace('</main>', f'</main><section class="container content-section"><h2>無料日を待たずに行ける施設</h2><p>日程に合わせやすい常時無料の施設を、無料になる範囲や対象条件とともに確認できます。</p><a href="{base}free/always/">常時無料の施設一覧を見る →</a></section>', 1)
+        root_html.write_text(root_markup, encoding="utf-8")
+
     by_path = {item[0]: item for item in page_defs}
     area_path = {slug: f"{slug}/free" for slug, _ in AREAS if f"{slug}/free" in by_path}
-    related_base = [("今日無料", base + "free/today/"), ("明日無料", base + "free/tomorrow/"), ("今週無料", base + "free/this-week/"), ("今週末無料", base + "free/this-weekend/"), ("今月無料", base + "free/this-month/")]
+    related_base = [("常時無料の施設", base + "free/always/")] + [("今日無料", base + "free/today/"), ("明日無料", base + "free/tomorrow/"), ("今週無料", base + "free/this-week/"), ("今週末無料", base + "free/this-weekend/"), ("今月無料", base + "free/this-month/")]
     for item in page_defs:
         path, title, heading, intro, facilities = item
         if path.startswith(("free/today", "free/tomorrow", "free/this-")):

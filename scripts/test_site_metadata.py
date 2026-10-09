@@ -28,6 +28,20 @@ def build_site(output, verification=""):
 
 
 class SiteMetadataTests(unittest.TestCase):
+    def test_always_free_page_excludes_conditional_and_unverified_facilities(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / 'site'
+            build_site(output)
+            page = (output / 'free/always/index.html').read_text(encoding='utf-8')
+            expected = {f['facility_id'] for f in prepare_site.eligible_facilities(prepare_site.facility_data())
+                        if any(r.get('type') == 'always_free' and prepare_site.eligible(r) == 'general'
+                               for r in f.get('free_rules', []))}
+            schemas = [json.loads(s) for s in re.findall(r'<script type="application/ld\+json">(.*?)</script>', page)]
+            collection = next(s for s in schemas if s.get('@type') == 'CollectionPage')
+            actual = {entry['url'].rstrip('/').split('/')[-1] for entry in collection['mainEntity']['itemListElement']}
+            self.assertEqual(actual, expected)
+            self.assertIn(BASE + 'free/always/', (output / 'sitemap.xml').read_text())
+
     def test_visible_breadcrumbs_match_schema_and_all_internal_targets_exist(self):
         with tempfile.TemporaryDirectory(prefix="free-day-navigation-") as directory:
             output = Path(directory) / "site"
