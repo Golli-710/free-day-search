@@ -173,9 +173,18 @@
     if (!date) return true;
     const weekday = date.getUTCDay(), day = date.getUTCDate();
     if (Array.isArray(f.open_weekdays) && !f.open_weekdays.includes(weekday)) return false;
-    if ((f.closed_weekdays || []).includes(weekday) && !(holidayName(date) && (f.open_on_holidays || []).includes(weekday))) return false;
+    if ((f.closed_weekdays || []).includes(weekday) && !((f.open_month_days || []).includes(monthDay(date)) || (holidayName(date) && (f.open_on_holidays || []).includes(weekday)))) return false;
     if (f.closed_holidays && holidayName(date)) return false;
     if (f.closed_day_after_holiday && holidayName(new Date(date.getTime() - 86400000))) return false;
+    for (let offset = 1; offset <= 7; offset++) {
+      const holiday = new Date(date.getTime() - offset * 86400000);
+      if (!(f.holiday_shifted_closure_weekdays || []).includes(holiday.getUTCDay()) || !holidayName(holiday)) continue;
+      let closure = new Date(holiday.getTime() + 86400000);
+      if (f.holiday_closure_shift === "next_weekday") {
+        while ([0, 6].includes(closure.getUTCDay()) || holidayName(closure)) closure = new Date(closure.getTime() + 86400000);
+      }
+      if (isoDate(date) === isoDate(closure)) return false;
+    }
     if ((f.closed_nth_weekdays || []).some(rule => weekday === rule.weekday && (rule.month == null || rule.month === date.getUTCMonth() + 1) && Math.floor((day - 1) / 7) + 1 === rule.ordinal)) return false;
     if ((f.closed_month_days || []).includes(monthDay(date))) return false;
     return !(f.closed_dates || []).includes(isoDate(date));

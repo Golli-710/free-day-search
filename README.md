@@ -124,3 +124,11 @@ python3 scripts/audit_seo.py --site /tmp/free-day-site --base https://OWNER.gith
 ## Cloudflare Pagesへの移行準備
 
 GitHub連携ビルドは `npm run build:cloudflare`、出力は `_site`。初期状態はnoindexの検証公開です。本番URLの指定、日次再生成、SEO切替、手動操作は [移行手順](docs/CLOUDFLARE_MIGRATION.md) を参照してください。既存GitHub Pagesは継続します。
+
+## 2026-10-10 東京の無料博物館
+
+消防博物館・警察博物館・お札と切手の博物館を公式案内に基づいて追加。3施設を対象に `/tokyo/museum/free/` を生成します。警察博物館は現在の西五反田・TOCビルの住所を掲載しています。
+
+休館ルールの `holiday_shifted_closure_weekdays` は祝日と通常休館曜日が一致した場合にだけ振替休館を計算します。`holiday_closure_shift` は `next_day`（翌日）または `next_weekday`（次の平日）。`open_month_days` は記念日の開館例外です。年末年始や臨時休館は従来の閉館日設定を優先します。生成ページとブラウザー検索の両方で同じ扱いを使います。
+
+検証: `python3 -m unittest discover -s scripts -p 'test_*.py'`、`node --test scripts/museum-calendar.test.mjs scripts/analytics.test.mjs scripts/social/*.test.mjs`。

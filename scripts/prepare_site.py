@@ -93,12 +93,23 @@ def open_on(f, day):
     weekday = (day.weekday() + 1) % 7  # Match JavaScript: Sunday is 0.
     if "open_weekdays" in f and weekday not in f["open_weekdays"]:
         return False
-    if weekday in f.get("closed_weekdays", []) and not (day in holidays(day.year) and weekday in f.get("open_on_holidays", [])):
+    if weekday in f.get("closed_weekdays", []) and not (day.strftime("%m-%d") in f.get("open_month_days", []) or (day in holidays(day.year) and weekday in f.get("open_on_holidays", []))):
         return False
     if f.get("closed_holidays") and day in holidays(day.year):
         return False
     if f.get("closed_day_after_holiday") and day - timedelta(days=1) in holidays(day.year):
         return False
+    # Shift only the holiday that coincides with this facility's usual closure.
+    for offset in range(1, 8):
+        holiday = day - timedelta(days=offset)
+        if (holiday.weekday() + 1) % 7 not in f.get("holiday_shifted_closure_weekdays", []) or holiday not in holidays(holiday.year):
+            continue
+        closure = holiday + timedelta(days=1)
+        if f.get("holiday_closure_shift") == "next_weekday":
+            while closure.weekday() >= 5 or closure in holidays(closure.year):
+                closure += timedelta(days=1)
+        if day == closure:
+            return False
     if any(weekday == rule["weekday"] and rule.get("month") in (None, day.month) and (day.day - 1) // 7 + 1 == rule["ordinal"] for rule in f.get("closed_nth_weekdays", [])):
         return False
     if day.strftime("%m-%d") in f.get("closed_month_days", []) or day.isoformat() in f.get("closed_dates", []):
