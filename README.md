@@ -132,3 +132,7 @@ GitHub連携ビルドは `npm run build:cloudflare`、出力は `_site`。初期
 休館ルールの `holiday_shifted_closure_weekdays` は祝日と通常休館曜日が一致した場合にだけ振替休館を計算します。`holiday_closure_shift` は `next_day`（翌日）または `next_weekday`（次の平日）。`open_month_days` は記念日の開館例外です。年末年始や臨時休館は従来の閉館日設定を優先します。生成ページとブラウザー検索の両方で同じ扱いを使います。
 
 検証: `python3 -m unittest discover -s scripts -p 'test_*.py'`、`node --test scripts/museum-calendar.test.mjs scripts/analytics.test.mjs scripts/social/*.test.mjs`。
+
+## X・Instagramの試験運用キット
+
+`npm run social:pack -- --start YYYY-MM-DD` で4週間の投稿文・計測リンク・動画入力を生成できます。[運用と動画連携の案内](docs/SOCIAL_TRIAL.md)をご覧ください。投稿キットの作成は外部APIを呼び出さず、実投稿履歴も変更しません。

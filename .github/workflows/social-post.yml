@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SOCIAL_POSTING_ENABLED: ${{ vars.SOCIAL_POSTING_ENABLED || 'false' }}
-      SOCIAL_SITE_URL: ${{ vars.SOCIAL_SITE_URL || 'https://golli-710.github.io/free-day-search/' }}
+      SOCIAL_SITE_URL: ${{ vars.SOCIAL_SITE_URL || 'https://free-day-search.pages.dev/' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

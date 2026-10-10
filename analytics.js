@@ -7,6 +7,17 @@
   try { consent = localStorage.getItem(key) || ''; } catch {}
   let started = false;
   const allowed = new Set(['page_view', 'search_submit', 'official_link_click', 'affiliate_link_click', 'detail_link_click', 'calendar_navigation', 'favorite_add', 'favorite_remove', 'calendar_export']);
+  // Accept only identifiers issued by our posting tools; never forward arbitrary query text.
+  const campaign = {};
+  const query = new URL(location.href).searchParams;
+  const source = query.get('utm_source');
+  const name = query.get('utm_campaign');
+  const content = query.get('utm_content');
+  if (['x', 'instagram'].includes(source) && query.get('utm_medium') === 'social' &&
+      ['free_spot_daily', 'free_day_trial'].includes(name) &&
+      /^[a-z0-9-]+_\d{4}-\d{2}-\d{2}(?:_(?:x|carousel|story|reel))?$/.test(content || '') && (content || '').length <= 100) {
+    Object.assign(campaign, {campaign_source: source, campaign_medium: 'social', campaign_name: name, campaign_content: content});
+  }
   const page = () => location.origin + location.pathname;
   function track(name, parameters = {}) {
     if (!valid || consent !== 'granted' || !started || !allowed.has(name)) return;
@@ -25,7 +36,7 @@
     window.gtag('consent', 'default', {analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied'});
     window.gtag('consent', 'update', {analytics_storage: 'granted'});
     window.gtag('js', new Date());
-    window.gtag('config', config, {send_page_view: false, allow_google_signals: false, allow_ad_personalization_signals: false, cookie_domain: 'none', page_location: page(), page_referrer: '', page_title: document.querySelector('meta[name="analytics-site"]')?.content || '検索サイト'});
+    window.gtag('config', config, {...campaign, send_page_view: false, allow_google_signals: false, allow_ad_personalization_signals: false, cookie_domain: 'none', page_location: page(), page_referrer: '', page_title: document.querySelector('meta[name="analytics-site"]')?.content || '検索サイト'});
     const script = document.createElement('script');
     script.async = true;
     script.src = 'https://www.googletagmanager.com/gtag/js?id=' + config;

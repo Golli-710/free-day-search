@@ -17,9 +17,10 @@ jobs:
         with:
           python-version: '3.12'
       - name: Verify analytics consent and data minimization
-        run: node --test scripts/analytics.test.mjs scripts/museum-calendar.test.mjs
+        run: node --test scripts/analytics.test.mjs scripts/museum-calendar.test.mjs scripts/social/*.test.mjs
       - name: Verify generated metadata and Cloudflare isolation
         run: |
           python3 -m unittest discover -s scripts -p test_site_metadata.py
           python3 -m unittest discover -s scripts -p test_cloudflare.py
           python3 -m unittest discover -s scripts -p test_museum_calendar.py
+          python3 -m unittest discover -s scripts -p test_social_video.py
