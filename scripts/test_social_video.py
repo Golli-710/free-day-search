@@ -6,7 +6,7 @@ spec=importlib.util.spec_from_file_location('social_render',Path(__file__).paren
 renderer=importlib.util.module_from_spec(spec);spec.loader.exec_module(renderer)
 class SocialVideoTest(unittest.TestCase):
     def sample(self):
-        data={key:'確認済み情報' for key in ['brand','facility_name','region','date_label','free_condition','audience','hours','closed','reservation','access','verified_at','cta']}
+        data={key:'確認済み情報' for key in ['brand','facility_name','region','date_label','free_condition','free_scope','audience','hours','closed','reservation','access','verified_at','cta']}
         data.update(type='free_outing',duration=15,source_url='https://official.example/',url='https://free-day-search.pages.dev/');return data
     def test_outing_scenes_preserve_conditions_and_total_fifteen_seconds(self):
         data=self.sample();data['free_condition']='常設展のみ無料・企画展は有料';data['audience']='大人・一般'

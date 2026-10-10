@@ -7,7 +7,7 @@ from pathlib import Path
 def validate(data):
     if data.get('type') != 'free_outing' or data.get('duration') != 15:
         raise ValueError('free_outing / 15秒の入力を指定してください')
-    for name in ['brand','facility_name','region','date_label','free_condition','audience','hours','closed','reservation','access','verified_at','source_url','url','cta']:
+    for name in ['brand','facility_name','region','date_label','free_condition','free_scope','audience','hours','closed','reservation','access','verified_at','source_url','url','cta']:
         if not isinstance(data.get(name),str) or not data[name].strip() or len(data[name]) > 600:
             raise ValueError(f'{name}: 1〜600文字の確認済み情報が必要です')
     for name in ['source_url','url']:
@@ -24,27 +24,37 @@ def load_engine(path):
 def scenes(data):
     return [
       {'title':data['facility_name'],'lines':[data['region'],data['date_label']],'seconds':3},
-      {'title':'無料になる条件','lines':[data['free_condition'],f"対象：{data['audience']}",f"営業時間：{data['hours']}"],'seconds':4},
-      {'title':'お出かけ前に','lines':[data['reservation'],data['access']],'seconds':5},
+      {'title':'無料になる条件','lines':[data['free_condition'],data['free_scope'] if len(data['free_scope'])<=80 else '無料の対象範囲はサイトで確認',f"対象：{data['audience']}"],'seconds':4},
+      {'title':'お出かけ前に','lines':['予約・休館日をチェック',data['access'] if len(data['access'])<=60 else '最寄駅・アクセスはサイトで確認'],'seconds':5},
       {'title':'詳しい条件を確認','lines':[data['cta'],data['brand'],'free-day-search.pages.dev'],'seconds':3},
     ]
+
+def block(engine,draw,text,box,color,max_size,min_size=24):
+    # Reduce size before drawing to keep closing punctuation off a line of its own.
+    import math
+    width,height=box[2:]
+    for size in range(max_size,min_size-1,-2):
+        lines=engine.wrap(text,engine.font(size),width)
+        if math.ceil(size*1.55)*len(lines)<=height and not any(line.startswith(('）',')','、','。')) for line in lines):
+            return engine.textblock(draw,text,box,color,size,size)
+    return engine.textblock(draw,text,box,color,max_size,min_size)
 
 def poster(engine,data,title,lines,path,height=1920):
     from PIL import Image,ImageDraw
     image=Image.new('RGB',(1080,height),'#f4f7ef');draw=ImageDraw.Draw(image)
     draw.rounded_rectangle((64,100,1016,height-140),radius=36,fill='#ffffff')
-    engine.textblock(draw,'無料のお出かけ',(100,150,880,100),'#416953',46)
-    engine.textblock(draw,title,(100,310,880,290),'#20392c',76,38)
+    block(engine,draw,'無料のお出かけ',(100,150,880,100),'#416953',46)
+    block(engine,draw,title,(100,310,880,290),'#20392c',76,38)
     y=650 if height==1920 else 570
-    engine.textblock(draw,'\n\n'.join(lines),(100,y,880,height-y-310),'#20392c',48,26)
-    engine.textblock(draw,f"情報確認：{data['verified_at']}｜最新情報は公式案内へ",(100,height-260,880,90),'#416953',28,24)
-    engine.textblock(draw,data['brand'],(100,height-115,880,60),'#416953',32,24)
+    block(engine,draw,'\n\n'.join(lines),(100,y,880,height-y-310),'#20392c',48,26)
+    block(engine,draw,f"情報確認：{data['verified_at']}｜最新情報は公式案内へ",(100,height-260,880,90),'#416953',28,24)
+    block(engine,draw,data['brand'],(100,height-115,880,60),'#416953',32,24)
     image.save(path)
 
 def render(data,out,engine,video=True):
     validate(data);out=Path(out);out.mkdir(parents=True,exist_ok=True)
     slides=[('01',data['facility_name'],[data['region'],data['date_label'],'無料条件は次の画像へ']),
-      ('02','無料になる条件',[data['free_condition'],f"対象：{data['audience']}",f"開館：{data['hours']}"]),
+      ('02','無料になる条件',[data['free_scope'],f"対象：{data['audience']}",f"開館：{data['hours']}"]),
       ('03','お出かけ前に',[data['reservation'],data['access']]),
       ('04','詳しい条件を確認',[data['cta'],data['brand'],'free-day-search.pages.dev'])]
     for number,title,lines in slides:poster(engine,data,title,lines,out/f'carousel-{number}.png',1350)
