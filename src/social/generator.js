@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 
-export const SITE_URL = (process.env.SOCIAL_SITE_URL || "https://golli-710.github.io/free-day-search/").replace(/\/?$/, "/");
+export const SITE_URL = (process.env.SOCIAL_SITE_URL || "https://free-day-search.pages.dev/").replace(/\/?$/, "/");
 export const UTM_CAMPAIGN = "free_spot_daily";
 export const RULE_TYPES = new Set(["annual_date", "holiday", "specific_date", "nth_weekday", "weekly_weekday", "nearest_weekday", "annual_period"]);
 const DAY_MS = 86_400_000;

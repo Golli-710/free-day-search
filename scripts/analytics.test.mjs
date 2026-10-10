@@ -61,3 +61,25 @@ test('withdrawal disables sending and removes analytics cookies', () => {
   assert.equal(s.context.reloaded, true);
   assert.match(s.context.document.cookie, /Max-Age=0/);
 });
+
+test('approved social campaigns survive stripped page URL after consent', () => {
+  const s=setup('G-TEST');
+  // Run a fresh document with a tagged landing URL before granting consent.
+  s.context.location.href='https://example.com/facility/zoo/?utm_source=instagram&utm_medium=social&utm_campaign=free_day_trial&utm_content=police-museum_2026-10-13_reel&q=private@example.com';
+  vm.runInNewContext(code,s.context);
+  s.nodes.at(-2).click({target:{dataset:{choice:'granted'}}});
+  const cfg=s.context.window.dataLayer.find(x=>x[0]==='config')[2];
+  assert.equal(cfg.campaign_source,'instagram');assert.equal(cfg.campaign_name,'free_day_trial');
+  assert.equal(cfg.campaign_content,'police-museum_2026-10-13_reel');
+  assert.equal(cfg.page_location,'https://example.com/facility/zoo/');
+  assert.ok(!JSON.stringify(s.context.window.dataLayer).includes('private@example.com'));
+});
+
+test('untrusted campaign values and arbitrary URL parameters are never sent', () => {
+ const s=setup('G-TEST');
+ s.context.location.href='https://example.com/?utm_source=instagram&utm_medium=social&utm_campaign=free_day_trial&utm_content=private@example.com&token=secret';
+ vm.runInNewContext(code,s.context);s.nodes.at(-2).click({target:{dataset:{choice:'granted'}}});
+ const cfg=s.context.window.dataLayer.find(x=>x[0]==='config')[2];
+ assert.equal(cfg.campaign_source,undefined);assert.equal(cfg.campaign_content,undefined);
+ assert.ok(!JSON.stringify(s.context.window.dataLayer).includes('secret'));
+});
