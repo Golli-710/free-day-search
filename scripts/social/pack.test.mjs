@@ -27,3 +27,16 @@ test('links distinguish formats and invalid dates are rejected',()=>{
  }
  assert.throws(()=>buildTrial(facilities,{posts:[]},'2026-02-31'));
 });
+test('static kit separates regions and removes paid voice/video formats',()=>{
+ const pack=buildTrial(facilities,{posts:[]},'2026-10-12',2,{areas:['東京都','大阪府']});
+ assert.ok(pack.posts.length>0);
+ for(const p of pack.posts){
+  assert.ok(['東京都','大阪府'].includes(p.area));
+  assert.ok(p.region.startsWith(p.area));
+  assert.ok(['x','carousel'].includes(p.format));
+  assert.equal(p.channel,p.format==='x'?'x':'instagram');
+  assert.ok(p.assets.every(x=>x.endsWith('.png')));
+  if(p.channel==='x')assert.ok(p.text.startsWith(`【${p.region}】`));
+ }
+ assert.equal(buildTrial(facilities,{posts:[]},'2026-10-12',2,{areas:['存在しないエリア']}).posts.length,0);
+});
