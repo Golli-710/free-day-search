@@ -12,7 +12,7 @@ export function trackingLink(facilityId,date,format) {
   u.searchParams.set('utm_medium','social'); u.searchParams.set('utm_campaign','free_day_trial');
   u.searchParams.set('utm_content',`${facilityId}_${date}_${format}`); return u.href;
 }
-export function buildTrial(facilities,history,start,weeks=4,{areas=[]}={}) {
+export function buildTrial(facilities,history,start,weeks=4,{areas=[],roundup=false}={}) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(start) || !Number.isInteger(weeks) || weeks<1 || weeks>4) throw Error('Start YYYY-MM-DD; weeks 1–4');
   const first=new Date(`${start}T08:00:00Z`);
   if (Number.isNaN(first.valueOf()) || jstToday(first)!==start) throw Error('Invalid start date');
@@ -32,6 +32,25 @@ export function buildTrial(facilities,history,start,weeks=4,{areas=[]}={}) {
       if(candidate){areaCursor=(index+1)%areaOrder.length;break;}
     }
     if(!candidate){skipped.push({day,format,reason:'確認済み候補なし／重複回避'});continue;}
+    if(roundup){
+      const pool=eligible.filter(f=>f.prefecture===facilities.find(f=>f.facility_id===candidate.facilityId).prefecture);
+      const members=[];let remaining=pool;
+      while(members.length<3){
+        const c=selectCandidate(remaining,planned,now,{afterDate:day});if(!c)break;
+        const f=remaining.find(f=>f.facility_id===c.facilityId);
+        members.push({facility_id:f.facility_id,name:f.name,municipality:f.municipality,target_date:c.targetDate,condition:c.ruleLabel,audience:c.targetConditions,scope:f.visit_info?.free_scope||f.free_conditions,closed:f.closed,hours:f.hours,verified_at:f.last_checked||f.last_verified_date,source_url:f.source_url||f.official_url});
+        remaining=remaining.filter(f=>f.facility_id!==c.facilityId);
+      }
+      if(members.length<2){skipped.push({day,format,reason:'同じエリアの確認済み施設が2件未満'});continue;}
+      const area=pool[0].prefecture,id=`${day}_${format}_roundup-${areaOrder.indexOf(area)}`;
+      const url=new URL(SITE_URL);url.searchParams.set('utm_source',format==='x'?'x':'instagram');url.searchParams.set('utm_medium','social');url.searchParams.set('utm_campaign','free_day_trial');url.searchParams.set('utm_content',id);
+      const title=`【${area}】無料で立ち寄れる候補${members.length}選`;
+      const caption=title+'\n\n'+members.map((m,i)=>`${i+1}. ${m.name}｜${m.municipality}\n候補日：${m.target_date}\n無料条件：${m.condition}\n対象：${m.audience}\n範囲：${m.scope}\n休館：${m.closed}`).join('\n\n')+'\n\n保存してお出かけ候補に。最新情報は施設公式案内で確認。詳しくはプロフィールのリンクへ。\n#無料デー検索 #無料のお出かけ';
+      const text=title+'\n'+members.map((m,i)=>`${i+1}. ${m.name}`).join('\n')+'\n無料範囲・対象者・休館日は画像とサイトで確認👇\n'+url.href;
+      if(weightedLength(text)>280)throw Error('Roundup X length exceeded');
+      posts.push({id,scheduled_at:`${day}T17:00:00+09:00`,area,region:area,channel:format==='x'?'x':'instagram',format,status:'draft',roundup:members,assets:format==='x'?['x.png']:Array.from({length:members.length+2},(_,i)=>`carousel-${String(i+1).padStart(2,'0')}.png`),candidate,text:format==='x'?text:caption,url:url.href,source_url:members[0].source_url,video:{region:area,verified_at:members.map(m=>m.verified_at).sort()[0]}});
+      continue;
+    }
     const f=facilities.find(f=>f.facility_id===candidate.facilityId);
     const url=trackingLink(candidate.facilityId,day,format);
     let text=candidate.text.replace(candidate.url,url);
@@ -70,6 +89,6 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const history=await readHistory(resolve(root,'social/history.json'));
   const start=value('--start',jstToday()),weeks=Number(value('--weeks','4')),out=resolve(root,value('--out','social/outbox/trial'));
   const areas=value('--areas','').split(',').filter(Boolean);
-  const pack=buildTrial(ctx.window.FACILITIES,history,start,weeks,{areas});await writePack(pack,out);
+  const pack=buildTrial(ctx.window.FACILITIES,history,start,weeks,{areas,roundup:args.includes('--roundup')});await writePack(pack,out);
   console.log(`${pack.posts.length} drafts / ${pack.skipped.length} skipped → ${out}`);
 }

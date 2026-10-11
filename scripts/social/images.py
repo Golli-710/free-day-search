@@ -45,6 +45,16 @@ def card(post,title,body,path,number,total):
 def render_pack(pack,out):
     for post in pack['posts']:
         v=post['video'];folder=out/post['id'];folder.mkdir(parents=True,exist_ok=True)
+        if post.get('roundup'):
+            members=post['roundup']
+            title=f"無料で立ち寄れる候補{len(members)}選"
+            slides=[(title,'保存してお出かけ候補に。\n無料の範囲・対象条件は次の画像へ')]
+            slides += [(m['name'],f"{m['municipality']}\n候補日：{m['target_date']}\n条件：{m['condition']}\n対象：{m['audience']}\n範囲：{m['scope']}\n休館：{m['closed']}") for m in members]
+            slides += [('開館日と条件を確認','最新情報は施設の公式案内へ。\n詳しい条件・ほかの施設は\nプロフィールのリンクから。')]
+            for i,(heading,body) in enumerate(slides,1):card(post,heading,body,folder/f'carousel-{i:02}.png',i,len(slides))
+            body='\n\n'.join(f"{m['name']}\n候補日：{m['target_date']}\n{m['scope']}／対象：{m['audience']}" for m in members)
+            card(post,title,body,folder/'x.png',1,1)
+            continue
         slides=[(v['facility_name'],v['date_label']+'\n\n'+v['free_condition']),
           ('無料になる条件',v['free_scope']+'\n\n対象：'+v['audience']),
           ('行く前に確認','開館：'+v['hours']+'\n休館：'+v['closed']+'\n\n'+v['reservation']+'\n'+v['access']),

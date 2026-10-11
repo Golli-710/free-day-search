@@ -39,3 +39,7 @@ Xの旧API投稿ジョブはSOCIAL_POSTING_ENABLED=falseのまま。今回のワ
 参考：
 - X API公式料金 https://docs.x.com/x-api/getting-started/pricing
 - Meta公式予約投稿案内動画 https://www.youtube.com/watch?v=PQjvbXyMhkM
+
+## エリア別まとめ（2026-10-11）
+週次ワークフローは `--roundup` を指定し、同一都道府県の確認済み候補を2〜3施設まとめます。施設ごとに候補日・無料の範囲・対象者・休館情報を保持します。候補日が異なる場合もあるため、同日に全施設が無料という表現は使いません。Instagramは表紙・各施設・案内の4〜5枚です。
+素材生成は毎週日曜8:35（日本時間）。Instagramへの予約登録・公開はこのワークフローに含みません。アプリの予約投稿またはMetaの公式予約機能で、内容確認後に登録してください。有料APIは使いません。

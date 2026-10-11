@@ -41,3 +41,17 @@ test('static kit separates regions and removes paid voice/video formats',()=>{
  }
  assert.equal(buildTrial(facilities,{posts:[]},'2026-10-12',2,{areas:['存在しないエリア']}).posts.length,0);
 });
+test('roundups keep each facility condition and day in one prefecture',()=>{
+ const pack=buildTrial(facilities,{posts:[]},'2026-10-12',2,{roundup:true});
+ assert.equal(pack.posts.length,10);
+ for(const p of pack.posts){
+  assert.ok(p.roundup.length>=2);
+  for(const m of p.roundup){
+   const f=facilities.find(f=>f.facility_id===m.facility_id);
+   assert.equal(f.prefecture,p.area);assert.ok(m.condition);assert.ok(m.scope);assert.ok(m.audience);
+   assert.ok(m.target_date>p.scheduled_at.slice(0,10));assert.ok(isOpenOn(f,new Date(m.target_date+'T12:00:00Z')));
+   if(p.channel==='instagram')assert.ok(p.text.includes(m.condition));
+  }
+  assert.equal(p.assets.length,p.channel==='x'?1:p.roundup.length+2);
+ }
+});
