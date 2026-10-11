@@ -4,7 +4,7 @@ import { spawnSync } from "node:child_process";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { SITE_URL, adultRuleStatus, candidatePool, checkPostQuality, generatePostCandidate, isDuplicateCandidate, jstToday, selectCandidate } from "../../src/social/generator.js";
+import { SITE_URL, adultRuleStatus, candidatePool, checkPostQuality, generatePostCandidate, isDuplicateCandidate, jstToday, isOpenOn, selectCandidate } from "../../src/social/generator.js";
 import { classifyXApiError, createXClient, XApiError } from "../../src/social/xClient.js";
 
 const node=process.execPath;
@@ -112,4 +112,14 @@ test("X API client uses v2 create endpoint, OAuth user credentials, and safe err
   assert.deepEqual(JSON.parse(request.options.body),{text:"dry test"});
   const rateLimited=await createXClient({env:{X_API_KEY:"key",X_API_SECRET:secret,X_ACCESS_TOKEN:"user-token",X_ACCESS_TOKEN_SECRET:"user-secret"},fetchImpl:async()=>({ok:false,status:429})});
   await assert.rejects(rateLimited.createPost("test"),error=>classifyXApiError(error)==="rate-limit"&&!String(error).includes(secret));
+});
+
+test('shifted holiday closures and named exceptional openings match the site calendar',()=>{
+ const f=facility({closed_weekdays:[1],open_on_holidays:[1],holiday_shifted_closure_weekdays:[1],holiday_closure_shift:'next_weekday'});
+ const date=s=>new Date(s+'T12:00:00Z');
+ assert.equal(isOpenOn(f,date('2026-10-12')),true);
+ assert.equal(isOpenOn(f,date('2026-10-13')),false);
+ assert.equal(isOpenOn(f,date('2026-10-14')),true);
+ assert.equal(isOpenOn(f,date('2026-05-07')),false);
+ assert.equal(isOpenOn({...f,open_month_days:['10-19']},date('2026-10-19')),true);
 });

@@ -34,6 +34,7 @@ test('static kit separates regions and removes paid voice/video formats',()=>{
   assert.ok(['東京都','大阪府'].includes(p.area));
   assert.ok(p.region.startsWith(p.area));
   assert.ok(['x','carousel'].includes(p.format));
+  assert.ok(p.candidate.targetDate>p.scheduled_at.slice(0,10),'17:00 posts promote a future outing');
   assert.equal(p.channel,p.format==='x'?'x':'instagram');
   assert.ok(p.assets.every(x=>x.endsWith('.png')));
   if(p.channel==='x')assert.ok(p.text.startsWith(`【${p.region}】`));

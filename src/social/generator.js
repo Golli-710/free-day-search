@@ -117,9 +117,18 @@ export function isOpenOn(f, d) {
   const weekday = d.getUTCDay(), day = d.getUTCDate(), md = `${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`;
   const holiday = holidays(d.getUTCFullYear()).has(iso(d));
   if (Array.isArray(f.open_weekdays) && !f.open_weekdays.includes(weekday)) return false;
-  if ((f.closed_weekdays || []).includes(weekday) && !(holiday && (f.open_on_holidays || []).includes(weekday))) return false;
+  if ((f.closed_weekdays || []).includes(weekday) && !((f.open_month_days || []).includes(md) || (holiday && (f.open_on_holidays || []).includes(weekday)))) return false;
   if (f.closed_holidays && holiday) return false;
   if (f.closed_day_after_holiday && holidays(d.getUTCFullYear()).has(iso(addDays(d,-1)))) return false;
+  for (let offset=1;offset<=7;offset++) {
+    const previous=addDays(d,-offset);
+    if (!(f.holiday_shifted_closure_weekdays || []).includes(previous.getUTCDay()) || !holidays(previous.getUTCFullYear()).has(iso(previous))) continue;
+    let closure=addDays(previous,1);
+    if (f.holiday_closure_shift === "next_weekday") {
+      while ([0,6].includes(closure.getUTCDay()) || holidays(closure.getUTCFullYear()).has(iso(closure))) closure=addDays(closure,1);
+    }
+    if (iso(closure) === iso(d)) return false;
+  }
   if ((f.closed_nth_weekdays || []).some(r => weekday === r.weekday && (r.month == null || r.month === d.getUTCMonth()+1) && Math.floor((day-1)/7)+1 === r.ordinal)) return false;
   if ((f.closed_month_days || []).includes(md)) return false;
   return !(f.closed_dates || []).includes(iso(d));
@@ -278,12 +287,12 @@ export function checkPostQuality({ candidate, facility, history, now = new Date(
   return { passed, checks, duplicate_checks:{ no_post_within_14_days:!recentFacilityPost, no_same_facility_target_date:!sameTarget, no_identical_text:!sameText, recent_dry_run_same_facility_count:recentDryRunCount } };
 }
 
-export function selectCandidate(facilities, history, now = new Date()) {
+export function selectCandidate(facilities, history, now = new Date(), {afterDate=null} = {}) {
   const groups = candidatePool(facilities,now);
   const latest = [...(history?.posts || [])].reverse().find(p => p.status !== "failed");
   for (const type of ["tomorrow","today","this-weekend","this-week"]) {
     const candidates = groups[type].flatMap(item => { try { return [generatePostCandidate({facility:item.facility,targetDate:item.targetDate,postType:type})]; } catch { return []; } });
-    const filtered = candidates.filter(c => !isDuplicateCandidate(c,history,{now}));
+    const filtered = candidates.filter(c => (!afterDate || c.targetDate>afterDate) && !isDuplicateCandidate(c,history,{now}));
     if (!filtered.length) continue;
     const lastPosted = new Map();
     for (const p of history?.posts || []) if (p.status === "posted" && p.facility_id) lastPosted.set(p.facility_id, Math.max(lastPosted.get(p.facility_id) || 0, Date.parse(p.posted_at || 0)));

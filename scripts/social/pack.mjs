@@ -28,7 +28,7 @@ export function buildTrial(facilities,history,start,weeks=4,{areas=[]}={}) {
     const day=jstToday(now); let candidate=null;
     for(let attempt=0;attempt<areaOrder.length;attempt++){
       const index=(areaCursor+attempt)%areaOrder.length,area=areaOrder[index];
-      candidate=selectCandidate(eligible.filter(f=>f.prefecture===area),planned,now);
+      candidate=selectCandidate(eligible.filter(f=>f.prefecture===area),planned,now,{afterDate:day});
       if(candidate){areaCursor=(index+1)%areaOrder.length;break;}
     }
     if(!candidate){skipped.push({day,format,reason:'確認済み候補なし／重複回避'});continue;}
