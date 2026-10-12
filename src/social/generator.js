@@ -127,6 +127,9 @@ export function isOpenOn(f, d) {
     if (f.holiday_closure_shift === "next_weekday") {
       while ([0,6].includes(closure.getUTCDay()) || holidays(closure.getUTCFullYear()).has(iso(closure))) closure=addDays(closure,1);
     }
+    if (f.holiday_closure_shift === "next_nonholiday") {
+      while (holidays(closure.getUTCFullYear()).has(iso(closure))) closure=addDays(closure,1);
+    }
     if (iso(closure) === iso(d)) return false;
   }
   if ((f.closed_nth_weekdays || []).some(r => weekday === r.weekday && (r.month == null || r.month === d.getUTCMonth()+1) && Math.floor((day-1)/7)+1 === r.ordinal)) return false;

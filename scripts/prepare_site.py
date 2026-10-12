@@ -18,7 +18,7 @@ from foundation import add_foundation
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE_FILES = ["index.html", "app.js", "data.js", "styles.css", "favicon.svg", "analytics.js"]
-AREAS = [("tokyo", "東京都"), ("kanagawa", "神奈川県"), ("osaka", "大阪府")]
+AREAS = [("tokyo", "東京都"), ("kanagawa", "神奈川県"), ("osaka", "大阪府"), ("chiba", "千葉県")]
 CATEGORIES = ["美術館", "博物館", "科学館", "動物園", "水族館", "植物園", "庭園"]
 CATEGORY_SLUGS = {"美術館": "art-museum", "博物館": "museum", "科学館": "science-museum", "動物園": "zoo", "水族館": "aquarium", "植物園": "botanical-garden", "庭園": "garden"}
 WEEKDAYS = ["月", "火", "水", "木", "金", "土", "日"]
@@ -107,6 +107,9 @@ def open_on(f, day):
         closure = holiday + timedelta(days=1)
         if f.get("holiday_closure_shift") == "next_weekday":
             while closure.weekday() >= 5 or closure in holidays(closure.year):
+                closure += timedelta(days=1)
+        if f.get("holiday_closure_shift") == "next_nonholiday":
+            while closure in holidays(closure.year):
                 closure += timedelta(days=1)
         if day == closure:
             return False

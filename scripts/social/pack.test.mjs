@@ -65,3 +65,9 @@ test('all roundup members are withheld for 28 days, including future reservation
  const booked=facilities.map(f=>({facility_id:f.facility_id,status:'scheduled',scheduled_at:'2026-10-15T19:00:00+09:00'}));
  assert.equal(buildTrial(facilities,{posts:booked},'2026-10-12',2,{roundup:true}).posts.length,0);
 });
+test('Kasori includes Chiba and shifts closure across consecutive holidays',()=>{
+ const f=facilities.find(f=>f.facility_id==='kasori-shell-mounds-museum');
+ assert.equal(f.prefecture,'千葉県');assert.equal(f.audit.status,'confirmed');
+ for(const day of ['2026-10-12','2026-10-17','2026-10-18','2026-05-05','2026-05-06'])assert.ok(isOpenOn(f,new Date(day+'T12:00:00Z')));
+ for(const day of ['2026-10-13','2026-05-07','2026-12-29','2026-06-03'])assert.equal(isOpenOn(f,new Date(day+'T12:00:00Z')),false);
+});

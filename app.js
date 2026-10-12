@@ -1,7 +1,7 @@
 (() => {
   const rows = window.FACILITIES;
   const categories = ["美術館", "博物館", "科学館", "動物園", "水族館", "植物園", "庭園"];
-  const prefectures = ["東京都", "神奈川県", "大阪府"];
+  const prefectures = [...new Set(rows.map(f => f.prefecture).filter(Boolean))];
   const app = document.querySelector("#app");
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"}[c]));
   const url = (params) => `?${new URLSearchParams(params).toString()}`;
@@ -182,6 +182,9 @@
       let closure = new Date(holiday.getTime() + 86400000);
       if (f.holiday_closure_shift === "next_weekday") {
         while ([0, 6].includes(closure.getUTCDay()) || holidayName(closure)) closure = new Date(closure.getTime() + 86400000);
+      }
+      if (f.holiday_closure_shift === "next_nonholiday") {
+        while (holidayName(closure)) closure = new Date(closure.getTime() + 86400000);
       }
       if (isoDate(date) === isoDate(closure)) return false;
     }
