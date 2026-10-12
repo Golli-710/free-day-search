@@ -30,7 +30,7 @@ jobs:
       - name: Prepare next two weeks
         run: |
           START=$(node -e "const d=new Date();const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);const n=new Date(p+'T12:00:00Z');n.setUTCDate(n.getUTCDate()+((8-n.getUTCDay())%7||7));console.log(n.toISOString().slice(0,10))")
-          npm run social:pack -- --start "$START" --weeks 2
+          npm run social:pack -- --start "$START" --weeks 2 --roundup
           npm run social:images
       - uses: actions/upload-artifact@v4
         with:
