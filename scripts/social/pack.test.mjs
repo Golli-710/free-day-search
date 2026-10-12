@@ -43,7 +43,7 @@ test('static kit separates regions and removes paid voice/video formats',()=>{
 });
 test('roundups keep each facility condition and day in one prefecture',()=>{
  const pack=buildTrial(facilities,{posts:[]},'2026-10-12',2,{roundup:true});
- assert.equal(pack.posts.length,10);
+ assert.ok(pack.posts.length>0 && pack.posts.length<=10);
  for(const p of pack.posts){
   assert.ok(p.roundup.length>=2);
   for(const m of p.roundup){
@@ -54,4 +54,14 @@ test('roundups keep each facility condition and day in one prefecture',()=>{
   }
   assert.equal(p.assets.length,p.channel==='x'?1:p.roundup.length+2);
  }
+});
+test('all roundup members are withheld for 28 days, including future reservations',()=>{
+ const pack=buildTrial(facilities,{posts:[]},'2026-10-12',4,{roundup:true});
+ const last=new Map();
+ for(const p of pack.posts)for(const m of p.roundup){
+  const day=Date.parse(p.scheduled_at);if(last.has(m.facility_id))assert.ok(day-last.get(m.facility_id)>=28*86400000);
+  last.set(m.facility_id,day);
+ }
+ const booked=facilities.map(f=>({facility_id:f.facility_id,status:'scheduled',scheduled_at:'2026-10-15T19:00:00+09:00'}));
+ assert.equal(buildTrial(facilities,{posts:booked},'2026-10-12',2,{roundup:true}).posts.length,0);
 });

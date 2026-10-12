@@ -1,4 +1,53 @@
 {
   "schema_version": 1,
-  "posts": []
+  "posts": [
+    {
+      "post_id": "x-weekend-2026-10-15-tokyo-metropolitan-art-museum",
+      "facility_id": "tokyo-metropolitan-art-museum",
+      "prefecture": "東京都",
+      "scheduled_at": "2026-10-15T19:00:00+09:00",
+      "posted_at": null,
+      "status": "scheduled",
+      "channel": "x",
+      "target_date": "2026-10-17",
+      "campaign": "weekend-20261017",
+      "evidence": "X native scheduled list verified 2026-10-12"
+    },
+    {
+      "post_id": "x-weekend-2026-10-15-banknote-postage-museum",
+      "facility_id": "banknote-postage-museum",
+      "prefecture": "東京都",
+      "scheduled_at": "2026-10-15T19:00:00+09:00",
+      "posted_at": null,
+      "status": "scheduled",
+      "channel": "x",
+      "target_date": "2026-10-17",
+      "campaign": "weekend-20261017",
+      "evidence": "X native scheduled list verified 2026-10-12"
+    },
+    {
+      "post_id": "x-weekend-2026-10-16-nogeyama-zoo",
+      "facility_id": "nogeyama-zoo",
+      "prefecture": "神奈川県",
+      "scheduled_at": "2026-10-16T19:00:00+09:00",
+      "posted_at": null,
+      "status": "scheduled",
+      "channel": "x",
+      "target_date": "2026-10-17",
+      "campaign": "weekend-20261017",
+      "evidence": "X native scheduled list verified 2026-10-12"
+    },
+    {
+      "post_id": "x-weekend-2026-10-16-kawasaki-sora-midori-science-museum",
+      "facility_id": "kawasaki-sora-midori-science-museum",
+      "prefecture": "神奈川県",
+      "scheduled_at": "2026-10-16T19:00:00+09:00",
+      "posted_at": null,
+      "status": "scheduled",
+      "channel": "x",
+      "target_date": "2026-10-17",
+      "campaign": "weekend-20261017",
+      "evidence": "X native scheduled list verified 2026-10-12"
+    }
+  ]
 }

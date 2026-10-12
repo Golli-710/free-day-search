@@ -239,7 +239,7 @@ export function isDuplicateCandidate(candidate, history, { cooldownDays = 14, no
   const posts = history?.posts || [];
   if (posts.some(p => p.status !== "failed" && p.facility_id === candidate.facilityId && p.target_date === candidate.targetDate)) return "same-facility-target-date";
   if (posts.some(p => p.status !== "failed" && p.post_text === candidate.text)) return "identical-post-text";
-  const cooldown = posts.some(p => ["posted","posting","unknown"].includes(p.status) && p.facility_id === candidate.facilityId && postedWithinDays(p,cooldownDays,now));
+  const cooldown = posts.some(p => ["posted","posting","unknown","scheduled"].includes(p.status) && p.facility_id === candidate.facilityId && postedWithinDays(p,cooldownDays,now));
   return cooldown ? "facility-cooldown" : null;
 }
 
@@ -248,7 +248,7 @@ function postedWithinDays(record, days, now) {
   const today = new Date(`${jstToday(now)}T00:00:00+09:00`).getTime();
   const recordDay = new Date(`${jstToday(new Date(record.posted_at || record.scheduled_at))}T00:00:00+09:00`).getTime();
   const delta = (today - recordDay) / DAY_MS;
-  return delta >= 0 && delta < days;
+  return delta < days;
 }
 
 export function checkPostQuality({ candidate, facility, history, now = new Date() }) {
@@ -287,12 +287,12 @@ export function checkPostQuality({ candidate, facility, history, now = new Date(
   return { passed, checks, duplicate_checks:{ no_post_within_14_days:!recentFacilityPost, no_same_facility_target_date:!sameTarget, no_identical_text:!sameText, recent_dry_run_same_facility_count:recentDryRunCount } };
 }
 
-export function selectCandidate(facilities, history, now = new Date(), {afterDate=null} = {}) {
+export function selectCandidate(facilities, history, now = new Date(), {afterDate=null,cooldownDays=14} = {}) {
   const groups = candidatePool(facilities,now);
   const latest = [...(history?.posts || [])].reverse().find(p => p.status !== "failed");
   for (const type of ["tomorrow","today","this-weekend","this-week"]) {
     const candidates = groups[type].flatMap(item => { try { return [generatePostCandidate({facility:item.facility,targetDate:item.targetDate,postType:type})]; } catch { return []; } });
-    const filtered = candidates.filter(c => (!afterDate || c.targetDate>afterDate) && !isDuplicateCandidate(c,history,{now}));
+    const filtered = candidates.filter(c => (!afterDate || c.targetDate>afterDate) && !isDuplicateCandidate(c,history,{now,cooldownDays}));
     if (!filtered.length) continue;
     const lastPosted = new Map();
     for (const p of history?.posts || []) if (p.status === "posted" && p.facility_id) lastPosted.set(p.facility_id, Math.max(lastPosted.get(p.facility_id) || 0, Date.parse(p.posted_at || 0)));
