@@ -18,3 +18,7 @@
 .breadcrumbs ol { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 0; }
 .breadcrumbs li:not(:last-child)::after { content: '›'; padding-left: 6px; }
 .breadcrumbs [aria-current="page"] { color: #53615b; }
+
+/* Reserved ad locations are invisible until explicitly activated. */
+.ad-placement[hidden] { display: none !important; }
+.ad-placement { grid-column: 1 / -1; width: 100%; max-width: 100%; margin: 1.5rem 0; }
