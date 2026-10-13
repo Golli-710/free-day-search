@@ -451,7 +451,8 @@ def main():
         page_path = f"facility/{quote(f['facility_id'])}"
         (out / page_path).mkdir(parents=True, exist_ok=True)
         candidates = [item for item in rows if item['facility_id'] != f['facility_id'] and item['prefecture'] == f['prefecture'] and approved(item)]
-        candidates.sort(key=lambda item: (item['municipality'] != f['municipality'], item['category'] != f['category'], item['facility_id']))
+        city_key = lambda item: item['municipality'].split('市', 1)[0] if '市' in item['municipality'] else item['municipality']
+        candidates.sort(key=lambda item: (city_key(item) != city_key(f), item['category'] != f['category'], item['facility_id']))
         (out / page_path / "index.html").write_text(facility_page_html(f, base, today, region_path, category_path, verification_meta, candidates[:3]), encoding="utf-8")
         urls.append(base + page_path + "/")
     urls.extend(add_foundation(ROOT, out, base, verification_meta))
