@@ -83,3 +83,12 @@ test('untrusted campaign values and arbitrary URL parameters are never sent', ()
  assert.equal(cfg.campaign_source,undefined);assert.equal(cfg.campaign_content,undefined);
  assert.ok(!JSON.stringify(s.context.window.dataLayer).includes('secret'));
 });
+
+test('scheduled weekend X campaign is retained without search parameters', () => {
+ const s=setup('G-TEST');
+ s.context.location.href='https://example.com/?prefecture=private&utm_source=x&utm_medium=social&utm_campaign=weekend&utm_content=tokyo_20261015';
+ vm.runInNewContext(code,s.context);s.nodes.at(-2).click({target:{dataset:{choice:'granted'}}});
+ const cfg=s.context.window.dataLayer.find(x=>x[0]==='config')[2];
+ assert.equal(cfg.campaign_source,'x');assert.equal(cfg.campaign_name,'weekend');assert.equal(cfg.campaign_content,'tokyo_20261015');
+ assert.ok(!JSON.stringify(s.context.window.dataLayer).includes('private'));
+});

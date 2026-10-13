@@ -13,9 +13,10 @@
   const source = query.get('utm_source');
   const name = query.get('utm_campaign');
   const content = query.get('utm_content');
+  const knownContent = /^[a-z0-9-]+_\d{4}-\d{2}-\d{2}(?:_(?:x|carousel|story|reel))?$/.test(content || '') || (name === 'weekend' && /^(?:tokyo|kanagawa|chiba|osaka)_\d{8}$/.test(content || ''));
   if (['x', 'instagram'].includes(source) && query.get('utm_medium') === 'social' &&
-      ['free_spot_daily', 'free_day_trial'].includes(name) &&
-      /^[a-z0-9-]+_\d{4}-\d{2}-\d{2}(?:_(?:x|carousel|story|reel))?$/.test(content || '') && (content || '').length <= 100) {
+      ['free_spot_daily', 'free_day_trial', 'weekend'].includes(name) &&
+      knownContent && (content || '').length <= 100) {
     Object.assign(campaign, {campaign_source: source, campaign_medium: 'social', campaign_name: name, campaign_content: content});
   }
   const page = () => location.origin + location.pathname;
