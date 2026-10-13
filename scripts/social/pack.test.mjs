@@ -72,8 +72,16 @@ test('Kasori includes Chiba and shifts closure across consecutive holidays',()=>
  for(const day of ['2026-10-13','2026-05-07','2026-12-29','2026-06-03'])assert.equal(isOpenOn(f,new Date(day+'T12:00:00Z')),false);
 });
 test('Chiba roundup has distinct verified museums and holiday closures',()=>{
- const chiba=facilities.filter(f=>f.prefecture==='千葉県');assert.equal(chiba.length,3);
+ const chiba=facilities.filter(f=>f.prefecture==='千葉県'&&f.category==='博物館');assert.equal(chiba.length,3);
  for(const f of chiba){assert.ok(isOpenOn(f,new Date('2026-10-17T12:00:00Z')));assert.equal(isOpenOn(f,new Date('2026-10-13T12:00:00Z')),false);}
- const pack=buildTrial(facilities,{posts:[]},'2026-10-12',1,{areas:['千葉県'],roundup:true});
+ const pack=buildTrial(chiba,{posts:[]},'2026-10-12',1,{areas:['千葉県'],roundup:true});
  assert.equal(pack.posts.length,1);assert.equal(new Set(pack.posts[0].roundup.map(m=>m.facility_id)).size,3);
+});
+test('science free days and child-only planetarium never become general free admission',()=>{
+ const science=facilities.find(f=>f.facility_id==='chiba-science-industry-museum');
+ assert.ok(science.free_rules.some(r=>r.month_day==='11-03'&&matchesRule(r,new Date('2026-11-03T12:00:00Z'))));
+ assert.ok(!science.free_rules.some(r=>r.type==='always_free'));
+ const water=facilities.find(f=>f.facility_id==='abiko-mizunoyakata-planetarium');
+ assert.ok(!water.free_rules.some(r=>matchesRule(r,new Date('2026-11-01T12:00:00Z'))));
+ assert.ok(water.free_rules.filter(r=>matchesRule(r,new Date('2026-10-17T12:00:00Z'))).every(r=>r.audience));
 });
