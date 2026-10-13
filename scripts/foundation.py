@@ -14,6 +14,9 @@ def add_foundation(root, out, base, verification_meta):
     policies = json.loads((root / 'policies.json').read_text(encoding='utf-8'))
     links = ' ・ '.join(f'<a href="{esc(base + p["slug"] + "/")}">{esc(p["title"])}</a>' for p in policies)
     navigation = f'<nav aria-label="運営情報">{links}</nav>'
+    adsense_meta = '<meta name="google-adsense-account" content="ca-pub-7636336060979442">' if base == 'https://free-day-search.pages.dev/' else ''
+    if adsense_meta:
+        (out / 'ads.txt').write_text('google.com, pub-7636336060979442, DIRECT, f08c47fec0942fa0\n', encoding='utf-8')
     urls = []
     for p in policies:
         canonical = base + p['slug'] + '/'
@@ -28,7 +31,7 @@ def add_foundation(root, out, base, verification_meta):
         urls.append(canonical)
     for page in out.rglob('*.html'):
         markup = page.read_text(encoding='utf-8')
-        markup = markup.replace('</head>', f'<meta name="site-analytics" content="{esc(measurement)}"><meta name="analytics-site" content="無料デー検索"></head>')
+        markup = markup.replace('</head>', f'{adsense_meta}<meta name="site-analytics" content="{esc(measurement)}"><meta name="analytics-site" content="無料デー検索"></head>')
         markup = markup.replace('</footer>', navigation + '</footer>')
         markup = markup.replace('</body>', f'<script defer src="{esc(base)}analytics.js"></script></body>')
         page.write_text(markup, encoding='utf-8')
