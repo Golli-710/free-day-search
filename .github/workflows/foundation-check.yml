@@ -23,4 +23,5 @@ jobs:
           python3 -m unittest discover -s scripts -p test_site_metadata.py
           python3 -m unittest discover -s scripts -p test_cloudflare.py
           python3 -m unittest discover -s scripts -p test_museum_calendar.py
+          python3 -m unittest discover -s scripts -p test_related_facilities.py
           python3 -m unittest discover -s scripts -p test_social_video.py
