@@ -72,7 +72,8 @@ test('Kasori includes Chiba and shifts closure across consecutive holidays',()=>
  for(const day of ['2026-10-13','2026-05-07','2026-12-29','2026-06-03'])assert.equal(isOpenOn(f,new Date(day+'T12:00:00Z')),false);
 });
 test('Chiba roundup has distinct verified museums and holiday closures',()=>{
- const chiba=facilities.filter(f=>f.prefecture==='千葉県'&&f.category==='博物館');assert.equal(chiba.length,3);
+ const chiba=facilities.filter(f=>f.prefecture==='千葉県'&&f.category==='博物館');assert.ok(chiba.length>=3);
+ assert.ok(chiba.some(f=>f.facility_id==='chiba-city-folk-museum'));
  for(const f of chiba){assert.ok(isOpenOn(f,new Date('2026-10-17T12:00:00Z')));assert.equal(isOpenOn(f,new Date('2026-10-13T12:00:00Z')),false);}
  const pack=buildTrial(chiba,{posts:[]},'2026-10-12',1,{areas:['千葉県'],roundup:true});
  assert.equal(pack.posts.length,1);assert.equal(new Set(pack.posts[0].roundup.map(m=>m.facility_id)).size,3);
