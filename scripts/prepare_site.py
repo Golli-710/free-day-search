@@ -411,6 +411,15 @@ def main():
         root_markup = root_markup.replace('</main>', f'</main><section class="container content-section"><h2>無料日を待たずに行ける施設</h2><p>日程に合わせやすい常時無料の施設を、無料になる範囲や対象条件とともに確認できます。</p><a href="{base}free/always/">常時無料の施設一覧を見る →</a></section>', 1)
         root_html.write_text(root_markup, encoding="utf-8")
 
+    # Emit important discovery links in the initial HTML, before app rendering.
+    generated_paths = {item[0] for item in page_defs}
+    guide_links = [(f"{slug}/free", f"{prefecture}の無料施設") for slug, prefecture in AREAS]
+    guide_links += [("free/this-weekend", "今週末の無料施設"), ("free/this-month", "今月の無料施設")]
+    guide_html = '<nav aria-label="エリアと日程の無料施設一覧"><ul>' + ''.join(f'<li><a href="{base}{path}/">{esc(label)}</a></li>' for path, label in guide_links if path in generated_paths) + '</ul></nav>'
+    root_markup = root_html.read_text(encoding="utf-8")
+    root_markup = root_markup.replace('常時無料の施設一覧を見る →</a></section>', '常時無料の施設一覧を見る →</a>' + guide_html + '</section>', 1)
+    root_html.write_text(root_markup, encoding="utf-8")
+
     by_path = {item[0]: item for item in page_defs}
     area_path = {slug: f"{slug}/free" for slug, _ in AREAS if f"{slug}/free" in by_path}
     related_base = [("常時無料の施設", base + "free/always/")] + [("今日無料", base + "free/today/"), ("明日無料", base + "free/tomorrow/"), ("今週無料", base + "free/this-week/"), ("今週末無料", base + "free/this-weekend/"), ("今月無料", base + "free/this-month/")]
