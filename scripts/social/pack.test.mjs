@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFile} from 'node:fs/promises';
-import {buildTrial,trackingLink} from './pack.mjs';
+import {buildTrial,trackingLink,roundupLink} from './pack.mjs';
 import {isOpenOn,matchesRule,adultRuleStatus} from '../../src/social/generator.js';
 const ctx={window:{}};vm.runInNewContext(await readFile(new URL('../../data.js',import.meta.url),'utf8'),ctx);
 const facilities=ctx.window.FACILITIES;
@@ -43,7 +43,7 @@ test('static kit separates regions and removes paid voice/video formats',()=>{
 });
 test('roundups keep each facility condition and day in one prefecture',()=>{
  const pack=buildTrial(facilities,{posts:[]},'2026-10-12',2,{roundup:true});
- assert.ok(pack.posts.length>0 && pack.posts.length<=10);
+ assert.ok(pack.posts.length>0 && pack.posts.length<=8);
  for(const p of pack.posts){
   assert.ok(p.roundup.length>=2);
   for(const m of p.roundup){
@@ -58,7 +58,7 @@ test('roundups keep each facility condition and day in one prefecture',()=>{
 test('all roundup members are withheld for 28 days, including future reservations',()=>{
  const pack=buildTrial(facilities,{posts:[]},'2026-10-12',4,{roundup:true});
  const last=new Map();
- for(const p of pack.posts)for(const m of p.roundup){
+ for(const p of pack.posts.filter(p=>p.channel==='x'))for(const m of p.roundup){
   const day=Date.parse(p.scheduled_at);if(last.has(m.facility_id))assert.ok(day-last.get(m.facility_id)>=28*86400000);
   last.set(m.facility_id,day);
  }
@@ -76,7 +76,7 @@ test('Chiba roundup has distinct verified museums and holiday closures',()=>{
  assert.ok(chiba.some(f=>f.facility_id==='chiba-city-folk-museum'));
  for(const f of chiba){assert.ok(isOpenOn(f,new Date('2026-10-17T12:00:00Z')));assert.equal(isOpenOn(f,new Date('2026-10-13T12:00:00Z')),false);}
  const pack=buildTrial(chiba,{posts:[]},'2026-10-12',1,{areas:['千葉県'],roundup:true});
- assert.equal(pack.posts.length,1);assert.equal(new Set(pack.posts[0].roundup.map(m=>m.facility_id)).size,3);
+ assert.equal(pack.posts.length,2);assert.equal(new Set(pack.posts[0].roundup.map(m=>m.facility_id)).size,3);
 });
 test('science free days and child-only planetarium never become general free admission',()=>{
  const science=facilities.find(f=>f.facility_id==='chiba-science-industry-museum');
@@ -85,4 +85,35 @@ test('science free days and child-only planetarium never become general free adm
  const water=facilities.find(f=>f.facility_id==='abiko-mizunoyakata-planetarium');
  assert.ok(!water.free_rules.some(r=>matchesRule(r,new Date('2026-11-01T12:00:00Z'))));
  assert.ok(water.free_rules.filter(r=>matchesRule(r,new Date('2026-10-17T12:00:00Z'))).every(r=>r.audience));
+});
+
+test('roundup kits pair both channels on Thursday/Friday at 19 JST for the coming weekend',()=>{
+ const history={posts:[]}, pack=buildTrial(facilities,history,'2026-10-19',2,{roundup:true});
+ assert.ok(pack.posts.length>=2); assert.equal(history.posts.length,0);
+ const pairs=new Map();
+ for(const p of pack.posts){
+  const date=new Date(p.scheduled_at.slice(0,10)+'T12:00:00Z');
+  assert.ok([4,5].includes(date.getUTCDay()));assert.ok(p.scheduled_at.endsWith('T19:00:00+09:00'));
+  const key=p.scheduled_at;pairs.set(key,[...(pairs.get(key)||[]),p]);
+  for(const m of p.roundup){
+   const target=new Date(m.target_date+'T12:00:00Z');
+   assert.ok([0,6].includes(target.getUTCDay()));
+   const delta=(target-date)/86400000;assert.ok(delta>=1&&delta<=3);
+  }
+ }
+ for(const pair of pairs.values()){
+  assert.equal(pair.length,2);assert.deepEqual(pair.map(p=>p.channel),['x','instagram']);
+  assert.equal(pair[0].area,pair[1].area);assert.deepEqual(pair[0].roundup,pair[1].roundup);
+ }
+});
+test('roundup links land on an area page using the existing approved analytics identifiers',()=>{
+ for(const [area,slug] of [['東京都','tokyo'],['神奈川県','kanagawa'],['千葉県','chiba'],['大阪府','osaka']]){
+  for(const format of ['x','carousel']){
+   const u=new URL(roundupLink(area,'2026-10-22',format));
+   assert.equal(u.pathname,`/${slug}/free/`);assert.equal(u.searchParams.get('utm_campaign'),'weekend');
+   assert.equal(u.searchParams.get('utm_content'),`${slug}_20261022`);
+   assert.equal(u.searchParams.get('utm_source'),format==='x'?'x':'instagram');
+  }
+ }
+ assert.throws(()=>roundupLink('不明','2026-10-22','x'));
 });
