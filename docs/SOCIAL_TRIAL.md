@@ -1,10 +1,10 @@
 # SNSで集客する4週間の試験
 
-Xは月・水・金17時、Instagramは火曜の画像投稿・木曜のリールを予定します。初回の下書きは2026年10月12日〜11月6日の20件です。日程は提案で、まだ投稿・予約投稿はしていません。
+現在のエリア別まとめキット（`--roundup`）は木曜・金曜19時に、同じエリアの候補をXとInstagram画像の2媒体分ずつ準備します。対象日はその週の土曜・日曜です。候補不足なら生成を省略し、投稿数を埋めるために条件を緩めません。生成は下書きのみで、予約・公開は別途確認します。
 
 ## 投稿素材を作る
 
-`npm run social:pack -- --start 2026-10-12` で投稿文、動画入力JSON、確認用HTML、計測表CSVを `social/outbox/trial/` に生成します。確認済みの大人対象無料ルールと休館情報を利用し、同じ施設・日付や14日以内の連投を避けます。既存の実投稿履歴を参照しますが、下書きを投稿済みとして保存しません。候補がない日は省略し、manifestのskippedへ理由を残します。
+`npm run social:pack -- --start 2026-10-19 --weeks 2 --roundup` で投稿文、動画入力JSON、確認用HTML、計測表CSVを `social/outbox/trial/` に生成します。確認済みの大人対象無料ルールと休館情報を利用し、同じ施設・日付や14日以内の連投を避けます。既存の実投稿履歴を参照しますが、下書きを投稿済みとして保存しません。候補がない日は省略し、manifestのskippedへ理由を残します。
 
 投稿文の日付は無料になる対象日で、投稿予定日とは別です。各投稿前に施設公式サイトで臨時休館・予約・無料範囲を再確認してください。Instagramのプロフィールリンクは投稿先の施設ページか対応する一覧に更新し、ストーリーズは投稿キットのstory用リンクを使います。画像・リール内の文字URLはクリック導線になりません。
 
@@ -22,7 +22,9 @@ python scripts/social/render.py social/outbox/trial/投稿ID.video.json --engine
 
 ## 計測
 
-リンクは `utm_source=x|instagram`、`utm_medium=social`、`utm_campaign=free_day_trial`、`utm_content=施設ID_投稿予定日_x|carousel|story|reel` を付けます。既存日次X候補の `free_spot_daily` も維持します。リンク既定先をCloudflareの本番URLに変更しました。
+エリアまとめはエリアの静的一覧（例 `/chiba/free/`）へ誘導し、`utm_campaign=weekend`、`utm_content=chiba_20261022` のようにエリアと投稿日を付けます。媒体は `utm_source` で分けます。この形式は既存のGA4アダプターが許可しています。単一施設の従来キット（`--roundup` なし、月〜金17時）は試験用として残しています。
+
+単一施設リンクは `utm_source=x|instagram`、`utm_medium=social`、`utm_campaign=free_day_trial`、`utm_content=施設ID_投稿予定日_x|carousel|story|reel` を付けます。既存日次X候補の `free_spot_daily` も維持します。リンク既定先をCloudflareの本番URLに変更しました。
 
 GA4は同意した利用者のみ計測し、ページURLから検索入力・クエリ・参照元を除きます。こちらの生成形式に一致するSNSキャンペーン情報だけを明示的に設定します。設定前の投稿流入は今回の変更で過去にさかのぼって復元できません。
 
