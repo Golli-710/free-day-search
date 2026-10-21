@@ -7,7 +7,7 @@ const ctx={window:{},document:{querySelector(){return null;}},Date,URL,URLSearch
 vm.runInNewContext(await readFile(new URL('../data.js',import.meta.url),'utf8'),ctx);
 const source=await readFile(new URL('../app.js',import.meta.url),'utf8');
 vm.runInNewContext(source.replace('  render();\n})();','  window.factoryCheck={isFreeOn,nextDateInfo,categories};\n})();'),ctx);
-const factories=ctx.window.FACILITIES.filter(f=>f.category==='工場見学');
+const factories=ctx.window.FACILITIES.filter(f=>f.category==='工場見学'&&f.reservation_required);
 test('browser factory category discloses booking without matching a date',()=>{
  assert.ok(ctx.window.factoryCheck.categories.includes('工場見学'));
  for(const f of factories){
@@ -17,4 +17,12 @@ test('browser factory category discloses booking without matching a date',()=>{
 });
 test('automatic SNS never promotes unconfirmed reservation availability',()=>{
  assert.equal(selectCandidate(factories,{posts:[]},new Date('2026-10-22T08:00:00Z')),null);
+});
+
+test('walk-in galleries retain real open-day matching',()=>{
+ const get=id=>ctx.window.FACILITIES.find(f=>f.facility_id===id);
+ assert.ok(ctx.window.factoryCheck.categories.includes('展望施設'));
+ assert.equal(ctx.window.factoryCheck.isFreeOn(get('harada-head-office-factory'),new Date('2026-10-24T12:00:00Z')),true);
+ assert.equal(ctx.window.factoryCheck.isFreeOn(get('harada-head-office-factory'),new Date('2026-10-25T12:00:00Z')),false);
+ assert.equal(ctx.window.factoryCheck.isFreeOn(get('mentai-park-oarai'),new Date('2026-10-25T12:00:00Z')),true);
 });
