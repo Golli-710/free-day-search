@@ -265,7 +265,7 @@ def visit_info_html(f, compact=False):
     if info.get("status") != "confirmed" or not str(info.get("source_url", "")).startswith("https://"):
         return ""
     if compact:
-        return f'<p>予約：{esc(info.get("reservation"))}</p><p>アクセス：{esc(info.get("access"))}</p>'
+        return "".join(f"<p>{label}：{esc(info[key])}</p>" for label, key in [("予約", "reservation"), ("アクセス", "access")] if info.get(key))
     fields = [("無料になる範囲", "free_scope"), ("予約・団体見学", "reservation"), ("最寄駅・アクセス", "access"), ("訪問前の確認", "notes")]
     details = "".join(f'<div><dt>{esc(label)}</dt><dd>{esc(info[key])}</dd></div>' for label, key in fields if info.get(key))
     return f'<section class="content-section visit-planning"><h2>お出かけ前に確認すること</h2><dl class="info-list">{details}</dl><p class="source-line">訪問情報の確認日：{esc(info.get("verified_at"))} ・ <a href="{esc(info["source_url"])}">予約・アクセスの公式案内</a></p></section>'
