@@ -36,7 +36,7 @@ export function adultRuleStatus(rule) {
 function confirmedFreeSchedule(f) {
   const status = f.audit?.status || f.audit_status;
   const fields = f.audit?.field_status || {};
-  return status === "confirmed" && !["needs_review", "unverified"].includes(fields.free_rules) && !["needs_review", "unverified"].includes(fields.free_days) && !["needs_review", "unverified"].includes(fields.free_conditions);
+  return !f.reservation_required && status === "confirmed" && !["needs_review", "unverified"].includes(fields.free_rules) && !["needs_review", "unverified"].includes(fields.free_days) && !["needs_review", "unverified"].includes(fields.free_conditions);
 }
 
 function rulesFor(f) {
