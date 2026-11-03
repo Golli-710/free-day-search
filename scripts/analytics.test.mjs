@@ -1,3 +1,4 @@
+import {roundupLink} from './social/pack.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -91,4 +92,15 @@ test('scheduled weekend X campaign is retained without search parameters', () =>
  const cfg=s.context.window.dataLayer.find(x=>x[0]==='config')[2];
  assert.equal(cfg.campaign_source,'x');assert.equal(cfg.campaign_name,'weekend');assert.equal(cfg.campaign_content,'tokyo_20261015');
  assert.ok(!JSON.stringify(s.context.window.dataLayer).includes('private'));
+});
+
+test('both generated roundup channels retain attribution in the real consent adapter',()=>{
+ for(const format of ['x','carousel']){
+  const s=setup('G-TEST');s.context.location.href=roundupLink('千葉県','2026-10-22',format);
+  vm.runInNewContext(code,s.context);s.nodes.at(-2).click({target:{dataset:{choice:'granted'}}});
+  const cfg=s.context.window.dataLayer.find(x=>x[0]==='config')[2];
+  assert.equal(cfg.campaign_source,format==='x'?'x':'instagram');
+  assert.equal(cfg.campaign_name,'weekend');assert.equal(cfg.campaign_content,'chiba_20261022');
+  assert.equal(cfg.page_location,'https://example.com/facility/zoo/');
+ }
 });
