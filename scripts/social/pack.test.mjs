@@ -113,7 +113,7 @@ test('roundup kits pair both channels on Thursday/Friday at 19 JST for the comin
  }
 });
 test('roundup links land on an area page using the existing approved analytics identifiers',()=>{
- for(const [area,slug] of [['東京都','tokyo'],['神奈川県','kanagawa'],['千葉県','chiba'],['大阪府','osaka']]){
+ for(const [area,slug] of [['東京都','tokyo'],['神奈川県','kanagawa'],['千葉県','chiba'],['大阪府','osaka'],['埼玉県','saitama'],['群馬県','gunma'],['茨城県','ibaraki']]){
   for(const format of ['x','carousel']){
    const u=new URL(roundupLink(area,'2026-10-22',format));
    assert.equal(u.pathname,`/${slug}/free/`);assert.equal(u.searchParams.get('utm_campaign'),'weekend');

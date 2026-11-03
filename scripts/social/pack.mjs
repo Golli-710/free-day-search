@@ -13,7 +13,7 @@ export function trackingLink(facilityId,date,format) {
   u.searchParams.set('utm_medium','social'); u.searchParams.set('utm_campaign','free_day_trial');
   u.searchParams.set('utm_content',`${facilityId}_${date}_${format}`); return u.href;
 }
-const areaSlugs = {'東京都':'tokyo','神奈川県':'kanagawa','千葉県':'chiba','大阪府':'osaka'};
+const areaSlugs = {'東京都':'tokyo','神奈川県':'kanagawa','千葉県':'chiba','大阪府':'osaka','埼玉県':'saitama','群馬県':'gunma','茨城県':'ibaraki'};
 export function roundupLink(area, day, format) {
   const slug=areaSlugs[area];
   if(!slug || !/^\d{4}-\d{2}-\d{2}$/.test(day) || !['x','carousel'].includes(format)) throw Error('Invalid roundup identifier');
