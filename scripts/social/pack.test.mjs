@@ -87,6 +87,12 @@ test('science free days and child-only planetarium never become general free adm
  assert.ok(water.free_rules.filter(r=>matchesRule(r,new Date('2026-10-17T12:00:00Z'))).every(r=>r.audience));
 });
 
+test('Hasseiden SNS selection respects the official year-end boundaries',()=>{
+ const f=facilities.find(f=>f.facility_id==='yokohama-hasseiden-museum');
+ for(const [day,expected] of [['2026-12-27',true],['2026-12-28',false],['2027-01-04',false],['2027-01-05',true]]){
+  assert.equal(isOpenOn(f,new Date(day+'T12:00:00Z')),expected,day);
+ }
+});
 test('roundup kits pair both channels on Thursday/Friday at 19 JST for the coming weekend',()=>{
  const history={posts:[]}, pack=buildTrial(facilities,history,'2026-10-19',2,{roundup:true});
  assert.ok(pack.posts.length>=2); assert.equal(history.posts.length,0);

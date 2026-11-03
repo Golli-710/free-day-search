@@ -26,5 +26,11 @@ class MuseumCalendarTests(unittest.TestCase):
     def test_fire_museum_commemorative_monday_is_open(self):
         self.assertTrue(prepare_site.open_on(self.facilities['tokyo-fire-museum'], date(2029, 10, 1)))
 
+    def test_hasseiden_full_year_end_closure(self):
+        f = self.facilities['yokohama-hasseiden-museum']
+        for day, expected in [('2026-12-27', True), ('2026-12-28', False), ('2027-01-04', False), ('2027-01-05', True), ('2026-10-21', False), ('2026-10-24', True)]:
+            with self.subTest(day=day):
+                self.assertEqual(prepare_site.open_on(f, date.fromisoformat(day)), expected)
+
 if __name__ == '__main__':
     unittest.main()

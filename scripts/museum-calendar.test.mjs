@@ -18,3 +18,10 @@ test('browser calendar respects museum holiday closure rules', () => {
   assert.equal(context.window.calendarCheck(get('police-museum'), new Date('2026-05-06T00:00:00Z')),true);
   assert.equal(context.window.calendarCheck(get('tokyo-fire-museum'), new Date('2029-10-01T00:00:00Z')),true);
 });
+
+test('Hasseiden browser calendar excludes the complete official year-end closure',()=>{
+ const f=get('yokohama-hasseiden-museum');
+ for(const [day,expected] of [['2026-12-27',true],['2026-12-28',false],['2027-01-04',false],['2027-01-05',true],['2026-10-21',false],['2026-10-24',true]]){
+  assert.equal(context.window.calendarCheck(f,new Date(day+'T00:00:00Z')),expected,day);
+ }
+});
