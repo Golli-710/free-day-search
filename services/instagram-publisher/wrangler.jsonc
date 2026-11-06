@@ -14,7 +14,7 @@
   },
   "vars": {
     "PUBLISH_ENABLED": "false",
-    "IG_ACCOUNT_ID": "",
+    "IG_ACCOUNT_ID": "17841431324405680",
     "IG_USERNAME": "free_day_search",
     "GRAPH_VERSION": "v25.0",
     "PUBLIC_ORIGIN": ""
