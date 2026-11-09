@@ -171,6 +171,7 @@
   };
   const openOn = (f, date) => {
     if (!date) return true;
+    if (f.closed_from && isoDate(date) >= f.closed_from) return false;
     const weekday = date.getUTCDay(), day = date.getUTCDate();
     if (Array.isArray(f.open_weekdays) && !f.open_weekdays.includes(weekday)) return false;
     if ((f.closed_weekdays || []).includes(weekday) && !((f.open_month_days || []).includes(monthDay(date)) || (holidayName(date) && (f.open_on_holidays || []).includes(weekday)))) return false;

@@ -90,6 +90,8 @@ def date_rules(f):
 
 
 def open_on(f, day):
+    if f.get("closed_from") and day.isoformat() >= f["closed_from"]:
+        return False
     weekday = (day.weekday() + 1) % 7  # Match JavaScript: Sunday is 0.
     if "open_weekdays" in f and weekday not in f["open_weekdays"]:
         return False

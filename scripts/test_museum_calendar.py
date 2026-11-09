@@ -23,6 +23,12 @@ class MuseumCalendarTests(unittest.TestCase):
         self.assertIn('西五反田', f['address'])
         self.assertFalse(prepare_site.open_on(f, date(2027, 1, 4)))
 
+    def test_nogeyama_weekday_and_indefinite_renovation_closure(self):
+        f = self.facilities['nogeyama-zoo']
+        for day, expected in [('2026-11-09', False), ('2026-11-10', True), ('2026-11-23', True), ('2026-11-24', False), ('2027-01-06', True), ('2027-01-07', False), ('2030-05-01', False)]:
+            with self.subTest(day=day):
+                self.assertEqual(prepare_site.open_on(f, date.fromisoformat(day)), expected)
+
     def test_fire_museum_commemorative_monday_is_open(self):
         self.assertTrue(prepare_site.open_on(self.facilities['tokyo-fire-museum'], date(2029, 10, 1)))
 
