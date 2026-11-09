@@ -10,7 +10,8 @@
   // Accept only identifiers issued by our posting tools; never forward arbitrary query text.
   const campaign = {};
   const query = new URL(location.href).searchParams;
-  const source = query.get('utm_source');
+  const rawSource = query.get('utm_source');
+  const source = rawSource === 'ig' ? 'instagram' : rawSource;
   const name = query.get('utm_campaign');
   const content = query.get('utm_content');
   const knownContent = /^[a-z0-9-]+_\d{4}-\d{2}-\d{2}(?:_(?:x|carousel|story|reel))?$/.test(content || '') || (name === 'weekend' && /^(?:tokyo|kanagawa|chiba|osaka)_\d{8}$/.test(content || ''));
@@ -18,6 +19,11 @@
       ['free_spot_daily', 'free_day_trial', 'weekend'].includes(name) &&
       knownContent && (content || '').length <= 100) {
     Object.assign(campaign, {campaign_source: source, campaign_medium: 'social', campaign_name: name, campaign_content: content});
+  }
+  // Recognize only the exact public bio tag; arbitrary campaign text stays private.
+  if (source === 'instagram' && query.get('utm_medium') === 'social' &&
+      !name && content === 'link_in_bio') {
+    Object.assign(campaign, {campaign_source: 'instagram', campaign_medium: 'social', campaign_name: 'profile', campaign_content: 'link_in_bio'});
   }
   const page = () => location.origin + location.pathname;
   function track(name, parameters = {}) {

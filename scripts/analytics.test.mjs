@@ -104,3 +104,25 @@ test('both generated roundup channels retain attribution in the real consent ada
   assert.equal(cfg.page_location,'https://example.com/facility/zoo/');
  }
 });
+
+
+test('Instagram bio alias is attributed only after consent without leaking other parameters',()=>{
+ for(const source of ['ig','instagram']){
+  const s=setup('G-TEST');
+  s.context.location.href=`https://example.com/?utm_source=${source}&utm_medium=social&utm_content=link_in_bio&fbclid=private-click-id&q=private-search`;
+  vm.runInNewContext(code,s.context);
+  assert.equal(s.events().length,0);
+  s.nodes.at(-2).click({target:{dataset:{choice:'granted'}}});
+  const cfg=s.context.window.dataLayer.find(x=>x[0]==='config')[2];
+  assert.equal(cfg.campaign_source,'instagram');assert.equal(cfg.campaign_name,'profile');assert.equal(cfg.campaign_content,'link_in_bio');
+  assert.ok(!JSON.stringify(s.context.window.dataLayer).includes('private-'));
+ }
+});
+
+test('bio attribution rejects unknown source, content and campaign text',()=>{
+ for(const suffix of ['utm_source=unknown&utm_medium=social&utm_content=link_in_bio','utm_source=ig&utm_medium=social&utm_content=private-text','utm_source=ig&utm_medium=social&utm_content=link_in_bio&utm_campaign=private-campaign']){
+  const s=setup('G-TEST');s.context.location.href='https://example.com/?'+suffix;
+  vm.runInNewContext(code,s.context);s.nodes.at(-2).click({target:{dataset:{choice:'granted'}}});
+  const cfg=s.context.window.dataLayer.find(x=>x[0]==='config')[2];assert.equal(cfg.campaign_source,undefined);
+ }
+});
