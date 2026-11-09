@@ -1,0 +1,9 @@
+# 2026-11-09 週次改善：Instagramプロフィール流入の識別
+
+11/8のプロフィール実画面で確認したリンクは `utm_source=ig&utm_medium=social&utm_content=link_in_bio`。既存のanalytics.jsはsourceがinstagramまたはx、許可されたcampaignと投稿IDがそろった場合だけ識別値を送るため、このプロフィールリンクは識別されない。page_locationはクエリを除去、referrerも空にする実装なので、プロフィールの識別値を明示的に維持する必要がある。
+
+igをinstagramに正規化し、campaignが指定されない正確なlink_in_bioタグだけをcampaign_name=profileとして扱う。任意のキャンペーン名・クリックID・検索語は送信しない。利用者がアクセス解析を許可する前は送信しない。過去の流入を復元する修正ではない。
+
+検証：analytics.test.mjsの11テスト成功（同意前送信なし、撤回、既存投稿タグ、プロフィール2表記、未知source/content/campaignの拒否、余分なクエリ非送信）。git diff --check成功。初回に古いローカルmainを起点としてテストが失敗したが、origin/mainへfast-forwardしてから再実装・全11件成功を確認。施設PR24やInstagramサービスPR25から独立した変更、本番未反映。
+
+次週評価：同意済みアクセスにおけるinstagram / social、campaign=profileのセッション、page_view、施設詳細への遷移。タグ有効化だけで訪問増とは評価しない。実流入がなければゼロ/未取得を区別する。
