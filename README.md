@@ -136,3 +136,5 @@ GitHub連携ビルドは `npm run build:cloudflare`、出力は `_site`。初期
 ## X・Instagramの試験運用キット
 
 `npm run social:pack -- --start YYYY-MM-DD` で4週間の投稿文・計測リンク・動画入力を生成できます。[運用と動画連携の案内](docs/SOCIAL_TRIAL.md)をご覧ください。投稿キットの作成は外部APIを呼び出さず、実投稿履歴も変更しません。
+
+`closed_from` は再開日未定の長期休館開始日（YYYY-MM-DD）です。開始日以降はブラウザー検索・静的生成の双方で無料のおでかけ候補から除外します。公式の再開発表を確認してから解除し、予定年だけで再開日を設定しません。
