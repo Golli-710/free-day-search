@@ -413,5 +413,27 @@
     if (q.has("category")) { const category = q.get("category"); return listing(`${category}の施設`, `${category}で無料条件のある施設を掲載しています。`, rows.filter(f => f.category === category)); }
     home();
   };
+  // A suspended tab can resume on a later JST day without a page reload.
+  let renderedDay = isoDate(todayJst());
+  const refreshDay = () => {
+    if (document.visibilityState === "hidden") return;
+    const day = isoDate(todayJst());
+    if (day === renderedDay) return;
+    const form = document.querySelector("#search-form");
+    const saved = form ? Array.from(form.elements)
+      .filter(field => field.name)
+      .filter(field => field.name !== "date" || field.value !== field.defaultValue)
+      .map(field => [field.name, field.value]) : [];
+    render();
+    const nextForm = document.querySelector("#search-form");
+    saved.forEach(([name, value]) => {
+      const field = nextForm?.elements.namedItem(name);
+      if (field) field.value = value;
+    });
+    renderedDay = day;
+  };
+  document.addEventListener?.("visibilitychange", refreshDay);
+  window.addEventListener?.("pageshow", refreshDay);
+  window.addEventListener?.("focus", refreshDay);
   render();
 })();
