@@ -185,5 +185,72 @@ window.FACILITIES = [
     "https://www.chiba-muse.or.jp/NATURAL/visit/page-1515134054446/",
     "https://www.pref.chiba.lg.jp/kansei/sanbanze/shisetsu/shisetsu-02.html"
   ]
+},
+{
+  "facility_id": "tojo-azumaya-garden",
+  "name": "戸定が丘歴史公園 東屋庭園",
+  "prefecture": "千葉県",
+  "municipality": "松戸市",
+  "address": "千葉県松戸市松戸714-1",
+  "category": "庭園",
+  "regular_fee": "東屋庭園の見学無料。戸定邸・戸定歴史館は別料金。",
+  "free_conditions": "東屋庭園は見学無料。戸定邸の書院造庭園は別の場所で、「戸定の日」も入館料が必要です。",
+  "free_days": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "東屋庭園のみ・開園日に限る"
+    }
+  ],
+  "hours": "9:00〜17:00",
+  "closed": "月曜日（祝日の場合は翌平日）、12月28日〜1月4日。臨時休園は公式案内を確認。",
+  "closed_weekdays": [
+    1
+  ],
+  "open_on_holidays": [
+    1
+  ],
+  "holiday_shifted_closure_weekdays": [
+    1
+  ],
+  "holiday_closure_shift": "next_weekday",
+  "closed_month_days": [
+    "12-28",
+    "12-29",
+    "12-30",
+    "12-31",
+    "01-01",
+    "01-02",
+    "01-03",
+    "01-04"
+  ],
+  "official_url": "https://www.city.matsudo.chiba.jp/tojo/annai.html",
+  "source_url": "https://www.city.matsudo.chiba.jp/tojo/oshirase/20200603_tojoday.html",
+  "last_checked": "2026-11-14",
+  "last_verified_date": "2026-11-14",
+  "audit_status": "confirmed",
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-14",
+    "free_scope": "東屋庭園は見学無料。戸定邸の書院造庭園は別の場所で、「戸定の日」も入館料が必要です。",
+    "reservation": "バス駐車は電話予約が必要です。団体ガイドは別途申込条件があります。",
+    "access": "松戸駅東口から徒歩約10分。公園は高台にあります。",
+    "notes": "駅から歩いて庭園を散策したい日に。屋外の東屋庭園と、有料の戸定邸・書院造庭園を区別して選べます。ペット同伴不可（補助犬は条件付きで可）。歴史館の展示替え休館を公園の休園と混同しないでください。",
+    "source_url": "https://www.city.matsudo.chiba.jp/tojo/annai.html"
+  },
+  "verification_sources": [
+    "https://www.city.matsudo.chiba.jp/tojo/annai.html",
+    "https://www.city.matsudo.chiba.jp/tojo/oshirase/20200603_tojoday.html",
+    "https://www.city.matsudo.chiba.jp/tojo/kyuukan.html"
+  ],
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-14",
+    "field_status": {
+      "visit_info": "confirmed",
+      "free_rules": "confirmed"
+    },
+    "issues": []
+  }
 }
 ];
