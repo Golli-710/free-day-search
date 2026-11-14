@@ -75,5 +75,182 @@ window.FACILITIES = [
 {"facility_id": "honjo-disaster-center", "name": "本所防災館", "prefecture": "東京都", "municipality": "墨田区", "address": "東京都墨田区横川4-6-6", "category": "博物館", "regular_fee": "入館・観覧無料", "free_conditions": "入館無料。体験ごとに年齢・学年制限あり。", "free_condition": "入館無料。体験ごとに年齢・学年制限あり。", "free_days": [], "free_dates": [], "free_rules": [{"type": "always_free", "label": "入館無料（開館日に限る）", "eligibility": {"target": "all", "adult_general": true, "adult_eligible": true, "details": "入館無料。体験ごとに年齢・学年制限あり。"}}], "hours": "9:00〜17:00（入館受付16:45まで）", "closed": "水曜・第3木曜（祝日は直後の平日）、12/29〜1/3", "official_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/honjo/index.html", "source_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/honjo/index.html", "source": "https://www.tfd.metro.tokyo.lg.jp/taiken/honjo/index.html", "last_checked": "2026-11-03", "last_verified_date": "2026-11-03", "lat": null, "lon": null, "audit_status": "confirmed", "free_condition_type": ["always_free"], "reservation_required": false, "visit_info": {"status": "confirmed", "verified_at": "2026-11-03", "free_scope": "入館無料。体験ごとに年齢・学年制限あり。", "reservation": "個人体験は空きがあれば当日可。希望の体験は事前予約推奨、団体は要予約。", "access": "錦糸町駅北口・押上駅B1/B2出口から徒歩10分。", "notes": "臨時休館・開催変更は訪問前に公式案内で確認。体験の空き枠は未確認。入館と体験参加は別です。", "source_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/honjo/index.html"}, "audit": {"status": "confirmed", "reviewed_at": "2026-11-03", "field_status": {"visit_info": "confirmed", "free_rules": "confirmed"}, "issues": []}, "closed_dates": ["2026-01-07", "2026-01-14", "2026-01-15", "2026-01-21", "2026-01-28", "2026-02-04", "2026-02-12", "2026-02-18", "2026-02-19", "2026-02-25", "2026-03-04", "2026-03-11", "2026-03-18", "2026-03-19", "2026-03-25", "2026-04-01", "2026-04-08", "2026-04-15", "2026-04-16", "2026-04-22", "2026-04-30", "2026-05-07", "2026-05-13", "2026-05-20", "2026-05-21", "2026-05-27", "2026-06-03", "2026-06-10", "2026-06-17", "2026-06-18", "2026-06-24", "2026-07-01", "2026-07-08", "2026-07-15", "2026-07-16", "2026-07-22", "2026-07-29", "2026-08-05", "2026-08-12", "2026-08-19", "2026-08-20", "2026-08-26", "2026-09-02", "2026-09-09", "2026-09-16", "2026-09-17", "2026-09-24", "2026-09-30", "2026-10-07", "2026-10-14", "2026-10-15", "2026-10-21", "2026-10-28", "2026-11-04", "2026-11-11", "2026-11-18", "2026-11-19", "2026-11-25", "2026-12-02", "2026-12-09", "2026-12-16", "2026-12-17", "2026-12-23", "2026-12-30", "2027-01-06", "2027-01-13", "2027-01-20", "2027-01-21", "2027-01-27", "2027-02-03", "2027-02-10", "2027-02-17", "2027-02-18", "2027-02-24", "2027-03-03", "2027-03-10", "2027-03-17", "2027-03-18", "2027-03-24", "2027-03-31", "2027-04-07", "2027-04-14", "2027-04-15", "2027-04-21", "2027-04-28", "2027-05-06", "2027-05-12", "2027-05-19", "2027-05-20", "2027-05-26", "2027-06-02", "2027-06-09", "2027-06-16", "2027-06-17", "2027-06-23", "2027-06-30", "2027-07-07", "2027-07-14", "2027-07-15", "2027-07-21", "2027-07-28", "2027-08-04", "2027-08-12", "2027-08-18", "2027-08-19", "2027-08-25", "2027-09-01", "2027-09-08", "2027-09-15", "2027-09-16", "2027-09-22", "2027-09-29", "2027-10-06", "2027-10-13", "2027-10-20", "2027-10-21", "2027-10-27", "2027-11-04", "2027-11-10", "2027-11-17", "2027-11-18", "2027-11-24", "2027-12-01", "2027-12-08", "2027-12-15", "2027-12-16", "2027-12-22", "2027-12-29"], "closed_month_days": ["12-29", "12-30", "12-31", "01-01", "01-02", "01-03"]},
 {"facility_id": "ikebukuro-disaster-center", "name": "池袋防災館", "prefecture": "東京都", "municipality": "豊島区", "address": "東京都豊島区西池袋2-37-8", "category": "博物館", "regular_fee": "入館・観覧無料", "free_conditions": "入館無料。体験ごとに年齢・学年制限あり。", "free_condition": "入館無料。体験ごとに年齢・学年制限あり。", "free_days": [], "free_dates": [], "free_rules": [{"type": "always_free", "label": "入館無料（開館日に限る）", "eligibility": {"target": "all", "adult_general": true, "adult_eligible": true, "details": "入館無料。体験ごとに年齢・学年制限あり。"}}], "hours": "9:00〜17:00（金曜21:00まで、体験最終受付16:15／金曜20:15）", "closed": "第1・第3火曜と第3火曜の翌日（祝日は直後の平日）、12/29〜1/3", "official_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/ikebukuro/index.html", "source_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/ikebukuro/index.html", "source": "https://www.tfd.metro.tokyo.lg.jp/taiken/ikebukuro/index.html", "last_checked": "2026-11-03", "last_verified_date": "2026-11-03", "lat": null, "lon": null, "audit_status": "confirmed", "free_condition_type": ["always_free"], "reservation_required": false, "visit_info": {"status": "confirmed", "verified_at": "2026-11-03", "free_scope": "入館無料。体験ごとに年齢・学年制限あり。", "reservation": "体験は事前予約推奨。予約なしは希望の体験ができない場合あり。団体は要予約。", "access": "池袋駅西口（南）・メトロポリタン口から徒歩5分。駐車場・駐輪場なし。", "notes": "臨時休館・開催変更は訪問前に公式案内で確認。体験の空き枠は未確認。入館と体験参加は別です。", "source_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/ikebukuro/index.html"}, "audit": {"status": "confirmed", "reviewed_at": "2026-11-03", "field_status": {"visit_info": "confirmed", "free_rules": "confirmed"}, "issues": []}, "closed_dates": ["2026-01-06", "2026-01-20", "2026-01-21", "2026-02-03", "2026-02-17", "2026-02-18", "2026-03-03", "2026-03-17", "2026-03-18", "2026-04-07", "2026-04-21", "2026-04-22", "2026-05-07", "2026-05-19", "2026-05-20", "2026-06-02", "2026-06-16", "2026-06-17", "2026-07-07", "2026-07-21", "2026-07-22", "2026-08-04", "2026-08-18", "2026-08-19", "2026-09-01", "2026-09-15", "2026-09-16", "2026-10-06", "2026-10-20", "2026-10-21", "2026-11-04", "2026-11-17", "2026-11-18", "2026-12-01", "2026-12-15", "2026-12-16", "2027-01-05", "2027-01-19", "2027-01-20", "2027-02-02", "2027-02-16", "2027-02-17", "2027-03-02", "2027-03-16", "2027-03-17", "2027-04-06", "2027-04-20", "2027-04-21", "2027-05-06", "2027-05-18", "2027-05-19", "2027-06-01", "2027-06-15", "2027-06-16", "2027-07-06", "2027-07-20", "2027-07-21", "2027-08-03", "2027-08-17", "2027-08-18", "2027-09-07", "2027-09-21", "2027-09-22", "2027-10-05", "2027-10-19", "2027-10-20", "2027-11-02", "2027-11-16", "2027-11-17", "2027-12-07", "2027-12-21", "2027-12-22"], "closed_month_days": ["12-29", "12-30", "12-31", "01-01", "01-02", "01-03"]},
 {"facility_id": "tachikawa-disaster-center", "name": "立川防災館", "prefecture": "東京都", "municipality": "立川市", "address": "東京都立川市泉町1156-1", "category": "博物館", "regular_fee": "入館・観覧無料", "free_conditions": "入館無料。体験ごとに年齢・学年・身長制限あり。", "free_condition": "入館無料。体験ごとに年齢・学年・身長制限あり。", "free_days": [], "free_dates": [], "free_rules": [{"type": "always_free", "label": "入館無料（開館日に限る）", "eligibility": {"target": "all", "adult_general": true, "adult_eligible": true, "details": "入館無料。体験ごとに年齢・学年・身長制限あり。"}}], "hours": "9:00〜17:00", "closed": "木曜・第3金曜（祝日は直後の平日）、12/29〜1/3", "official_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/tachikawa/index.html", "source_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/tachikawa/index.html", "source": "https://www.tfd.metro.tokyo.lg.jp/taiken/tachikawa/index.html", "last_checked": "2026-11-03", "last_verified_date": "2026-11-03", "lat": null, "lon": null, "audit_status": "confirmed", "free_condition_type": ["always_free"], "reservation_required": false, "visit_info": {"status": "confirmed", "verified_at": "2026-11-03", "free_scope": "入館無料。体験ごとに年齢・学年・身長制限あり。", "reservation": "事業所・学校等と個人10名以上は事前予約。一般個人も混雑時は希望の体験ができない場合あり。", "access": "JR立川駅北口からバス「立川消防署」下車すぐ。高松駅徒歩15分。", "notes": "臨時休館・開催変更は訪問前に公式案内で確認。体験の空き枠は未確認。入館と体験参加は別です。", "source_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/tachikawa/index.html"}, "audit": {"status": "confirmed", "reviewed_at": "2026-11-03", "field_status": {"visit_info": "confirmed", "free_rules": "confirmed"}, "issues": []}, "closed_dates": ["2026-01-02", "2026-01-08", "2026-01-15", "2026-01-16", "2026-01-22", "2026-01-29", "2026-02-05", "2026-02-12", "2026-02-19", "2026-02-20", "2026-02-26", "2026-03-05", "2026-03-12", "2026-03-19", "2026-03-23", "2026-03-26", "2026-04-02", "2026-04-09", "2026-04-16", "2026-04-17", "2026-04-23", "2026-04-30", "2026-05-07", "2026-05-14", "2026-05-15", "2026-05-21", "2026-05-28", "2026-06-04", "2026-06-11", "2026-06-18", "2026-06-19", "2026-06-25", "2026-07-02", "2026-07-09", "2026-07-16", "2026-07-17", "2026-07-23", "2026-07-30", "2026-08-06", "2026-08-13", "2026-08-20", "2026-08-21", "2026-08-27", "2026-09-03", "2026-09-10", "2026-09-17", "2026-09-18", "2026-09-24", "2026-10-01", "2026-10-08", "2026-10-15", "2026-10-16", "2026-10-22", "2026-10-29", "2026-11-05", "2026-11-12", "2026-11-19", "2026-11-20", "2026-11-26", "2026-12-03", "2026-12-10", "2026-12-17", "2026-12-18", "2026-12-24", "2026-12-31", "2027-01-07", "2027-01-14", "2027-01-15", "2027-01-21", "2027-01-28", "2027-02-04", "2027-02-12", "2027-02-18", "2027-02-19", "2027-02-25", "2027-03-04", "2027-03-11", "2027-03-18", "2027-03-19", "2027-03-25", "2027-04-01", "2027-04-08", "2027-04-15", "2027-04-16", "2027-04-22", "2027-04-30", "2027-05-06", "2027-05-13", "2027-05-20", "2027-05-21", "2027-05-27", "2027-06-03", "2027-06-10", "2027-06-17", "2027-06-18", "2027-06-24", "2027-07-01", "2027-07-08", "2027-07-15", "2027-07-16", "2027-07-22", "2027-07-29", "2027-08-05", "2027-08-12", "2027-08-19", "2027-08-20", "2027-08-26", "2027-09-02", "2027-09-09", "2027-09-16", "2027-09-17", "2027-09-24", "2027-09-30", "2027-10-07", "2027-10-14", "2027-10-15", "2027-10-21", "2027-10-28", "2027-11-04", "2027-11-11", "2027-11-18", "2027-11-19", "2027-11-25", "2027-12-02", "2027-12-09", "2027-12-16", "2027-12-17", "2027-12-23", "2027-12-30"], "closed_month_days": ["12-29", "12-30", "12-31", "01-01", "01-02", "01-03"]},
-{"facility_id": "meiji-university-museum", "name": "明治大学博物館", "prefecture": "東京都", "municipality": "千代田区", "address": "東京都千代田区神田駿河台1-1 アカデミーコモン地階", "category": "博物館", "regular_fee": "入館・観覧無料", "free_conditions": "博物館の観覧無料。物販・飲食・駐車場は別料金。", "free_condition": "博物館の観覧無料。物販・飲食・駐車場は別料金。", "free_days": [], "free_dates": [], "free_rules": [{"type": "always_free", "label": "入館無料（開館日に限る）", "eligibility": {"target": "all", "adult_general": true, "adult_eligible": true, "details": "博物館の観覧無料。物販・飲食・駐車場は別料金。"}}], "hours": "平日10:00〜17:00（入館16:30まで）、土曜10:00〜16:00（入館15:30まで）", "closed": "日祝（2026年度11/23等の休日授業日は開館）、大学指定休業日。公式開館カレンダー確認。", "official_url": "https://www.meiji.ac.jp/museum/", "source_url": "https://www.meiji.ac.jp/museum/", "source": "https://www.meiji.ac.jp/museum/", "last_checked": "2026-11-03", "last_verified_date": "2026-11-03", "lat": null, "lon": null, "audit_status": "confirmed", "free_condition_type": ["always_free"], "reservation_required": false, "visit_info": {"status": "confirmed", "verified_at": "2026-11-03", "free_scope": "博物館の観覧無料。物販・飲食・駐車場は別料金。", "reservation": "団体見学等の条件は公式利用案内で確認。", "access": "JR御茶ノ水駅御茶ノ水橋口徒歩5分、新御茶ノ水駅B1出口徒歩8分、神保町駅A5出口徒歩10分。", "notes": "臨時休館・開催変更は訪問前に公式案内で確認。祝日開館の例外は日付検索に未反映。2026年度の開館案内を掲載。", "source_url": "https://www.meiji.ac.jp/museum/"}, "audit": {"status": "confirmed", "reviewed_at": "2026-11-03", "field_status": {"visit_info": "confirmed", "free_rules": "confirmed"}, "issues": []}, "closed_dates": ["2027-02-04", "2027-02-05", "2027-02-15", "2027-02-16", "2026-04-21", "2026-08-10", "2026-08-11", "2026-08-12", "2026-08-13", "2026-08-14", "2026-08-15", "2026-08-16", "2026-08-01", "2026-08-08", "2026-08-15", "2026-08-22", "2026-08-29", "2026-09-05", "2026-09-12", "2026-09-19"], "closed_month_days": ["12-25", "12-26", "12-27", "12-28", "12-29", "12-30", "12-31", "01-01", "01-02", "01-03", "01-04", "01-05", "01-06", "01-07", "01-17", "11-01"], "sources": ["https://www.meiji.ac.jp/museum/", "https://www.meiji.ac.jp/museum/traffic.html"], "closed_weekdays": [0], "closed_holidays": true}
+{"facility_id": "meiji-university-museum", "name": "明治大学博物館", "prefecture": "東京都", "municipality": "千代田区", "address": "東京都千代田区神田駿河台1-1 アカデミーコモン地階", "category": "博物館", "regular_fee": "入館・観覧無料", "free_conditions": "博物館の観覧無料。物販・飲食・駐車場は別料金。", "free_condition": "博物館の観覧無料。物販・飲食・駐車場は別料金。", "free_days": [], "free_dates": [], "free_rules": [{"type": "always_free", "label": "入館無料（開館日に限る）", "eligibility": {"target": "all", "adult_general": true, "adult_eligible": true, "details": "博物館の観覧無料。物販・飲食・駐車場は別料金。"}}], "hours": "平日10:00〜17:00（入館16:30まで）、土曜10:00〜16:00（入館15:30まで）", "closed": "日祝（2026年度11/23等の休日授業日は開館）、大学指定休業日。公式開館カレンダー確認。", "official_url": "https://www.meiji.ac.jp/museum/", "source_url": "https://www.meiji.ac.jp/museum/", "source": "https://www.meiji.ac.jp/museum/", "last_checked": "2026-11-03", "last_verified_date": "2026-11-03", "lat": null, "lon": null, "audit_status": "confirmed", "free_condition_type": ["always_free"], "reservation_required": false, "visit_info": {"status": "confirmed", "verified_at": "2026-11-03", "free_scope": "博物館の観覧無料。物販・飲食・駐車場は別料金。", "reservation": "団体見学等の条件は公式利用案内で確認。", "access": "JR御茶ノ水駅御茶ノ水橋口徒歩5分、新御茶ノ水駅B1出口徒歩8分、神保町駅A5出口徒歩10分。", "notes": "臨時休館・開催変更は訪問前に公式案内で確認。祝日開館の例外は日付検索に未反映。2026年度の開館案内を掲載。", "source_url": "https://www.meiji.ac.jp/museum/"}, "audit": {"status": "confirmed", "reviewed_at": "2026-11-03", "field_status": {"visit_info": "confirmed", "free_rules": "confirmed"}, "issues": []}, "closed_dates": ["2027-02-04", "2027-02-05", "2027-02-15", "2027-02-16", "2026-04-21", "2026-08-10", "2026-08-11", "2026-08-12", "2026-08-13", "2026-08-14", "2026-08-15", "2026-08-16", "2026-08-01", "2026-08-08", "2026-08-15", "2026-08-22", "2026-08-29", "2026-09-05", "2026-09-12", "2026-09-19"], "closed_month_days": ["12-25", "12-26", "12-27", "12-28", "12-29", "12-30", "12-31", "01-01", "01-02", "01-03", "01-04", "01-05", "01-06", "01-07", "01-17", "11-01"], "sources": ["https://www.meiji.ac.jp/museum/", "https://www.meiji.ac.jp/museum/traffic.html"], "closed_weekdays": [0], "closed_holidays": true},
+{
+  "facility_id": "chiba-natural-history-museum",
+  "name": "千葉県立中央博物館",
+  "prefecture": "千葉県",
+  "municipality": "千葉市中央区",
+  "address": "千葉県千葉市中央区青葉町955-2",
+  "category": "博物館",
+  "regular_fee": "一般300円、企画展期間500円、特別展期間800円。高校・大学生は各150円・250円・400円。",
+  "free_conditions": "6月15日（県民の日）・11月3日（文化の日）は入場無料。中学生以下、65歳以上、対象の障害者手帳所持者と介護者は無料。生態園は入場無料ですが、本館の無料日とは区別してください。",
+  "free_rules": [
+    {
+      "type": "annual_date",
+      "month_day": "06-15",
+      "label": "県民の日・入場無料"
+    },
+    {
+      "type": "annual_date",
+      "month_day": "11-03",
+      "label": "文化の日・入場無料"
+    },
+    {
+      "type": "eligibility",
+      "audience": "中学生以下"
+    },
+    {
+      "type": "eligibility",
+      "audience": "65歳以上・対象の障害者手帳所持者と介護者"
+    }
+  ],
+  "free_days": [],
+  "hours": "9:00〜16:30（入館16:00まで）。開館延長日は公式案内を確認。",
+  "closed": "月曜日（休日の場合は開館し次の平日が休館）、12月28日〜1月4日、臨時休館日。2026年6月15日は臨時開館し翌16日休館。",
+  "closed_weekdays": [
+    1
+  ],
+  "open_on_holidays": [
+    1
+  ],
+  "holiday_shifted_closure_weekdays": [
+    1
+  ],
+  "closed_month_days": [
+    "12-28",
+    "12-29",
+    "12-30",
+    "12-31",
+    "01-01",
+    "01-02",
+    "01-03",
+    "01-04"
+  ],
+  "official_url": "https://www.chiba-muse.or.jp/NATURAL/",
+  "source_url": "https://www.chiba-muse.or.jp/NATURAL/visit/",
+  "last_checked": "2026-11-12",
+  "last_verified_date": "2026-11-12",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-12",
+    "field_status": {
+      "name": "confirmed",
+      "prefecture": "confirmed",
+      "municipality": "confirmed",
+      "address": "confirmed",
+      "category": "confirmed",
+      "regular_fee": "confirmed",
+      "free_conditions": "confirmed",
+      "free_rules": "confirmed",
+      "hours": "confirmed",
+      "closed": "confirmed",
+      "official_url": "confirmed",
+      "source_url": "confirmed",
+      "last_checked": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-12",
+    "free_scope": "6月15日（県民の日）・11月3日（文化の日）は入場無料。中学生以下、65歳以上、対象の障害者手帳所持者と介護者は無料。生態園は入場無料ですが、本館の無料日とは区別してください。",
+    "reservation": "団体の見学や講座・観察会の申込み条件は、それぞれの公式案内で確認してください。",
+    "access": "京成千葉寺駅から徒歩約20分。JR千葉駅からバス約15分、「中央博物館」下車後徒歩約7分。青葉の森公園北口駐車場は有料。",
+    "notes": "房総の自然と歴史を屋内で見たい日に。本館の通常料金と無料日、生態園の無料入場を分けて予算を確認。65歳以上は年齢証明、手帳対象者は手帳等の提示が必要。県民の日が月曜となる将来年は翌日休館を再確認してください。",
+    "source_url": "https://www.chiba-muse.or.jp/NATURAL/visit/"
+  },
+  "holiday_closure_shift": "next_weekday",
+  "closed_dates": [
+    "2026-06-16",
+    "2026-10-05",
+    "2026-10-06",
+    "2026-10-07",
+    "2026-10-08",
+    "2026-10-09",
+    "2026-10-10",
+    "2026-10-11",
+    "2026-10-12",
+    "2026-10-13",
+    "2026-10-14",
+    "2026-10-15"
+  ],
+  "open_month_days": [
+    "06-15"
+  ],
+  "verification_sources": [
+    "https://www.chiba-muse.or.jp/NATURAL/visit/",
+    "https://www.chiba-muse.or.jp/NATURAL/visit/page-1515134054446/",
+    "https://www.pref.chiba.lg.jp/kansei/sanbanze/shisetsu/shisetsu-02.html"
+  ]
+},
+{
+  "facility_id": "tojo-azumaya-garden",
+  "name": "戸定が丘歴史公園 東屋庭園",
+  "prefecture": "千葉県",
+  "municipality": "松戸市",
+  "address": "千葉県松戸市松戸714-1",
+  "category": "庭園",
+  "regular_fee": "東屋庭園の見学無料。戸定邸・戸定歴史館は別料金。",
+  "free_conditions": "東屋庭園は見学無料。戸定邸の書院造庭園は別の場所で、「戸定の日」も入館料が必要です。",
+  "free_days": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "東屋庭園のみ・開園日に限る"
+    }
+  ],
+  "hours": "9:00〜17:00",
+  "closed": "月曜日（祝日の場合は翌平日）、12月28日〜1月4日。臨時休園は公式案内を確認。",
+  "closed_weekdays": [
+    1
+  ],
+  "open_on_holidays": [
+    1
+  ],
+  "holiday_shifted_closure_weekdays": [
+    1
+  ],
+  "holiday_closure_shift": "next_weekday",
+  "closed_month_days": [
+    "12-28",
+    "12-29",
+    "12-30",
+    "12-31",
+    "01-01",
+    "01-02",
+    "01-03",
+    "01-04"
+  ],
+  "official_url": "https://www.city.matsudo.chiba.jp/tojo/annai.html",
+  "source_url": "https://www.city.matsudo.chiba.jp/tojo/oshirase/20200603_tojoday.html",
+  "last_checked": "2026-11-14",
+  "last_verified_date": "2026-11-14",
+  "audit_status": "confirmed",
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-14",
+    "free_scope": "東屋庭園は見学無料。戸定邸の書院造庭園は別の場所で、「戸定の日」も入館料が必要です。",
+    "reservation": "バス駐車は電話予約が必要です。団体ガイドは別途申込条件があります。",
+    "access": "松戸駅東口から徒歩約10分。公園は高台にあります。",
+    "notes": "駅から歩いて庭園を散策したい日に。屋外の東屋庭園と、有料の戸定邸・書院造庭園を区別して選べます。ペット同伴不可（補助犬は条件付きで可）。歴史館の展示替え休館を公園の休園と混同しないでください。",
+    "source_url": "https://www.city.matsudo.chiba.jp/tojo/annai.html"
+  },
+  "verification_sources": [
+    "https://www.city.matsudo.chiba.jp/tojo/annai.html",
+    "https://www.city.matsudo.chiba.jp/tojo/oshirase/20200603_tojoday.html",
+    "https://www.city.matsudo.chiba.jp/tojo/kyuukan.html"
+  ],
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-14",
+    "field_status": {
+      "visit_info": "confirmed",
+      "free_rules": "confirmed"
+    },
+    "issues": []
+  }
+}
 ];
