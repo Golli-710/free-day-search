@@ -131,3 +131,14 @@ test('native fetch is invoked without a Meta instance receiver', async () => {
   });
   assert.equal((await api.call('me')).id, 'test');
 });
+
+ test('Instagram login uses its own host and never forwards to arbitrary hosts', async () => {
+  const api = new Meta({META_ACCESS_TOKEN: 'fake', GRAPH_VERSION: 'v25.0', IG_LOGIN_MODE: 'instagram'}, async (url, init) => {
+    assert.equal(url.hostname, 'graph.instagram.com');
+    assert.equal(init.headers.Authorization, 'Bearer fake');
+    return Response.json({id: 'ok'});
+  });
+  assert.equal((await api.call('me')).id, 'ok');
+  const invalid = new Meta({META_ACCESS_TOKEN: 'fake', GRAPH_VERSION: 'v25.0', IG_LOGIN_MODE: 'other'}, () => {throw Error('must not fetch');});
+  await assert.rejects(invalid.call('me'), e => e.kind === 'invalid_login_mode');
+});

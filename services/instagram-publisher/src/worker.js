@@ -31,7 +31,9 @@ export async function handleRequest(request, env) {
       const account = await api.identity();
       const result = await api.call('me/permissions');
       const granted = new Set((result.data ?? []).filter(p => p.status === 'granted').map(p => p.permission));
-      const required = ['instagram_basic', 'instagram_content_publish', 'instagram_manage_insights'];
+      const required = env.IG_LOGIN_MODE === 'instagram'
+        ? ['instagram_business_basic', 'instagram_business_content_publish', 'instagram_business_manage_insights']
+        : ['instagram_basic', 'instagram_content_publish', 'instagram_manage_insights'];
       const missing = required.filter(p => !granted.has(p));
       return json({connected: missing.length === 0, account, missing_permissions: missing,
         publishing_enabled: env.PUBLISH_ENABLED === 'true'}, missing.length ? 503 : 200);

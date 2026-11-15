@@ -25,3 +25,11 @@
 `PUBLISH_ENABLED=false` にしcronを解除。既に公開済みの投稿は取り消されない。非公開のstatus/connectionは管理トークンがなければ401。未承認素材はURLを知っていても配信しない。トークン期限・失効時は接続を復旧するまで停止し、投稿できたと推測しない。
 
 検証：Node15件（重複・同時実行・タイムアウト・誤アカウント・公開URL確認等）、Python3件（変換・重複・パス逸脱・画像比率）、空キュー検査、Wrangler dry-run成功。実API接続・実公開は未検証。
+
+## 2026-11-15 接続方式の修正
+
+free_day_search は Instagram Login を使用するため、IG_LOGIN_MODE=instagram と graph.instagram.com を設定。Facebook Login は明示切替でのみ使用する。接続確認は instagram_business_basic / instagram_business_content_publish / instagram_business_manage_insights を確認する。トークン値は出力しない。
+
+公開は引き続き無効、cron は未設定。Cloudflare の META_ACCESS_TOKEN は保存済みだが、Wrangler は未認証のため実環境への反映・接続テストは未完了。デプロイ用の認証後、ADMIN_TOKEN と Durable Object を設定し、/connection を公開せず検証する。
+
+仕様: https://developers.facebook.com/documentation/instagram-platform/instagram-api-with-instagram-login

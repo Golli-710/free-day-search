@@ -12,7 +12,10 @@ export class Meta {
   async call(path, params = {}, method = 'GET') {
     if (!this.env.META_ACCESS_TOKEN) throw new MetaError('token_missing');
     if (!/^v\d+\.0$/.test(this.env.GRAPH_VERSION)) throw new MetaError('invalid_api_version');
-    const url = new URL(`https://graph.facebook.com/${this.env.GRAPH_VERSION}/${path}`);
+    const mode = this.env.IG_LOGIN_MODE ?? 'facebook';
+    if (!['facebook', 'instagram'].includes(mode)) throw new MetaError('invalid_login_mode');
+    const host = mode === 'instagram' ? 'graph.instagram.com' : 'graph.facebook.com';
+    const url = new URL(`https://${host}/${this.env.GRAPH_VERSION}/${path}`);
     const init = {method, headers: {Authorization: `Bearer ${this.env.META_ACCESS_TOKEN}`},
       signal: AbortSignal.timeout(10000), redirect: 'manual'};
     if (method === 'GET') url.search = new URLSearchParams(params);
