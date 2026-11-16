@@ -32,6 +32,16 @@ jobs:
           START=$(node -e "const d=new Date();const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);const n=new Date(p+'T12:00:00Z');n.setUTCDate(n.getUTCDate()+((8-n.getUTCDay())%7||7));console.log(n.toISOString().slice(0,10))")
           npm run social:pack -- --start "$START" --weeks 2 --roundup
           npm run social:images
+      - name: Check Instagram publisher and import drafts
+        run: |
+          node --test services/instagram-publisher/tests/*.test.js
+          python -m unittest discover -s services/instagram-publisher/tests -p 'test_*.py'
+          python services/instagram-publisher/scripts/import_pack.py social/outbox/trial/manifest.json --output social/outbox/instagram-api
+      - uses: actions/upload-artifact@v4
+        with:
+          name: instagram-api-drafts-${{ github.run_id }}
+          path: social/outbox/instagram-api/
+          retention-days: 21
       - uses: actions/upload-artifact@v4
         with:
           name: area-sns-kit-${{ github.run_id }}
