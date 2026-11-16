@@ -33,3 +33,7 @@ free_day_search は Instagram Login を使用するため、IG_LOGIN_MODE=instag
 公開は引き続き無効、cron は未設定。Cloudflare の META_ACCESS_TOKEN は保存済みだが、Wrangler は未認証のため実環境への反映・接続テストは未完了。デプロイ用の認証後、ADMIN_TOKEN と Durable Object を設定し、/connection を公開せず検証する。
 
 仕様: https://developers.facebook.com/documentation/instagram-platform/instagram-api-with-instagram-login
+
+## 接続検証で確定した設定（2026-11-16）
+
+保存済み専用トークンはFacebook系形式だったため IG_LOGIN_MODE=facebook に修正。Instagram方式という先の推定を訂正。実環境 /connection で connected=true、free_day_search（17841431324405680）、missing_permissions=[]を確認。公開はfalse、キューは空、cron未設定を維持。再発行不要。トークン値は取得・出力していない。

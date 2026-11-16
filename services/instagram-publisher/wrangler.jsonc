@@ -16,7 +16,7 @@
     "PUBLISH_ENABLED": "false",
     "IG_ACCOUNT_ID": "17841431324405680",
     "IG_USERNAME": "free_day_search",
-    "IG_LOGIN_MODE": "instagram",
+    "IG_LOGIN_MODE": "facebook",
     "GRAPH_VERSION": "v25.0",
     "PUBLIC_ORIGIN": "https://free-day-instagram-publisher.shingo-minamikawa0710.workers.dev"
   },
