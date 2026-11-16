@@ -37,7 +37,7 @@ export async function handleRequest(request, env) {
       const missing = required.filter(p => !granted.has(p));
       return json({connected: missing.length === 0, account, missing_permissions: missing,
         publishing_enabled: env.PUBLISH_ENABLED === 'true'}, missing.length ? 503 : 200);
-    } catch (error) {return json({connected: false, error: error.kind ?? 'connection_failed', code: error.code ?? null}, 503);}
+    } catch (error) {return json({connected: false, error: error.kind ?? 'connection_failed', code: error.code ?? null, subcode: error.subcode ?? null, reason: error.reason ?? null, login_mode: env.IG_LOGIN_MODE ?? 'facebook', token_has_whitespace: /\s/.test(env.META_ACCESS_TOKEN ?? '')}, 503);}
   }
   // Only media referenced by explicitly approved posts can be fetched by Meta.
   const allowed = new Set(approvedPosts().flatMap(p => p.format === 'carousel' ? p.media_paths : [p.video_path]));

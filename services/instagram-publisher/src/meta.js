@@ -26,7 +26,13 @@ export class Meta {
     if (response.status >= 300 && response.status < 400) throw new MetaError('redirect_rejected', response.status);
     try { data = await response.json(); }
     catch { throw new MetaError('non_json_response', response.status); }
-    if (!response.ok || data.error) throw new MetaError('meta_error', data.error?.code ?? response.status);
+    if (!response.ok || data.error) {
+      const error = new MetaError('meta_error', data.error?.code ?? response.status);
+      error.subcode = Number.isInteger(data.error?.error_subcode) ? data.error.error_subcode : null;
+      const message = String(data.error?.message ?? '').toLowerCase();
+      error.reason = message.includes('expired') ? 'expired' : message.includes('cannot parse') ? 'cannot_parse' : message.includes('invalid') ? 'invalid' : 'unspecified';
+      throw error;
+    }
     return data;
   }
   async identity() {
