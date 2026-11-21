@@ -401,5 +401,329 @@ window.FACILITIES = [
     "https://www.postalmuseum.jp/guide/open.html",
     "https://www.postalmuseum.jp/guide/access.html"
   ]
+},
+{
+  "facility_id": "musashino-furusato-museum",
+  "name": "武蔵野ふるさと歴史館",
+  "prefecture": "東京都",
+  "municipality": "武蔵野市",
+  "address": "東京都武蔵野市境5-15-5",
+  "category": "博物館",
+  "regular_fee": "入館無料（別料金・利用条件は無料範囲を確認）",
+  "free_conditions": "入館無料。",
+  "free_condition": "入館無料。",
+  "free_days": [],
+  "free_dates": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）",
+      "eligibility": {
+        "target": "all",
+        "adult_general": true,
+        "adult_eligible": true
+      }
+    }
+  ],
+  "hours": "9:30〜17:00",
+  "closed": "金曜日、祝日、年末年始、特別整理日",
+  "official_url": "https://www.city.musashino.lg.jp/heiwa_bunka_sports/furusatorekishikan/1007244.html",
+  "source_url": "https://www.city.musashino.lg.jp/heiwa_bunka_sports/furusatorekishikan/1007244.html",
+  "source": "https://www.city.musashino.lg.jp/heiwa_bunka_sports/furusatorekishikan/1007244.html",
+  "last_checked": "2026-11-21",
+  "last_verified_date": "2026-11-21",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-21",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-21",
+    "free_scope": "入館無料。",
+    "access": "武蔵境駅から徒歩12分。ムーバス「武蔵野ふるさと歴史館」下車すぐ。駐車場なし。",
+    "reservation": "通常展示の案内に個人見学の予約条件の記載なし。団体・講座・資料閲覧は別途公式へ確認。",
+    "notes": "石器や古文書、戦争に関する資料から街の歴史を知る候補。金曜と祝日は休館です。",
+    "source_url": "https://www.city.musashino.lg.jp/heiwa_bunka_sports/furusatorekishikan/1007244.html"
+  },
+  "verification_sources": [
+    "https://www.city.musashino.lg.jp/heiwa_bunka_sports/furusatorekishikan/1007244.html",
+    "https://www.city.musashino.lg.jp/_res/projects/default_project/_page_/001/053/596/2026_r08_calendar.pdf"
+  ],
+  "schedule_confirmed_until": "2026-11-30",
+  "lat": null,
+  "lon": null,
+  "closed_weekdays": [
+    5
+  ],
+  "closed_holidays": true
+},
+{
+  "facility_id": "koganei-cultural-properties-center",
+  "name": "小金井市文化財センター",
+  "prefecture": "東京都",
+  "municipality": "小金井市",
+  "address": "東京都小金井市緑町3-2-37 浴恩館公園内",
+  "category": "博物館",
+  "regular_fee": "入館無料（別料金・利用条件は無料範囲を確認）",
+  "free_conditions": "入館無料。学習室の利用には事前申請が必要。",
+  "free_condition": "入館無料。学習室の利用には事前申請が必要。",
+  "free_days": [],
+  "free_dates": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）",
+      "eligibility": {
+        "target": "all",
+        "adult_general": true,
+        "adult_eligible": true
+      }
+    }
+  ],
+  "hours": "9:00〜16:30",
+  "closed": "月曜日（祝日の場合は翌日）、年末年始",
+  "official_url": "https://www.city.koganei.lg.jp/kankobunka/bunkazai/bunkazaisenta.html",
+  "source_url": "https://www.city.koganei.lg.jp/kankobunka/bunkazai/bunkazaisenta.html",
+  "source": "https://www.city.koganei.lg.jp/kankobunka/bunkazai/bunkazaisenta.html",
+  "last_checked": "2026-11-21",
+  "last_verified_date": "2026-11-21",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-21",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-21",
+    "free_scope": "入館無料。学習室の利用には事前申請が必要。",
+    "access": "東小金井駅から徒歩20分、武蔵小金井駅から徒歩25分。ココバス「小金井公園入口」から徒歩5分。駐車場なし。",
+    "reservation": "通常展示の案内に個人見学の予約条件の記載なし。団体・講座・資料閲覧は別途公式へ確認。",
+    "notes": "浴恩館の建物と考古資料・民具を見て、公園散策と組み合わせたい日に。閉館は16時30分です。",
+    "source_url": "https://www.city.koganei.lg.jp/kankobunka/bunkazai/bunkazaisenta.html"
+  },
+  "verification_sources": [
+    "https://www.city.koganei.lg.jp/kankobunka/bunkazai/bunkazaisenta.html"
+  ],
+  "schedule_confirmed_until": "2026-11-30",
+  "lat": null,
+  "lon": null,
+  "closed_weekdays": [
+    1
+  ],
+  "open_on_holidays": [
+    1
+  ],
+  "holiday_shifted_closure_weekdays": [
+    1
+  ],
+  "holiday_closure_shift": "next_day"
+},
+{
+  "facility_id": "higashiyamato-local-museum",
+  "name": "東大和市立郷土博物館",
+  "prefecture": "東京都",
+  "municipality": "東大和市",
+  "address": "東京都東大和市奈良橋1-260-2",
+  "category": "博物館",
+  "regular_fee": "入館無料（別料金・利用条件は無料範囲を確認）",
+  "free_conditions": "博物館の入館は無料。プラネタリウム観覧は有料。",
+  "free_condition": "博物館の入館は無料。プラネタリウム観覧は有料。",
+  "free_days": [],
+  "free_dates": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）",
+      "eligibility": {
+        "target": "all",
+        "adult_general": true,
+        "adult_eligible": true
+      }
+    }
+  ],
+  "hours": "9:00〜17:00",
+  "closed": "月曜日（祝日は開館）、祝日の翌日（土日になる場合は翌火曜）、12月28日〜1月4日。臨時休館あり",
+  "official_url": "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006043.html",
+  "source_url": "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006043.html",
+  "source": "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006043.html",
+  "last_checked": "2026-11-21",
+  "last_verified_date": "2026-11-21",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-21",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-21",
+    "free_scope": "博物館の入館は無料。プラネタリウム観覧は有料。",
+    "access": "東大和市駅からバス「八幡神社」または「八幡神社前」下車徒歩2分。ちょこバス「郷土博物館入口」下車徒歩2分。",
+    "reservation": "通常展示の案内に個人見学の予約条件の記載なし。団体・講座・資料閲覧は別途公式へ確認。",
+    "notes": "狭山丘陵の自然・歴史・暮らしを学ぶ候補。星の投影も見たい場合は別料金と投影時刻を確認してください。",
+    "source_url": "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006043.html"
+  },
+  "verification_sources": [
+    "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006043.html",
+    "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006047.html",
+    "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006044.html"
+  ],
+  "schedule_confirmed_until": "2026-11-30",
+  "lat": null,
+  "lon": null,
+  "closed_weekdays": [
+    1
+  ],
+  "open_on_holidays": [
+    1
+  ],
+  "closed_dates": [
+    "2026-11-04",
+    "2026-11-24"
+  ]
+},
+{
+  "facility_id": "musashimurayama-history-museum",
+  "name": "武蔵村山市立歴史民俗資料館",
+  "prefecture": "東京都",
+  "municipality": "武蔵村山市",
+  "address": "東京都武蔵村山市本町5-21-1",
+  "category": "博物館",
+  "regular_fee": "入館無料（別料金・利用条件は無料範囲を確認）",
+  "free_conditions": "入館無料。本館の案内です。分館とは開館日が異なります。",
+  "free_condition": "入館無料。本館の案内です。分館とは開館日が異なります。",
+  "free_days": [],
+  "free_dates": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）",
+      "eligibility": {
+        "target": "all",
+        "adult_general": true,
+        "adult_eligible": true
+      }
+    }
+  ],
+  "hours": "9:00〜17:00",
+  "closed": "第1月曜日、第3水曜日（祝日の場合は翌日）、12月28日〜1月3日。臨時休館あり",
+  "official_url": "https://www.city.musashimurayama.lg.jp/shisetus/history/rekishiminzoku/1004383.html",
+  "source_url": "https://www.city.musashimurayama.lg.jp/shisetus/history/rekishiminzoku/1004383.html",
+  "source": "https://www.city.musashimurayama.lg.jp/shisetus/history/rekishiminzoku/1004383.html",
+  "last_checked": "2026-11-21",
+  "last_verified_date": "2026-11-21",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-21",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-21",
+    "free_scope": "入館無料。本館の案内です。分館とは開館日が異なります。",
+    "access": "立川駅・箱根ヶ崎駅などからバス「横田」下車徒歩11分。上北台駅からMMシャトルの日中便「村山温泉かたくりの湯」下車徒歩1分。",
+    "reservation": "通常展示の案内に個人見学の予約条件の記載なし。団体・講座・資料閲覧は別途公式へ確認。",
+    "notes": "地域の歴史をたどる屋内のお出かけ候補。毎週月曜休館ではないので、公式の本館カレンダーで日程を選べます。",
+    "source_url": "https://www.city.musashimurayama.lg.jp/shisetus/history/rekishiminzoku/1004383.html"
+  },
+  "verification_sources": [
+    "https://www.city.musashimurayama.lg.jp/shisetus/history/rekishiminzoku/1004383.html",
+    "https://www.city.musashimurayama.lg.jp/kankou/spots/rekishiminzoku/1001917/1020004.html"
+  ],
+  "schedule_confirmed_until": "2026-11-30",
+  "lat": null,
+  "lon": null,
+  "closed_dates": [
+    "2026-11-02",
+    "2026-11-18"
+  ]
+},
+{
+  "facility_id": "furusato-fuchu-history-museum",
+  "name": "ふるさと府中歴史館",
+  "prefecture": "東京都",
+  "municipality": "府中市",
+  "address": "東京都府中市宮町3-1",
+  "category": "博物館",
+  "regular_fee": "入館無料（別料金・利用条件は無料範囲を確認）",
+  "free_conditions": "入館無料。5月3〜5日は1階国府資料展示室のみ開室。一部展示休止の案内あり。",
+  "free_condition": "入館無料。5月3〜5日は1階国府資料展示室のみ開室。一部展示休止の案内あり。",
+  "free_days": [],
+  "free_dates": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）",
+      "eligibility": {
+        "target": "all",
+        "adult_general": true,
+        "adult_eligible": true
+      }
+    }
+  ],
+  "hours": "9:00〜17:00",
+  "closed": "月曜日（休日の場合は直後の平日）、12月29日〜1月3日。臨時休館あり",
+  "official_url": "https://www.city.fuchu.tokyo.jp/shisetu/komyunite/gekijo/fuchurekishikann/hurusatorekisikann.html",
+  "source_url": "https://www.city.fuchu.tokyo.jp/shisetu/komyunite/gekijo/fuchurekishikann/hurusatorekisikann.html",
+  "source": "https://www.city.fuchu.tokyo.jp/shisetu/komyunite/gekijo/fuchurekishikann/hurusatorekisikann.html",
+  "last_checked": "2026-11-21",
+  "last_verified_date": "2026-11-21",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-21",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-21",
+    "free_scope": "入館無料。5月3〜5日は1階国府資料展示室のみ開室。一部展示休止の案内あり。",
+    "access": "京王線府中駅から徒歩約7分（同じ建物内の宮町図書館の公式アクセス案内）。",
+    "reservation": "通常展示の案内に個人見学の予約条件の記載なし。団体・講座・資料閲覧は別途公式へ確認。",
+    "notes": "武蔵国府跡の出土資料やくらやみ祭りを知る候補。大型CG展示など一部休止中のため、見たい展示を公式案内で確認してください。",
+    "source_url": "https://www.city.fuchu.tokyo.jp/shisetu/komyunite/gekijo/fuchurekishikann/hurusatorekisikann.html"
+  },
+  "verification_sources": [
+    "https://www.city.fuchu.tokyo.jp/shisetu/komyunite/gekijo/fuchurekishikann/hurusatorekisikann.html",
+    "https://library.city.fuchu.tokyo.jp/lib_info/miyamachi.html",
+    "https://www.city.fuchu.tokyo.jp/shisetu/komyunite/gekijo/fuchurekishikann/rekisikann-tennji-itibu-kyuushi.html"
+  ],
+  "schedule_confirmed_until": "2026-11-30",
+  "lat": null,
+  "lon": null,
+  "closed_weekdays": [
+    1
+  ],
+  "open_on_holidays": [
+    1
+  ],
+  "holiday_shifted_closure_weekdays": [
+    1
+  ],
+  "holiday_closure_shift": "next_weekday"
 }
 ];
