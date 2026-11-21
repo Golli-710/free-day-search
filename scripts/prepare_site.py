@@ -12,7 +12,7 @@ from datetime import date, timedelta
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 from breadcrumbs import add_breadcrumbs
 from foundation import add_foundation
 
@@ -276,7 +276,21 @@ def ad_placement(name):
     return f'<aside class="ad-placement" data-ad-placement="{name}" aria-label="広告" hidden></aside>'
 
 
-def page_html(title, description, heading, intro, facilities, base, canonical, related, today=None, verification_meta=""):
+def calendar_link(base, page_path):
+    parts = page_path.strip('/').split('/')
+    params = {'view': 'calendar'}
+    areas = dict(AREAS)
+    categories = {slug: category for category, slug in CATEGORY_SLUGS.items()}
+    if parts[0] in areas:
+        params['prefecture'] = areas[parts[0]]
+        if len(parts) > 2 and parts[1] in categories:
+            params['category'] = categories[parts[1]]
+    elif len(parts) == 2 and parts[0] == 'free' and parts[1] in categories:
+        params['category'] = categories[parts[1]]
+    return base + '?' + urlencode(params)
+
+
+def page_html(title, description, heading, intro, facilities, base, canonical, related, today=None, verification_meta="", page_path=""):
     today = today or date.today()
     cards = []
     for f, event_date, event_rules in facilities:
@@ -292,7 +306,7 @@ def page_html(title, description, heading, intro, facilities, base, canonical, r
     related_html = "・".join(f'<a href="{esc(url)}">{esc(label)}</a>' for label, url in related)
     robots_meta = "" if facilities else '<meta name="robots" content="noindex,follow">'
     schema = {"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "description": description, "url": canonical, "inLanguage": "ja", "mainEntity": {"@type": "ItemList", "numberOfItems": len(facilities), "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": f["name"], "url": f'{base}facility/{quote(f["facility_id"])}/'} for i, (f, _, _) in enumerate(facilities)]}}
-    return f'''<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">{verification_meta}{robots_meta}<title>{esc(title)}</title><meta name="description" content="{esc(description)}"><link rel="canonical" href="{esc(canonical)}"><meta property="og:locale" content="ja_JP"><meta property="og:type" content="website"><meta property="og:site_name" content="無料デー検索"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{esc(canonical)}"><meta name="twitter:card" content="summary"><link rel="icon" href="{base}favicon.svg"><link rel="stylesheet" href="{base}styles.css"><script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script></head><body><header class="site-header"><a class="brand" href="{base}"><span class="brand-mark">￥</span> 無料デー検索</a><a class="header-link" href="{base}">無料日を検索</a></header><main class="container"><a class="back-link" href="{base}">← トップへ</a><div class="page-heading"><span class="eyebrow">大人・一般向けの無料情報</span><h1>{esc(heading)}</h1><section class="page-context"><h2>このページで分かること</h2><p>{esc(intro)}</p><p>{len(facilities)}施設を掲載。大人・一般が対象となる確認済みルールだけで無料日を計算し、対象者限定の条件は施設ごとに表示します。掲載情報の最新確認日：{esc(latest_checked)}。各施設の確認日は一覧にも記載しています。</p><p>最新の開館・無料情報は訪問前に公式サイトをご確認ください。</p></section></div><section class="cards" aria-label="無料施設一覧">{listing}</section><section class="content-section"><h2>関連ページ</h2><p>{related_html}</p><p><a href="{base}?view=calendar">無料日カレンダーを見る</a></p></section></main><footer class="site-footer"><p><strong>無料デー検索</strong> — 施設の公式情報を確認して掲載しています。</p><p>無料条件や開館日は変更される場合があります。訪問前に公式案内をご確認ください。</p></footer></body></html>'''
+    return f'''<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">{verification_meta}{robots_meta}<title>{esc(title)}</title><meta name="description" content="{esc(description)}"><link rel="canonical" href="{esc(canonical)}"><meta property="og:locale" content="ja_JP"><meta property="og:type" content="website"><meta property="og:site_name" content="無料デー検索"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{esc(canonical)}"><meta name="twitter:card" content="summary"><link rel="icon" href="{base}favicon.svg"><link rel="stylesheet" href="{base}styles.css"><script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script></head><body><header class="site-header"><a class="brand" href="{base}"><span class="brand-mark">￥</span> 無料デー検索</a><a class="header-link" href="{base}">無料日を検索</a></header><main class="container"><a class="back-link" href="{base}">← トップへ</a><div class="page-heading"><span class="eyebrow">大人・一般向けの無料情報</span><h1>{esc(heading)}</h1><section class="page-context"><h2>このページで分かること</h2><p>{esc(intro)}</p><p>{len(facilities)}施設を掲載。大人・一般が対象となる確認済みルールだけで無料日を計算し、対象者限定の条件は施設ごとに表示します。掲載情報の最新確認日：{esc(latest_checked)}。各施設の確認日は一覧にも記載しています。</p><p>最新の開館・無料情報は訪問前に公式サイトをご確認ください。</p></section></div><section class="cards" aria-label="無料施設一覧">{listing}</section><section class="content-section"><h2>関連ページ</h2><p>{related_html}</p><p><a href="{esc(calendar_link(base, page_path))}">無料日カレンダーを見る</a></p></section></main><footer class="site-footer"><p><strong>無料デー検索</strong> — 施設の公式情報を確認して掲載しています。</p><p>無料条件や開館日は変更される場合があります。訪問前に公式案内をご確認ください。</p></footer></body></html>'''
 
 
 def facility_page_html(f, base, today, region_page, category_page, verification_meta="", related_facilities=()):
@@ -460,7 +474,7 @@ def main():
                 links.append((f"地域を問わず無料{category}", base + "free/" + cat_slug + "/"))
         canonical = base + path + "/"
         (out / path).mkdir(parents=True, exist_ok=True)
-        html_page = page_html(title, f"{intro}施設の無料条件・通常料金・確認日・公式情報を掲載。", heading, intro, facilities, base, canonical, links, today, verification_meta)
+        html_page = page_html(title, f"{intro}施設の無料条件・通常料金・確認日・公式情報を掲載。", heading, intro, facilities, base, canonical, links, today, verification_meta, page_path=path)
         (out / path / "index.html").write_text(html_page, encoding="utf-8")
         if facilities:
             urls.append(canonical)
