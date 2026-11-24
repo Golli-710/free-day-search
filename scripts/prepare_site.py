@@ -354,8 +354,10 @@ def facility_page_html(f, base, today, region_page, category_page, verification_
 
 def editorial_image(f, base):
     fid = f.get("facility_id", "")
-    art = "history" if fid == "jica-yokohama-migration-museum" else "archaeology" if "archaeolog" in fid else "outing"
-    return f'<figure class="editorial-image"><img src="{base}assets/editorial/{art}.webp" alt="" loading="lazy" width="800" height="533"><figcaption>テーマイラスト・実際の施設ではありません</figcaption></figure>'
+    if fid not in {"jica-yokohama-migration-museum", "banknote-postage-museum", "kawasaki-sora-midori-science-museum"}:
+        return ""
+    return f'<figure class="editorial-image"><img src="{base}assets/editorial/facilities/{fid}.webp" alt="" loading="lazy" width="800" height="533"><figcaption>施設テーマのイラスト・実物ではありません</figcaption></figure>'
+
 
 
 def main():
