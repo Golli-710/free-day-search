@@ -725,5 +725,67 @@ window.FACILITIES = [
     1
   ],
   "holiday_closure_shift": "next_weekday"
+},
+{
+  "facility_id": "urawa-minkaen",
+  "name": "浦和くらしの博物館民家園",
+  "prefecture": "埼玉県",
+  "municipality": "さいたま市緑区",
+  "address": "埼玉県さいたま市緑区下山口新田1179-1",
+  "category": "博物館",
+  "regular_fee": "入館無料",
+  "free_conditions": "通常の入館は無料。講座・催しの参加条件は各案内を確認。",
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）"
+    }
+  ],
+  "free_days": [],
+  "free_dates": [],
+  "hours": "9:00〜16:30",
+  "closed": "月曜（休日を除く）、休日の翌日（土日・休日・休館日を除く）、12月28日〜1月4日、臨時休館",
+  "official_url": "https://www.city.saitama.lg.jp/004/005/004/005/003/002/p032604.html",
+  "source_url": "https://www.city.saitama.lg.jp/004/005/004/005/003/002/p032604.html",
+  "last_checked": "2026-11-25",
+  "last_verified_date": "2026-11-25",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-25",
+    "issues": []
+  },
+  "closed_weekdays": [
+    1
+  ],
+  "open_on_holidays": [
+    1
+  ],
+  "closed_dates": [
+    "2026-11-24",
+    "2027-02-23"
+  ],
+  "closed_month_days": [
+    "12-28",
+    "12-29",
+    "12-30",
+    "12-31",
+    "01-01",
+    "01-02",
+    "01-03",
+    "01-04"
+  ],
+  "schedule_confirmed_until": "2026-11-30",
+  "lat": null,
+  "lon": null,
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-25",
+    "source_url": "https://www.city.saitama.lg.jp/004/005/004/005/003/002/p001856.html",
+    "free_scope": "通常入館無料。伝統建築と民俗資料の野外博物館。",
+    "reservation": "通常見学の予約条件の記載なし。体験学習・講座は個別案内を確認。",
+    "access": "浦和駅東口1番からバス「念仏橋」下車すぐ。東浦和駅から徒歩約25分。駐車場あり。",
+    "notes": "2027年2月23日は電気設備修繕で臨時休館。12月以降の日付検索は休館日の再確認後に更新。"
+  }
 }
 ];
