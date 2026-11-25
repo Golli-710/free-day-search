@@ -223,7 +223,7 @@
     return `<section class="content-section visit-planning"><h2>お出かけ前に確認すること</h2><dl class="info-list">${fields.filter(([, key]) => info[key]).map(([label, key]) => `<div><dt>${esc(label)}</dt><dd>${esc(info[key])}</dd></div>`).join("")}</dl><p class="source-line">訪問情報の確認日：${esc(info.verified_at)} ・ <a href="${esc(info.source_url)}">予約・アクセスの公式案内</a></p></section>`;
   };
   const facilityArtIds = new Set(["jica-yokohama-migration-museum", "banknote-postage-museum", "kawasaki-sora-midori-science-museum"]);
-  const editorialImage = (f) => facilityArtIds.has(f.facility_id) ? `<figure class="editorial-image"><img src="assets/editorial/facilities/${esc(f.facility_id)}.webp" alt="" loading="lazy" width="800" height="533"><figcaption>施設テーマのイラスト・実物ではありません</figcaption></figure>` : "";
+  const editorialImage = (f) => f.facility_id === "banknote-postage-museum" ? `<figure class="editorial-image"><img src="assets/photos/banknote-postage-museum.webp" alt="お札と切手の博物館の外観（2022年撮影）" loading="lazy" width="1000" height="750"><figcaption><a href="https://commons.wikimedia.org/wiki/File:Banknote_%26_Postage_Stamp_Museum.jpg">写真：Syced / Wikimedia Commons / CC0（2022年撮影・縮小圧縮）</a></figcaption></figure>` : facilityArtIds.has(f.facility_id) ? `<figure class="editorial-image"><img src="assets/editorial/facilities/${esc(f.facility_id)}.webp" alt="" loading="lazy" width="800" height="533"><figcaption>施設テーマのイラスト・実物ではありません</figcaption></figure>` : "";
   const card = (f, context = null) => {
     const next = context || nextDateInfo(f, todayJst());
     const dates = dateRulesFor(f).map(labelText).filter(Boolean);
