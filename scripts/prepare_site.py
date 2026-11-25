@@ -355,6 +355,8 @@ def facility_page_html(f, base, today, region_page, category_page, verification_
 
 def editorial_image(f, base):
     fid = f.get("facility_id", "")
+    if fid == "banknote-postage-museum":
+        return f'<figure class="editorial-image"><img src="{base}assets/photos/banknote-postage-museum.webp" alt="お札と切手の博物館の外観（2022年撮影）" loading="lazy" width="1000" height="750"><figcaption><a href="https://commons.wikimedia.org/wiki/File:Banknote_%26_Postage_Stamp_Museum.jpg">写真：Syced / Wikimedia Commons / CC0（2022年撮影・縮小圧縮）</a></figcaption></figure>'
     if fid not in {"jica-yokohama-migration-museum", "banknote-postage-museum", "kawasaki-sora-midori-science-museum"}:
         return ""
     return f'<figure class="editorial-image"><img src="{base}assets/editorial/facilities/{fid}.webp" alt="" loading="lazy" width="800" height="533"><figcaption>施設テーマのイラスト・実物ではありません</figcaption></figure>'
