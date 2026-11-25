@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """Build the static site, high-value SEO landing pages, and sitemap."""
 import argparse
+import hashlib
 import calendar
 import html
 import json
@@ -360,6 +361,15 @@ def editorial_image(f, base):
 
 
 
+def validate_unique_facility_art(directory):
+    seen = {}
+    for image in sorted(directory.glob("*.webp")):
+        digest = hashlib.sha256(image.read_bytes()).hexdigest()
+        if digest in seen:
+            raise ValueError(f"Duplicate facility artwork: {seen[digest]} and {image.name}")
+        seen[digest] = image.name
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--site-url", required=True, help="Public base URL, ending with slash")
@@ -371,6 +381,7 @@ def main():
     verification_code = args.google_site_verification.strip()
     verification_meta = f'<meta name="google-site-verification" content="{html.escape(verification_code, quote=True)}">' if verification_code else ""
     today = date.fromisoformat(args.today) if args.today else datetime.now(ZoneInfo("Asia/Tokyo")).date()
+    validate_unique_facility_art(ROOT / "assets/editorial/facilities")
     out = Path(args.output).resolve()
     if out.exists():
         shutil.rmtree(out)
