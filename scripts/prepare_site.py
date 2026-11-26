@@ -357,8 +357,10 @@ def facility_page_html(f, base, today, region_page, category_page, verification_
 
 def editorial_image(f, base):
     fid = f.get("facility_id", "")
-    if fid == "banknote-postage-museum":
-        return f'<figure class="editorial-image"><img src="{base}assets/photos/banknote-postage-museum.webp" alt="お札と切手の博物館の外観（2022年撮影）" loading="lazy" width="1000" height="750"><figcaption><a href="https://commons.wikimedia.org/wiki/File:Banknote_%26_Postage_Stamp_Museum.jpg">写真：Syced / Wikimedia Commons / CC0（2022年撮影・縮小圧縮）</a></figcaption></figure>'
+    p = f.get("photo")
+    if p:
+        year = p["photographed_at"][:4]
+        return f'<figure class="editorial-image"><img src="{base}{esc(p["path"])}" alt="{esc(p["alt"])}（{year}年撮影）" loading="lazy" width="{p["width"]}" height="{p["height"]}"><figcaption>写真：<a href="{esc(p["source_url"])}">{esc(p["author"])} / Wikimedia Commons</a> / <a href="{esc(p["license_url"])}">{esc(p["license"])}</a>（{year}年撮影・{esc(p["changes"])}）</figcaption></figure>'
     if fid not in {"jica-yokohama-migration-museum", "banknote-postage-museum", "kawasaki-sora-midori-science-museum"}:
         return ""
     return f'<figure class="editorial-image"><img src="{base}assets/editorial/facilities/{fid}.webp" alt="" loading="lazy" width="800" height="533"><figcaption>施設テーマのイラスト・実物ではありません</figcaption></figure>'
@@ -400,6 +402,18 @@ def main():
     root_markup = root_markup.replace('<meta property="og:url" content="./">', f'<meta property="og:url" content="{html.escape(base, quote=True)}">')
     root_html.write_text(root_markup, encoding="utf-8")
     rows = facility_data()
+    photo_owners = {}
+    for facility in rows:
+        photo = facility.get("photo")
+        if not photo:
+            continue
+        image = ROOT / photo["path"]
+        digest = hashlib.sha256(image.read_bytes()).hexdigest()
+        if digest in photo_owners:
+            raise ValueError(f"Photo reused across facilities: {photo_owners[digest]} and {facility['facility_id']}")
+        photo_owners[digest] = facility["facility_id"]
+        if not all(photo.get(field) for field in ["source_url", "author", "license", "license_url", "photographed_at", "changes"]):
+            raise ValueError(f"Missing photo credit: {facility['facility_id']}")
     eligible_rows = eligible_facilities(rows)
     urls = [base]
     page_defs = []

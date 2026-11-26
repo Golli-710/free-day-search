@@ -12,5 +12,41 @@
     "adaptation": true,
     "identity_check": "王子の現施設。2011年移転後の撮影。外観看板で施設名確認。",
     "notes": "2022年の掲示物は現行イベント情報ではない。"
+  },
+  {
+    "facility_id": "jica-yokohama-migration-museum",
+    "path": "assets/photos/jica-yokohama-migration-museum.webp",
+    "author": "KQuhen",
+    "source_url": "https://commons.wikimedia.org/wiki/File:JICA_Yokohama_and_Japanese_Overseas_Migration_Museum_exterior.jpg",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "photographed_at": "2026-06-12",
+    "checked_at": "2026-11-26",
+    "changes": "縮小・WebP圧縮",
+    "alt": "JICA横浜・海外移住資料館の外観",
+    "width": 1000,
+    "height": 667,
+    "commercial_use": true,
+    "adaptation": true,
+    "identity_check": "外観と施設看板を目視確認。所在地と施設名を照合。",
+    "output_license": "CC BY-SA 4.0"
+  },
+  {
+    "facility_id": "kodaira-gas-museum",
+    "path": "assets/photos/kodaira-gas-museum.webp",
+    "author": "Suikotei",
+    "source_url": "https://commons.wikimedia.org/wiki/File:GAS_MUSEUM_(Kodaira)_01.jpg",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "photographed_at": "2020-08-22",
+    "checked_at": "2026-11-26",
+    "changes": "縮小・WebP圧縮",
+    "alt": "ガスミュージアムの外観",
+    "width": 1000,
+    "height": 750,
+    "commercial_use": true,
+    "adaptation": true,
+    "identity_check": "外観と施設看板を目視確認。所在地と施設名を照合。",
+    "output_license": "CC BY-SA 4.0"
   }
 ]
