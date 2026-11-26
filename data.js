@@ -75,5 +75,717 @@ window.FACILITIES = [
 {"facility_id": "honjo-disaster-center", "name": "本所防災館", "prefecture": "東京都", "municipality": "墨田区", "address": "東京都墨田区横川4-6-6", "category": "博物館", "regular_fee": "入館・観覧無料", "free_conditions": "入館無料。体験ごとに年齢・学年制限あり。", "free_condition": "入館無料。体験ごとに年齢・学年制限あり。", "free_days": [], "free_dates": [], "free_rules": [{"type": "always_free", "label": "入館無料（開館日に限る）", "eligibility": {"target": "all", "adult_general": true, "adult_eligible": true, "details": "入館無料。体験ごとに年齢・学年制限あり。"}}], "hours": "9:00〜17:00（入館受付16:45まで）", "closed": "水曜・第3木曜（祝日は直後の平日）、12/29〜1/3", "official_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/honjo/index.html", "source_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/honjo/index.html", "source": "https://www.tfd.metro.tokyo.lg.jp/taiken/honjo/index.html", "last_checked": "2026-11-03", "last_verified_date": "2026-11-03", "lat": null, "lon": null, "audit_status": "confirmed", "free_condition_type": ["always_free"], "reservation_required": false, "visit_info": {"status": "confirmed", "verified_at": "2026-11-03", "free_scope": "入館無料。体験ごとに年齢・学年制限あり。", "reservation": "個人体験は空きがあれば当日可。希望の体験は事前予約推奨、団体は要予約。", "access": "錦糸町駅北口・押上駅B1/B2出口から徒歩10分。", "notes": "臨時休館・開催変更は訪問前に公式案内で確認。体験の空き枠は未確認。入館と体験参加は別です。", "source_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/honjo/index.html"}, "audit": {"status": "confirmed", "reviewed_at": "2026-11-03", "field_status": {"visit_info": "confirmed", "free_rules": "confirmed"}, "issues": []}, "closed_dates": ["2026-01-07", "2026-01-14", "2026-01-15", "2026-01-21", "2026-01-28", "2026-02-04", "2026-02-12", "2026-02-18", "2026-02-19", "2026-02-25", "2026-03-04", "2026-03-11", "2026-03-18", "2026-03-19", "2026-03-25", "2026-04-01", "2026-04-08", "2026-04-15", "2026-04-16", "2026-04-22", "2026-04-30", "2026-05-07", "2026-05-13", "2026-05-20", "2026-05-21", "2026-05-27", "2026-06-03", "2026-06-10", "2026-06-17", "2026-06-18", "2026-06-24", "2026-07-01", "2026-07-08", "2026-07-15", "2026-07-16", "2026-07-22", "2026-07-29", "2026-08-05", "2026-08-12", "2026-08-19", "2026-08-20", "2026-08-26", "2026-09-02", "2026-09-09", "2026-09-16", "2026-09-17", "2026-09-24", "2026-09-30", "2026-10-07", "2026-10-14", "2026-10-15", "2026-10-21", "2026-10-28", "2026-11-04", "2026-11-11", "2026-11-18", "2026-11-19", "2026-11-25", "2026-12-02", "2026-12-09", "2026-12-16", "2026-12-17", "2026-12-23", "2026-12-30", "2027-01-06", "2027-01-13", "2027-01-20", "2027-01-21", "2027-01-27", "2027-02-03", "2027-02-10", "2027-02-17", "2027-02-18", "2027-02-24", "2027-03-03", "2027-03-10", "2027-03-17", "2027-03-18", "2027-03-24", "2027-03-31", "2027-04-07", "2027-04-14", "2027-04-15", "2027-04-21", "2027-04-28", "2027-05-06", "2027-05-12", "2027-05-19", "2027-05-20", "2027-05-26", "2027-06-02", "2027-06-09", "2027-06-16", "2027-06-17", "2027-06-23", "2027-06-30", "2027-07-07", "2027-07-14", "2027-07-15", "2027-07-21", "2027-07-28", "2027-08-04", "2027-08-12", "2027-08-18", "2027-08-19", "2027-08-25", "2027-09-01", "2027-09-08", "2027-09-15", "2027-09-16", "2027-09-22", "2027-09-29", "2027-10-06", "2027-10-13", "2027-10-20", "2027-10-21", "2027-10-27", "2027-11-04", "2027-11-10", "2027-11-17", "2027-11-18", "2027-11-24", "2027-12-01", "2027-12-08", "2027-12-15", "2027-12-16", "2027-12-22", "2027-12-29"], "closed_month_days": ["12-29", "12-30", "12-31", "01-01", "01-02", "01-03"]},
 {"facility_id": "ikebukuro-disaster-center", "name": "池袋防災館", "prefecture": "東京都", "municipality": "豊島区", "address": "東京都豊島区西池袋2-37-8", "category": "博物館", "regular_fee": "入館・観覧無料", "free_conditions": "入館無料。体験ごとに年齢・学年制限あり。", "free_condition": "入館無料。体験ごとに年齢・学年制限あり。", "free_days": [], "free_dates": [], "free_rules": [{"type": "always_free", "label": "入館無料（開館日に限る）", "eligibility": {"target": "all", "adult_general": true, "adult_eligible": true, "details": "入館無料。体験ごとに年齢・学年制限あり。"}}], "hours": "9:00〜17:00（金曜21:00まで、体験最終受付16:15／金曜20:15）", "closed": "第1・第3火曜と第3火曜の翌日（祝日は直後の平日）、12/29〜1/3", "official_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/ikebukuro/index.html", "source_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/ikebukuro/index.html", "source": "https://www.tfd.metro.tokyo.lg.jp/taiken/ikebukuro/index.html", "last_checked": "2026-11-03", "last_verified_date": "2026-11-03", "lat": null, "lon": null, "audit_status": "confirmed", "free_condition_type": ["always_free"], "reservation_required": false, "visit_info": {"status": "confirmed", "verified_at": "2026-11-03", "free_scope": "入館無料。体験ごとに年齢・学年制限あり。", "reservation": "体験は事前予約推奨。予約なしは希望の体験ができない場合あり。団体は要予約。", "access": "池袋駅西口（南）・メトロポリタン口から徒歩5分。駐車場・駐輪場なし。", "notes": "臨時休館・開催変更は訪問前に公式案内で確認。体験の空き枠は未確認。入館と体験参加は別です。", "source_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/ikebukuro/index.html"}, "audit": {"status": "confirmed", "reviewed_at": "2026-11-03", "field_status": {"visit_info": "confirmed", "free_rules": "confirmed"}, "issues": []}, "closed_dates": ["2026-01-06", "2026-01-20", "2026-01-21", "2026-02-03", "2026-02-17", "2026-02-18", "2026-03-03", "2026-03-17", "2026-03-18", "2026-04-07", "2026-04-21", "2026-04-22", "2026-05-07", "2026-05-19", "2026-05-20", "2026-06-02", "2026-06-16", "2026-06-17", "2026-07-07", "2026-07-21", "2026-07-22", "2026-08-04", "2026-08-18", "2026-08-19", "2026-09-01", "2026-09-15", "2026-09-16", "2026-10-06", "2026-10-20", "2026-10-21", "2026-11-04", "2026-11-17", "2026-11-18", "2026-12-01", "2026-12-15", "2026-12-16", "2027-01-05", "2027-01-19", "2027-01-20", "2027-02-02", "2027-02-16", "2027-02-17", "2027-03-02", "2027-03-16", "2027-03-17", "2027-04-06", "2027-04-20", "2027-04-21", "2027-05-06", "2027-05-18", "2027-05-19", "2027-06-01", "2027-06-15", "2027-06-16", "2027-07-06", "2027-07-20", "2027-07-21", "2027-08-03", "2027-08-17", "2027-08-18", "2027-09-07", "2027-09-21", "2027-09-22", "2027-10-05", "2027-10-19", "2027-10-20", "2027-11-02", "2027-11-16", "2027-11-17", "2027-12-07", "2027-12-21", "2027-12-22"], "closed_month_days": ["12-29", "12-30", "12-31", "01-01", "01-02", "01-03"]},
 {"facility_id": "tachikawa-disaster-center", "name": "立川防災館", "prefecture": "東京都", "municipality": "立川市", "address": "東京都立川市泉町1156-1", "category": "博物館", "regular_fee": "入館・観覧無料", "free_conditions": "入館無料。体験ごとに年齢・学年・身長制限あり。", "free_condition": "入館無料。体験ごとに年齢・学年・身長制限あり。", "free_days": [], "free_dates": [], "free_rules": [{"type": "always_free", "label": "入館無料（開館日に限る）", "eligibility": {"target": "all", "adult_general": true, "adult_eligible": true, "details": "入館無料。体験ごとに年齢・学年・身長制限あり。"}}], "hours": "9:00〜17:00", "closed": "木曜・第3金曜（祝日は直後の平日）、12/29〜1/3", "official_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/tachikawa/index.html", "source_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/tachikawa/index.html", "source": "https://www.tfd.metro.tokyo.lg.jp/taiken/tachikawa/index.html", "last_checked": "2026-11-03", "last_verified_date": "2026-11-03", "lat": null, "lon": null, "audit_status": "confirmed", "free_condition_type": ["always_free"], "reservation_required": false, "visit_info": {"status": "confirmed", "verified_at": "2026-11-03", "free_scope": "入館無料。体験ごとに年齢・学年・身長制限あり。", "reservation": "事業所・学校等と個人10名以上は事前予約。一般個人も混雑時は希望の体験ができない場合あり。", "access": "JR立川駅北口からバス「立川消防署」下車すぐ。高松駅徒歩15分。", "notes": "臨時休館・開催変更は訪問前に公式案内で確認。体験の空き枠は未確認。入館と体験参加は別です。", "source_url": "https://www.tfd.metro.tokyo.lg.jp/taiken/tachikawa/index.html"}, "audit": {"status": "confirmed", "reviewed_at": "2026-11-03", "field_status": {"visit_info": "confirmed", "free_rules": "confirmed"}, "issues": []}, "closed_dates": ["2026-01-02", "2026-01-08", "2026-01-15", "2026-01-16", "2026-01-22", "2026-01-29", "2026-02-05", "2026-02-12", "2026-02-19", "2026-02-20", "2026-02-26", "2026-03-05", "2026-03-12", "2026-03-19", "2026-03-23", "2026-03-26", "2026-04-02", "2026-04-09", "2026-04-16", "2026-04-17", "2026-04-23", "2026-04-30", "2026-05-07", "2026-05-14", "2026-05-15", "2026-05-21", "2026-05-28", "2026-06-04", "2026-06-11", "2026-06-18", "2026-06-19", "2026-06-25", "2026-07-02", "2026-07-09", "2026-07-16", "2026-07-17", "2026-07-23", "2026-07-30", "2026-08-06", "2026-08-13", "2026-08-20", "2026-08-21", "2026-08-27", "2026-09-03", "2026-09-10", "2026-09-17", "2026-09-18", "2026-09-24", "2026-10-01", "2026-10-08", "2026-10-15", "2026-10-16", "2026-10-22", "2026-10-29", "2026-11-05", "2026-11-12", "2026-11-19", "2026-11-20", "2026-11-26", "2026-12-03", "2026-12-10", "2026-12-17", "2026-12-18", "2026-12-24", "2026-12-31", "2027-01-07", "2027-01-14", "2027-01-15", "2027-01-21", "2027-01-28", "2027-02-04", "2027-02-12", "2027-02-18", "2027-02-19", "2027-02-25", "2027-03-04", "2027-03-11", "2027-03-18", "2027-03-19", "2027-03-25", "2027-04-01", "2027-04-08", "2027-04-15", "2027-04-16", "2027-04-22", "2027-04-30", "2027-05-06", "2027-05-13", "2027-05-20", "2027-05-21", "2027-05-27", "2027-06-03", "2027-06-10", "2027-06-17", "2027-06-18", "2027-06-24", "2027-07-01", "2027-07-08", "2027-07-15", "2027-07-16", "2027-07-22", "2027-07-29", "2027-08-05", "2027-08-12", "2027-08-19", "2027-08-20", "2027-08-26", "2027-09-02", "2027-09-09", "2027-09-16", "2027-09-17", "2027-09-24", "2027-09-30", "2027-10-07", "2027-10-14", "2027-10-15", "2027-10-21", "2027-10-28", "2027-11-04", "2027-11-11", "2027-11-18", "2027-11-19", "2027-11-25", "2027-12-02", "2027-12-09", "2027-12-16", "2027-12-17", "2027-12-23", "2027-12-30"], "closed_month_days": ["12-29", "12-30", "12-31", "01-01", "01-02", "01-03"]},
-{"facility_id": "meiji-university-museum", "name": "明治大学博物館", "prefecture": "東京都", "municipality": "千代田区", "address": "東京都千代田区神田駿河台1-1 アカデミーコモン地階", "category": "博物館", "regular_fee": "入館・観覧無料", "free_conditions": "博物館の観覧無料。物販・飲食・駐車場は別料金。", "free_condition": "博物館の観覧無料。物販・飲食・駐車場は別料金。", "free_days": [], "free_dates": [], "free_rules": [{"type": "always_free", "label": "入館無料（開館日に限る）", "eligibility": {"target": "all", "adult_general": true, "adult_eligible": true, "details": "博物館の観覧無料。物販・飲食・駐車場は別料金。"}}], "hours": "平日10:00〜17:00（入館16:30まで）、土曜10:00〜16:00（入館15:30まで）", "closed": "日祝（2026年度11/23等の休日授業日は開館）、大学指定休業日。公式開館カレンダー確認。", "official_url": "https://www.meiji.ac.jp/museum/", "source_url": "https://www.meiji.ac.jp/museum/", "source": "https://www.meiji.ac.jp/museum/", "last_checked": "2026-11-03", "last_verified_date": "2026-11-03", "lat": null, "lon": null, "audit_status": "confirmed", "free_condition_type": ["always_free"], "reservation_required": false, "visit_info": {"status": "confirmed", "verified_at": "2026-11-03", "free_scope": "博物館の観覧無料。物販・飲食・駐車場は別料金。", "reservation": "団体見学等の条件は公式利用案内で確認。", "access": "JR御茶ノ水駅御茶ノ水橋口徒歩5分、新御茶ノ水駅B1出口徒歩8分、神保町駅A5出口徒歩10分。", "notes": "臨時休館・開催変更は訪問前に公式案内で確認。祝日開館の例外は日付検索に未反映。2026年度の開館案内を掲載。", "source_url": "https://www.meiji.ac.jp/museum/"}, "audit": {"status": "confirmed", "reviewed_at": "2026-11-03", "field_status": {"visit_info": "confirmed", "free_rules": "confirmed"}, "issues": []}, "closed_dates": ["2027-02-04", "2027-02-05", "2027-02-15", "2027-02-16", "2026-04-21", "2026-08-10", "2026-08-11", "2026-08-12", "2026-08-13", "2026-08-14", "2026-08-15", "2026-08-16", "2026-08-01", "2026-08-08", "2026-08-15", "2026-08-22", "2026-08-29", "2026-09-05", "2026-09-12", "2026-09-19"], "closed_month_days": ["12-25", "12-26", "12-27", "12-28", "12-29", "12-30", "12-31", "01-01", "01-02", "01-03", "01-04", "01-05", "01-06", "01-07", "01-17", "11-01"], "sources": ["https://www.meiji.ac.jp/museum/", "https://www.meiji.ac.jp/museum/traffic.html"], "closed_weekdays": [0], "closed_holidays": true}
+{"facility_id": "meiji-university-museum", "name": "明治大学博物館", "prefecture": "東京都", "municipality": "千代田区", "address": "東京都千代田区神田駿河台1-1 アカデミーコモン地階", "category": "博物館", "regular_fee": "入館・観覧無料", "free_conditions": "博物館の観覧無料。物販・飲食・駐車場は別料金。", "free_condition": "博物館の観覧無料。物販・飲食・駐車場は別料金。", "free_days": [], "free_dates": [], "free_rules": [{"type": "always_free", "label": "入館無料（開館日に限る）", "eligibility": {"target": "all", "adult_general": true, "adult_eligible": true, "details": "博物館の観覧無料。物販・飲食・駐車場は別料金。"}}], "hours": "平日10:00〜17:00（入館16:30まで）、土曜10:00〜16:00（入館15:30まで）", "closed": "日祝（2026年度11/23等の休日授業日は開館）、大学指定休業日。公式開館カレンダー確認。", "official_url": "https://www.meiji.ac.jp/museum/", "source_url": "https://www.meiji.ac.jp/museum/", "source": "https://www.meiji.ac.jp/museum/", "last_checked": "2026-11-03", "last_verified_date": "2026-11-03", "lat": null, "lon": null, "audit_status": "confirmed", "free_condition_type": ["always_free"], "reservation_required": false, "visit_info": {"status": "confirmed", "verified_at": "2026-11-03", "free_scope": "博物館の観覧無料。物販・飲食・駐車場は別料金。", "reservation": "団体見学等の条件は公式利用案内で確認。", "access": "JR御茶ノ水駅御茶ノ水橋口徒歩5分、新御茶ノ水駅B1出口徒歩8分、神保町駅A5出口徒歩10分。", "notes": "臨時休館・開催変更は訪問前に公式案内で確認。祝日開館の例外は日付検索に未反映。2026年度の開館案内を掲載。", "source_url": "https://www.meiji.ac.jp/museum/"}, "audit": {"status": "confirmed", "reviewed_at": "2026-11-03", "field_status": {"visit_info": "confirmed", "free_rules": "confirmed"}, "issues": []}, "closed_dates": ["2027-02-04", "2027-02-05", "2027-02-15", "2027-02-16", "2026-04-21", "2026-08-10", "2026-08-11", "2026-08-12", "2026-08-13", "2026-08-14", "2026-08-15", "2026-08-16", "2026-08-01", "2026-08-08", "2026-08-15", "2026-08-22", "2026-08-29", "2026-09-05", "2026-09-12", "2026-09-19"], "closed_month_days": ["12-25", "12-26", "12-27", "12-28", "12-29", "12-30", "12-31", "01-01", "01-02", "01-03", "01-04", "01-05", "01-06", "01-07", "01-17", "11-01"], "sources": ["https://www.meiji.ac.jp/museum/", "https://www.meiji.ac.jp/museum/traffic.html"], "closed_weekdays": [0], "closed_holidays": true},
+{
+  "facility_id": "jma-weather-museum",
+  "name": "気象科学館",
+  "prefecture": "東京都",
+  "municipality": "港区",
+  "address": "東京都港区虎ノ門3-6-9 気象庁2階",
+  "category": "科学館",
+  "official_url": "https://www.jma.go.jp/jma/kishou/intro/kagakukan.html",
+  "source_url": "https://www.jma.go.jp/jma/kishou/intro/kagakukan.html",
+  "regular_fee": "無料",
+  "free_conditions": "館内展示の見学無料。",
+  "free_days": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）"
+    }
+  ],
+  "hours": "9:00〜20:00",
+  "closed": "第2月曜とその翌日（月曜祝日は火・水曜）、12/29〜1/3、臨時休館。",
+  "last_checked": "2026-11-15",
+  "last_verified_date": "2026-11-15",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-15",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-15",
+    "free_scope": "館内展示の見学無料。",
+    "access": "虎ノ門ヒルズ駅A2a出口徒歩4分、神谷町駅4b出口徒歩5分。駐車場なし。",
+    "reservation": "通常見学は予約不要。",
+    "notes": "気象・地震・火山の展示を屋内で見たい日に。解説員の気象予報士に質問できます。臨時休館は公式確認。",
+    "source_url": "https://www.jma.go.jp/jma/kishou/intro/kagakukan.html"
+  },
+  "closed_month_days": [
+    "12-29",
+    "12-30",
+    "12-31",
+    "01-01",
+    "01-02",
+    "01-03"
+  ],
+  "schedule_confirmed_until": "2027-12-31",
+  "verification_sources": [
+    "https://www.jma.go.jp/jma/kishou/intro/kagakukan.html"
+  ],
+  "closed_dates": [
+    "2026-01-13",
+    "2026-01-14",
+    "2026-02-09",
+    "2026-02-10",
+    "2026-03-09",
+    "2026-03-10",
+    "2026-04-13",
+    "2026-04-14",
+    "2026-05-11",
+    "2026-05-12",
+    "2026-06-08",
+    "2026-06-09",
+    "2026-07-13",
+    "2026-07-14",
+    "2026-08-10",
+    "2026-08-11",
+    "2026-09-14",
+    "2026-09-15",
+    "2026-10-13",
+    "2026-10-14",
+    "2026-11-09",
+    "2026-11-10",
+    "2026-12-14",
+    "2026-12-15",
+    "2027-01-12",
+    "2027-01-13",
+    "2027-02-08",
+    "2027-02-09",
+    "2027-03-08",
+    "2027-03-09",
+    "2027-04-12",
+    "2027-04-13",
+    "2027-05-10",
+    "2027-05-11",
+    "2027-06-14",
+    "2027-06-15",
+    "2027-07-12",
+    "2027-07-13",
+    "2027-08-09",
+    "2027-08-10",
+    "2027-09-13",
+    "2027-09-14",
+    "2027-10-12",
+    "2027-10-13",
+    "2027-11-08",
+    "2027-11-09",
+    "2027-12-13",
+    "2027-12-14"
+  ]
+},
+{
+  "facility_id": "nikon-museum",
+  "name": "ニコンミュージアム",
+  "prefecture": "東京都",
+  "municipality": "品川区",
+  "address": "東京都品川区西大井1-5-20 ニコン本社1階",
+  "category": "博物館",
+  "official_url": "https://www.jp.nikon.com/company/corporate/museum/guide/",
+  "source_url": "https://www.jp.nikon.com/company/corporate/museum/guide/",
+  "regular_fee": "無料",
+  "free_conditions": "入館無料。ショップの購入は別料金。",
+  "free_days": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）"
+    }
+  ],
+  "hours": "10:00〜17:30（最終入館17:00）",
+  "closed": "日曜・月曜・祝日、館の指定日。祝日の土曜日も休館。",
+  "last_checked": "2026-11-15",
+  "last_verified_date": "2026-11-15",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-15",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-15",
+    "free_scope": "入館無料。ショップの購入は別料金。",
+    "access": "西大井駅徒歩約4分、大井町駅徒歩約12分。来館者駐車場なし。",
+    "reservation": "個人見学は予約不要。30名を超える団体は事前連絡。",
+    "notes": "カメラや光学技術に関心がある人の土曜候補。日曜は休館です。指定休館の確認範囲を超えるため日付検索は2026年11月末まで。",
+    "source_url": "https://www.jp.nikon.com/company/corporate/museum/guide/"
+  },
+  "closed_weekdays": [
+    0,
+    1
+  ],
+  "closed_holidays": true,
+  "schedule_confirmed_until": "2026-11-30",
+  "verification_sources": [
+    "https://www.jp.nikon.com/company/corporate/museum/guide/",
+    "https://www.jp.nikon.com/company/news/2026/0910_01/"
+  ]
+},
+{
+  "facility_id": "kodaira-gas-museum",
+  "name": "GAS MUSEUM ガスミュージアム",
+  "prefecture": "東京都",
+  "municipality": "小平市",
+  "address": "東京都小平市大沼町4-31-25",
+  "category": "博物館",
+  "official_url": "https://www.gasmuseum.jp/access/",
+  "source_url": "https://www.gasmuseum.jp/access/",
+  "regular_fee": "入館無料",
+  "free_conditions": "入館無料。イベントの参加条件は個別案内を確認。",
+  "free_days": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）"
+    }
+  ],
+  "hours": "10:00〜17:00",
+  "closed": "月曜（祝日・振替休日は翌日）、年末年始。年末年始の具体的日程は未確認。",
+  "last_checked": "2026-11-15",
+  "last_verified_date": "2026-11-15",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-15",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-15",
+    "free_scope": "入館無料。イベントの参加条件は個別案内を確認。",
+    "access": "花小金井駅入口から東久留米駅西口行き西武バス、「ガスミュージアム入口」下車徒歩3分。無料駐車場30台。",
+    "reservation": "団体は公式の申込用紙で事前申込み。",
+    "notes": "ガス灯や暮らしの道具を見比べたい日に。年末年始の未確認日を無料開館と表示しないため日付検索は2026年11月末まで。",
+    "source_url": "https://www.gasmuseum.jp/access/"
+  },
+  "closed_weekdays": [
+    1
+  ],
+  "open_on_holidays": [
+    1
+  ],
+  "holiday_shifted_closure_weekdays": [
+    1
+  ],
+  "schedule_confirmed_until": "2026-11-30",
+  "verification_sources": [
+    "https://www.gasmuseum.jp/access/",
+    "https://www.gasmuseum.jp/gallery/",
+    "https://www.gasmuseum.jp/wp-content/uploads/group.pdf"
+  ]
+},
+{
+  "facility_id": "suginami-animation-museum",
+  "name": "東京工芸大学 杉並アニメーションミュージアム",
+  "prefecture": "東京都",
+  "municipality": "杉並区",
+  "address": "東京都杉並区上荻3-29-5 杉並会館3階",
+  "category": "博物館",
+  "official_url": "https://sam.or.jp/access",
+  "source_url": "https://sam.or.jp/access",
+  "regular_fee": "入館・シアター無料（ワークショップ材料費等は別）",
+  "free_conditions": "シアター上映を含む見学無料。ワークショップは材料費等がかかる場合があります。",
+  "free_days": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）"
+    }
+  ],
+  "hours": "10:00〜18:00（入館17:30まで。企画展等による変更は公式確認）",
+  "closed": "月曜（祝日は翌平日）、12/28〜1/4。展示替え等の臨時休館あり。",
+  "last_checked": "2026-11-15",
+  "last_verified_date": "2026-11-15",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-15",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-15",
+    "free_scope": "シアター上映を含む見学無料。ワークショップは材料費等がかかる場合があります。",
+    "access": "荻窪駅北口からバス約5分「荻窪警察署前」下車徒歩2分。西荻窪駅から徒歩約16分。専用駐車場なし。",
+    "reservation": "団体は事前予約。ワークショップの受付条件は個別確認。",
+    "notes": "アニメの制作工程や歴史を知りたい日に。上映と制作体験の実施時間は別なので来館前に確認してください。",
+    "source_url": "https://sam.or.jp/access"
+  },
+  "closed_weekdays": [
+    1
+  ],
+  "open_on_holidays": [
+    1
+  ],
+  "holiday_shifted_closure_weekdays": [
+    1
+  ],
+  "holiday_closure_shift": "next_weekday",
+  "closed_month_days": [
+    "12-28",
+    "12-29",
+    "12-30",
+    "12-31",
+    "01-01",
+    "01-02",
+    "01-03",
+    "01-04"
+  ],
+  "verification_sources": [
+    "https://sam.or.jp/access",
+    "https://sam.or.jp/faq"
+  ]
+},
+{
+  "facility_id": "postal-museum-japan",
+  "name": "郵政博物館",
+  "prefecture": "東京都",
+  "municipality": "墨田区",
+  "address": "東京都墨田区押上1-1-2 東京ソラマチ9階",
+  "category": "博物館",
+  "official_url": "https://www.postalmuseum.jp/guide/open.html",
+  "source_url": "https://www.postalmuseum.jp/guide/open.html",
+  "regular_fee": "大人300円、小・中・高校生150円",
+  "free_conditions": "障がい者手帳等の所持者と介助者は無料。一般の大人は有料です。",
+  "free_days": [],
+  "free_rules": [
+    {
+      "type": "eligibility",
+      "audience": "障がい者手帳等所持者と介助者",
+      "label": "対象者限定無料"
+    }
+  ],
+  "hours": "10:00〜17:30（入館17:00まで）",
+  "closed": "不定休。展示替え・設備点検等の臨時休館は公式のお知らせを確認。",
+  "last_checked": "2026-11-15",
+  "last_verified_date": "2026-11-15",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-15",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-15",
+    "free_scope": "障がい者手帳等の所持者と介助者は無料。一般の大人は有料です。",
+    "access": "押上駅B3出口からすぐ。ソラマチ8階で8〜10階用エレベーターに乗換え9階へ。",
+    "reservation": "団体は公式の団体予約窓口で条件を確認。",
+    "notes": "郵便・切手に関心があり、無料対象条件に該当する方の候補。一般向けの今日無料一覧には含めません。",
+    "source_url": "https://www.postalmuseum.jp/guide/open.html"
+  },
+  "verification_sources": [
+    "https://www.postalmuseum.jp/guide/open.html",
+    "https://www.postalmuseum.jp/guide/access.html"
+  ]
+},
+{
+  "facility_id": "musashino-furusato-museum",
+  "name": "武蔵野ふるさと歴史館",
+  "prefecture": "東京都",
+  "municipality": "武蔵野市",
+  "address": "東京都武蔵野市境5-15-5",
+  "category": "博物館",
+  "regular_fee": "入館無料（別料金・利用条件は無料範囲を確認）",
+  "free_conditions": "入館無料。",
+  "free_condition": "入館無料。",
+  "free_days": [],
+  "free_dates": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）",
+      "eligibility": {
+        "target": "all",
+        "adult_general": true,
+        "adult_eligible": true
+      }
+    }
+  ],
+  "hours": "9:30〜17:00",
+  "closed": "金曜日、祝日、年末年始、特別整理日",
+  "official_url": "https://www.city.musashino.lg.jp/heiwa_bunka_sports/furusatorekishikan/1007244.html",
+  "source_url": "https://www.city.musashino.lg.jp/heiwa_bunka_sports/furusatorekishikan/1007244.html",
+  "source": "https://www.city.musashino.lg.jp/heiwa_bunka_sports/furusatorekishikan/1007244.html",
+  "last_checked": "2026-11-21",
+  "last_verified_date": "2026-11-21",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-21",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-21",
+    "free_scope": "入館無料。",
+    "access": "武蔵境駅から徒歩12分。ムーバス「武蔵野ふるさと歴史館」下車すぐ。駐車場なし。",
+    "reservation": "通常展示の案内に個人見学の予約条件の記載なし。団体・講座・資料閲覧は別途公式へ確認。",
+    "notes": "石器や古文書、戦争に関する資料から街の歴史を知る候補。金曜と祝日は休館です。",
+    "source_url": "https://www.city.musashino.lg.jp/heiwa_bunka_sports/furusatorekishikan/1007244.html"
+  },
+  "verification_sources": [
+    "https://www.city.musashino.lg.jp/heiwa_bunka_sports/furusatorekishikan/1007244.html",
+    "https://www.city.musashino.lg.jp/_res/projects/default_project/_page_/001/053/596/2026_r08_calendar.pdf"
+  ],
+  "schedule_confirmed_until": "2026-11-30",
+  "lat": null,
+  "lon": null,
+  "closed_weekdays": [
+    5
+  ],
+  "closed_holidays": true
+},
+{
+  "facility_id": "koganei-cultural-properties-center",
+  "name": "小金井市文化財センター",
+  "prefecture": "東京都",
+  "municipality": "小金井市",
+  "address": "東京都小金井市緑町3-2-37 浴恩館公園内",
+  "category": "博物館",
+  "regular_fee": "入館無料（別料金・利用条件は無料範囲を確認）",
+  "free_conditions": "入館無料。学習室の利用には事前申請が必要。",
+  "free_condition": "入館無料。学習室の利用には事前申請が必要。",
+  "free_days": [],
+  "free_dates": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）",
+      "eligibility": {
+        "target": "all",
+        "adult_general": true,
+        "adult_eligible": true
+      }
+    }
+  ],
+  "hours": "9:00〜16:30",
+  "closed": "月曜日（祝日の場合は翌日）、年末年始",
+  "official_url": "https://www.city.koganei.lg.jp/kankobunka/bunkazai/bunkazaisenta.html",
+  "source_url": "https://www.city.koganei.lg.jp/kankobunka/bunkazai/bunkazaisenta.html",
+  "source": "https://www.city.koganei.lg.jp/kankobunka/bunkazai/bunkazaisenta.html",
+  "last_checked": "2026-11-21",
+  "last_verified_date": "2026-11-21",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-21",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-21",
+    "free_scope": "入館無料。学習室の利用には事前申請が必要。",
+    "access": "東小金井駅から徒歩20分、武蔵小金井駅から徒歩25分。ココバス「小金井公園入口」から徒歩5分。駐車場なし。",
+    "reservation": "通常展示の案内に個人見学の予約条件の記載なし。団体・講座・資料閲覧は別途公式へ確認。",
+    "notes": "浴恩館の建物と考古資料・民具を見て、公園散策と組み合わせたい日に。閉館は16時30分です。",
+    "source_url": "https://www.city.koganei.lg.jp/kankobunka/bunkazai/bunkazaisenta.html"
+  },
+  "verification_sources": [
+    "https://www.city.koganei.lg.jp/kankobunka/bunkazai/bunkazaisenta.html"
+  ],
+  "schedule_confirmed_until": "2026-11-30",
+  "lat": null,
+  "lon": null,
+  "closed_weekdays": [
+    1
+  ],
+  "open_on_holidays": [
+    1
+  ],
+  "holiday_shifted_closure_weekdays": [
+    1
+  ],
+  "holiday_closure_shift": "next_day"
+},
+{
+  "facility_id": "higashiyamato-local-museum",
+  "name": "東大和市立郷土博物館",
+  "prefecture": "東京都",
+  "municipality": "東大和市",
+  "address": "東京都東大和市奈良橋1-260-2",
+  "category": "博物館",
+  "regular_fee": "入館無料（別料金・利用条件は無料範囲を確認）",
+  "free_conditions": "博物館の入館は無料。プラネタリウム観覧は有料。",
+  "free_condition": "博物館の入館は無料。プラネタリウム観覧は有料。",
+  "free_days": [],
+  "free_dates": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）",
+      "eligibility": {
+        "target": "all",
+        "adult_general": true,
+        "adult_eligible": true
+      }
+    }
+  ],
+  "hours": "9:00〜17:00",
+  "closed": "月曜日（祝日は開館）、祝日の翌日（土日になる場合は翌火曜）、12月28日〜1月4日。臨時休館あり",
+  "official_url": "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006043.html",
+  "source_url": "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006043.html",
+  "source": "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006043.html",
+  "last_checked": "2026-11-21",
+  "last_verified_date": "2026-11-21",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-21",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-21",
+    "free_scope": "博物館の入館は無料。プラネタリウム観覧は有料。",
+    "access": "東大和市駅からバス「八幡神社」または「八幡神社前」下車徒歩2分。ちょこバス「郷土博物館入口」下車徒歩2分。",
+    "reservation": "通常展示の案内に個人見学の予約条件の記載なし。団体・講座・資料閲覧は別途公式へ確認。",
+    "notes": "狭山丘陵の自然・歴史・暮らしを学ぶ候補。星の投影も見たい場合は別料金と投影時刻を確認してください。",
+    "source_url": "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006043.html"
+  },
+  "verification_sources": [
+    "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006043.html",
+    "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006047.html",
+    "https://www.city.higashiyamato.lg.jp/bunkasports/museum/1006042/1006044.html"
+  ],
+  "schedule_confirmed_until": "2026-11-30",
+  "lat": null,
+  "lon": null,
+  "closed_weekdays": [
+    1
+  ],
+  "open_on_holidays": [
+    1
+  ],
+  "closed_dates": [
+    "2026-11-04",
+    "2026-11-24"
+  ]
+},
+{
+  "facility_id": "musashimurayama-history-museum",
+  "name": "武蔵村山市立歴史民俗資料館",
+  "prefecture": "東京都",
+  "municipality": "武蔵村山市",
+  "address": "東京都武蔵村山市本町5-21-1",
+  "category": "博物館",
+  "regular_fee": "入館無料（別料金・利用条件は無料範囲を確認）",
+  "free_conditions": "入館無料。本館の案内です。分館とは開館日が異なります。",
+  "free_condition": "入館無料。本館の案内です。分館とは開館日が異なります。",
+  "free_days": [],
+  "free_dates": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）",
+      "eligibility": {
+        "target": "all",
+        "adult_general": true,
+        "adult_eligible": true
+      }
+    }
+  ],
+  "hours": "9:00〜17:00",
+  "closed": "第1月曜日、第3水曜日（祝日の場合は翌日）、12月28日〜1月3日。臨時休館あり",
+  "official_url": "https://www.city.musashimurayama.lg.jp/shisetus/history/rekishiminzoku/1004383.html",
+  "source_url": "https://www.city.musashimurayama.lg.jp/shisetus/history/rekishiminzoku/1004383.html",
+  "source": "https://www.city.musashimurayama.lg.jp/shisetus/history/rekishiminzoku/1004383.html",
+  "last_checked": "2026-11-21",
+  "last_verified_date": "2026-11-21",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-21",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-21",
+    "free_scope": "入館無料。本館の案内です。分館とは開館日が異なります。",
+    "access": "立川駅・箱根ヶ崎駅などからバス「横田」下車徒歩11分。上北台駅からMMシャトルの日中便「村山温泉かたくりの湯」下車徒歩1分。",
+    "reservation": "通常展示の案内に個人見学の予約条件の記載なし。団体・講座・資料閲覧は別途公式へ確認。",
+    "notes": "地域の歴史をたどる屋内のお出かけ候補。毎週月曜休館ではないので、公式の本館カレンダーで日程を選べます。",
+    "source_url": "https://www.city.musashimurayama.lg.jp/shisetus/history/rekishiminzoku/1004383.html"
+  },
+  "verification_sources": [
+    "https://www.city.musashimurayama.lg.jp/shisetus/history/rekishiminzoku/1004383.html",
+    "https://www.city.musashimurayama.lg.jp/kankou/spots/rekishiminzoku/1001917/1020004.html"
+  ],
+  "schedule_confirmed_until": "2026-11-30",
+  "lat": null,
+  "lon": null,
+  "closed_dates": [
+    "2026-11-02",
+    "2026-11-18"
+  ]
+},
+{
+  "facility_id": "furusato-fuchu-history-museum",
+  "name": "ふるさと府中歴史館",
+  "prefecture": "東京都",
+  "municipality": "府中市",
+  "address": "東京都府中市宮町3-1",
+  "category": "博物館",
+  "regular_fee": "入館無料（別料金・利用条件は無料範囲を確認）",
+  "free_conditions": "入館無料。5月3〜5日は1階国府資料展示室のみ開室。一部展示休止の案内あり。",
+  "free_condition": "入館無料。5月3〜5日は1階国府資料展示室のみ開室。一部展示休止の案内あり。",
+  "free_days": [],
+  "free_dates": [],
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）",
+      "eligibility": {
+        "target": "all",
+        "adult_general": true,
+        "adult_eligible": true
+      }
+    }
+  ],
+  "hours": "9:00〜17:00",
+  "closed": "月曜日（休日の場合は直後の平日）、12月29日〜1月3日。臨時休館あり",
+  "official_url": "https://www.city.fuchu.tokyo.jp/shisetu/komyunite/gekijo/fuchurekishikann/hurusatorekisikann.html",
+  "source_url": "https://www.city.fuchu.tokyo.jp/shisetu/komyunite/gekijo/fuchurekishikann/hurusatorekisikann.html",
+  "source": "https://www.city.fuchu.tokyo.jp/shisetu/komyunite/gekijo/fuchurekishikann/hurusatorekisikann.html",
+  "last_checked": "2026-11-21",
+  "last_verified_date": "2026-11-21",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-21",
+    "field_status": {
+      "free_rules": "confirmed",
+      "visit_info": "confirmed"
+    },
+    "issues": []
+  },
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-21",
+    "free_scope": "入館無料。5月3〜5日は1階国府資料展示室のみ開室。一部展示休止の案内あり。",
+    "access": "京王線府中駅から徒歩約7分（同じ建物内の宮町図書館の公式アクセス案内）。",
+    "reservation": "通常展示の案内に個人見学の予約条件の記載なし。団体・講座・資料閲覧は別途公式へ確認。",
+    "notes": "武蔵国府跡の出土資料やくらやみ祭りを知る候補。大型CG展示など一部休止中のため、見たい展示を公式案内で確認してください。",
+    "source_url": "https://www.city.fuchu.tokyo.jp/shisetu/komyunite/gekijo/fuchurekishikann/hurusatorekisikann.html"
+  },
+  "verification_sources": [
+    "https://www.city.fuchu.tokyo.jp/shisetu/komyunite/gekijo/fuchurekishikann/hurusatorekisikann.html",
+    "https://library.city.fuchu.tokyo.jp/lib_info/miyamachi.html",
+    "https://www.city.fuchu.tokyo.jp/shisetu/komyunite/gekijo/fuchurekishikann/rekisikann-tennji-itibu-kyuushi.html"
+  ],
+  "schedule_confirmed_until": "2026-11-30",
+  "lat": null,
+  "lon": null,
+  "closed_weekdays": [
+    1
+  ],
+  "open_on_holidays": [
+    1
+  ],
+  "holiday_shifted_closure_weekdays": [
+    1
+  ],
+  "holiday_closure_shift": "next_weekday"
+},
+{
+  "facility_id": "urawa-minkaen",
+  "name": "浦和くらしの博物館民家園",
+  "prefecture": "埼玉県",
+  "municipality": "さいたま市緑区",
+  "address": "埼玉県さいたま市緑区下山口新田1179-1",
+  "category": "博物館",
+  "regular_fee": "入館無料",
+  "free_conditions": "通常の入館は無料。講座・催しの参加条件は各案内を確認。",
+  "free_rules": [
+    {
+      "type": "always_free",
+      "label": "入館無料（開館日に限る）"
+    }
+  ],
+  "free_days": [],
+  "free_dates": [],
+  "hours": "9:00〜16:30",
+  "closed": "月曜（休日を除く）、休日の翌日（土日・休日・休館日を除く）、12月28日〜1月4日、臨時休館",
+  "official_url": "https://www.city.saitama.lg.jp/004/005/004/005/003/002/p032604.html",
+  "source_url": "https://www.city.saitama.lg.jp/004/005/004/005/003/002/p032604.html",
+  "last_checked": "2026-11-25",
+  "last_verified_date": "2026-11-25",
+  "audit_status": "confirmed",
+  "audit": {
+    "status": "confirmed",
+    "reviewed_at": "2026-11-25",
+    "issues": []
+  },
+  "closed_weekdays": [
+    1
+  ],
+  "open_on_holidays": [
+    1
+  ],
+  "closed_dates": [
+    "2026-11-24",
+    "2027-02-23"
+  ],
+  "closed_month_days": [
+    "12-28",
+    "12-29",
+    "12-30",
+    "12-31",
+    "01-01",
+    "01-02",
+    "01-03",
+    "01-04"
+  ],
+  "schedule_confirmed_until": "2026-11-30",
+  "lat": null,
+  "lon": null,
+  "visit_info": {
+    "status": "confirmed",
+    "verified_at": "2026-11-25",
+    "source_url": "https://www.city.saitama.lg.jp/004/005/004/005/003/002/p001856.html",
+    "free_scope": "通常入館無料。伝統建築と民俗資料の野外博物館。",
+    "reservation": "通常見学の予約条件の記載なし。体験学習・講座は個別案内を確認。",
+    "access": "浦和駅東口1番からバス「念仏橋」下車すぐ。東浦和駅から徒歩約25分。駐車場あり。",
+    "notes": "2027年2月23日は電気設備修繕で臨時休館。12月以降の日付検索は休館日の再確認後に更新。"
+  }
+}
 ];

@@ -25,3 +25,14 @@ test('Hasseiden browser calendar excludes the complete official year-end closure
   assert.equal(context.window.calendarCheck(f,new Date(day+'T00:00:00Z')),expected,day);
  }
 });
+
+test('new facilities honor holidays and bounded schedule confirmation',()=>{
+ for(const [id,d,ok] of [
+ ['jma-weather-museum','2026-10-12',true],['jma-weather-museum','2026-10-13',false],['jma-weather-museum','2026-10-14',false],
+ ['jma-weather-museum','2026-11-09',false],['jma-weather-museum','2026-11-10',false],['jma-weather-museum','2026-11-11',true],
+ ['nikon-museum','2026-11-21',true],['nikon-museum','2026-11-22',false],['nikon-museum','2026-11-23',false],['nikon-museum','2026-12-01',false],
+ ['kodaira-gas-museum','2026-11-23',true],['kodaira-gas-museum','2026-11-24',false],['kodaira-gas-museum','2026-12-01',false],
+ ['suginami-animation-museum','2026-11-23',true],['suginami-animation-museum','2026-11-24',false],['suginami-animation-museum','2026-12-28',false]])
+ assert.equal(context.window.calendarCheck(get(id),new Date(d+'T00:00:00Z')),ok,id+' '+d);
+ assert.equal(get('postal-museum-japan').free_rules.some(r=>r.type==='always_free'),false);
+});
