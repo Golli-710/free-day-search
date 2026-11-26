@@ -339,7 +339,7 @@ def facility_page_html(f, base, today, region_page, category_page, verification_
     rule_html = "・".join(dict.fromkeys(next_rules + rules)) or ("常時無料" if any(r.get("type") == "always_free" for r in f.get("free_rules", [])) else "確認できた無料日ルールはありません")
     audience_html = "・".join(audience_text) or "大人・一般"
     source = f.get("source_url") or f.get("source") or ""
-    links = [("無料日カレンダー", base + "?view=calendar")]
+    links = [(f["prefecture"] + "の無料日カレンダー", base + "?view=calendar&prefecture=" + quote(f["prefecture"]))]
     if region_page:
         links.append((f'{f["prefecture"]}の無料施設', base + region_page + "/"))
     if category_page:
